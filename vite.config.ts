@@ -7,7 +7,11 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     alias: {
-      "@containers" : path.resolve(__dirname, './containers')
+      "@containers" : path.resolve(__dirname, './containers'),
+      "@services" : path.resolve(__dirname, './services/index.tsx')
     },
   },
 })
+
+
+//mongodb+srv://<lucasmanmai>:<c86VNzigxVaU4dBw>@cluster0.fnusd.mongodb.net/
