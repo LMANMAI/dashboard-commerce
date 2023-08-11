@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { getProducts } from "@services";
 const MisProductos: React.FC = () => {
   const [activeprod, setActiveProd] = useState<any>({});
-  const [products, setProducts] = useState<any>({});
+  const [products, setProducts] = useState<any>([]);
 
   const getData = async () => {
     const req = await getProducts();
@@ -35,7 +35,7 @@ const MisProductos: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((item) => (
+            {products.map((item: any) => (
               <tr key={item.name}>
                 <td>
                   <div className="flex items-center space-x-3">
@@ -58,6 +58,7 @@ const MisProductos: React.FC = () => {
                   <button
                     className="btn btn-neutral btn-xs"
                     onClick={() => {
+                      setActiveProd(item);
                       if (document) {
                         (
                           document.getElementById(
@@ -65,7 +66,6 @@ const MisProductos: React.FC = () => {
                           ) as HTMLFormElement
                         ).showModal();
                       }
-                      setActiveProd(item);
                     }} // eslint-disable-line
                   >
                     details
@@ -78,7 +78,7 @@ const MisProductos: React.FC = () => {
               <form method="dialog" className="modal-box">
                 <h3 className="font-bold text-lg">Hello!</h3>
                 <p className="py-4">{activeprod.name}</p>
-
+                <img src={activeprod.posterPathImage} alt={activeprod.name} />
                 <div className="modal-action">
                   {/* if there is a button in form, it will close the modal */}
                   <button className="btn">Close</button>
