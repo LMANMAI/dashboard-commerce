@@ -14,19 +14,8 @@ const AgregarProductos = () => {
           <input
             name="desde"
             type="date"
-            className="date_picker input input-bordered w-full max-w-xs"
-            // onChange={e => {
-            //   if (e.target.value === '') {
-            //     delete object[objectnameStart];
-            //     return;
-            //   }
-            //   handleChange({
-            //     ...object,
-            //     [objectnameStart]: new Date(e.target.value).toISOString(),
-            //   });
-            // }}
           />
-          <select className="select select-bordered w-full max-w-xs">
+          <select >
             <option disabled selected>
               Brand
             </option>
@@ -36,12 +25,10 @@ const AgregarProductos = () => {
           <input
             type="text"
             placeholder="Name"
-            className="input input-bordered w-full max-w-xs"
           />
           <input
             type="number"
             placeholder="Price"
-            className="input input-bordered w-full max-w-xs"
           />
 
           <label
@@ -51,7 +38,6 @@ const AgregarProductos = () => {
             Poster image
             <input
               type="file"
-              className="file-input file-input-bordered w-full max-w-xs"
             />
           </label>
           <label
