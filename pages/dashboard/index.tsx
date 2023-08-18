@@ -1,45 +1,53 @@
 import React from "react";
 import { Outlet, NavLink } from "react-router-dom";
+import type, { Menu, MenuProps } from "antd";
+import {
+  AppstoreOutlined,
+  MailOutlined,
+  SettingOutlined,
+} from "@ant-design/icons";
+
+type MenuItem = Required<MenuProps>["items"][number];
+
+function getItem(
+  label: React.ReactNode,
+  key: React.Key,
+  icon?: React.ReactNode,
+  children?: MenuItem[],
+  type?: "group"
+): MenuItem {
+  return {
+    key,
+    icon,
+    children,
+    label,
+    type,
+  } as MenuItem;
+}
+
 import { SideMenu, MenuItem } from "./styles";
 const DashboardPage = () => {
-  const sideBarMenuItems = [
-    {
-      path: "/",
-      name: "Inicio",
-    },
-    {
-      path: "add",
-      name: "Agregar productos",
-    },
-    {
-      path: "products",
-      name: "Mis productos",
-    },
-    {
-      path: "sales",
-      name: "Mis ventas",
-    },
-  ];
-
+  const items: MenuProps["items"] = [
+    getItem("Navigation One", "sub1", <MailOutlined />, [getItem("Option 1", "1"), getItem("Option 2", "2"),getItem("Option 3", "3"), getItem("Option 4", "4")]), ];
+  const onClick: MenuProps["onClick"] = (e) => {
+    console.log("click ", e);
+  };
   return (
-    <div>
+    <div style={{display: 'flex', height: '100vh'}}>
       <SideMenu>
-      <ul>
-              {sideBarMenuItems.map((item, index) => (
-                <MenuItem>
-                  <NavLink
-                    key={index}
-                    className="button link"
-                    to={item.path}
-                    title={item.name}
-                  >
-                    <div className="name link_text ">{item.name}</div>
-                  </NavLink>
-                </MenuItem>
-              ))}
-            </ul>
-      </SideMenu>  
-      <Outlet />
+        
+        <Menu
+          onClick={onClick}
+          style={{ width: 256 }}
+          defaultSelectedKeys={["1"]}
+          defaultOpenKeys={["sub1"]}
+          mode="inline"
+          items={items}
+        />
+      </SideMenu>
+     <div style={{width: '100%'}}>
+     <Outlet />
+     </div>
     </div>
   );
 };
