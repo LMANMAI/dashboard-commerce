@@ -11,6 +11,7 @@ import {
 import { SideMenu, MenuContainer, MenuOpenedButton } from "./styles";
 const DashboardPage = () => {
   const [menustatus, setMenuStatus] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState(0);
   const menu = [
     { icon: HomeOutlined, label: "Inicio", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar", path: "add" },
@@ -37,12 +38,18 @@ const DashboardPage = () => {
         </MenuOpenedButton>
         <SideMenu menustatus={menustatus}>
           <MenuContainer menustatus={menustatus}>
-            {menu.map((item) => {
+            {menu.map((item, index) => {
               return (
-                <NavLink to={item.path} className="nav_link">
+                <NavLink
+                  to={item.path}
+                  className={() =>
+                    `nav_link ${index === activeIndex ? "active" : ""}`
+                  }
+                  onClick={() => setActiveIndex(index)}
+                >
                   <item.icon
                     className="icon_link"
-                    style={{ fontSize: "16px" }}
+                    style={{ fontSize: "16px", background: "#f5f4f1" }}
                   />
                   <p className="nav_link label">{item.label}</p>
                 </NavLink>
