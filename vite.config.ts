@@ -8,10 +8,10 @@ export default defineConfig({
   resolve: {
     alias: {
       "@containers" : path.resolve(__dirname, './containers'),
-      "@services" : path.resolve(__dirname, './services/index.tsx')
+      "@services" : path.resolve(__dirname, './services/index.tsx'),
+      "@types" : path.resolve(__dirname, './src/types/index.ts')
     },
   },
 })
 
 
-//mongodb+srv://<lucasmanmai>:<c86VNzigxVaU4dBw>@cluster0.fnusd.mongodb.net/

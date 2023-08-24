@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import type, { Menu, MenuProps } from "antd";
+
 import {
   HomeOutlined,
   PlusCircleOutlined,
   FolderOpenOutlined,
   RiseOutlined,
+  MenuOutlined,
 } from "@ant-design/icons";
-import Icon from "@ant-design/icons";
-import { SideMenu, MenuContainer } from "./styles";
+import { SideMenu, MenuContainer, MenuOpenedButton } from "./styles";
 const DashboardPage = () => {
+  const [menustatus, setMenuStatus] = useState<boolean>(false);
   const menu = [
     { icon: HomeOutlined, label: "Inicio", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar", path: "add" },
@@ -19,31 +20,38 @@ const DashboardPage = () => {
 
   return (
     <div style={{ display: "flex", height: "100vh" }}>
-      <SideMenu>
-        {/* <Menu
-          onClick={onClick}
-          style={{ width: 256 }}
-          defaultSelectedKeys={["1"]}
-          defaultOpenKeys={["sub1"]}
-          mode="inline"
-          items={items}
-        /> */}
-        <MenuContainer>
-          {menu.map((item) => {
-            return (
-              <NavLink to={item.path}>
-                <Icon
-                  type="message"
-                  component={item.icon}
-                  style={{ fontSize: "16px", color: "#08c" }}
-                />
-                <p>{item.label}</p>
-              </NavLink>
-            );
-          })}
-        </MenuContainer>
-      </SideMenu>
-      <div style={{ width: "100%" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          backgroundColor: "#cccbc8",
+        }}
+      >
+        <MenuOpenedButton
+          menustatus={menustatus}
+          onClick={() => {
+            setMenuStatus(!menustatus);
+          }}
+        >
+          <MenuOutlined style={{ fontSize: "20px", color: "#3b3c3d" }} />
+        </MenuOpenedButton>
+        <SideMenu menustatus={menustatus}>
+          <MenuContainer menustatus={menustatus}>
+            {menu.map((item) => {
+              return (
+                <NavLink to={item.path} className="nav_link">
+                  <item.icon
+                    className="icon_link"
+                    style={{ fontSize: "16px" }}
+                  />
+                  <p className="nav_link label">{item.label}</p>
+                </NavLink>
+              );
+            })}
+          </MenuContainer>
+        </SideMenu>
+      </div>
+      <div style={{ width: "100%", paddingLeft: "5px" }}>
         <Outlet />
       </div>
     </div>

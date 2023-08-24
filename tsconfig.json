@@ -26,6 +26,7 @@
       "@components/*": ["./components/*"],
       "@containers/*": ["containers/*"],
       "@services": ["services/index.tsx"],
+      "@types": ["src/types/index.ts"],
     },
   },
   "include": ["src"],
