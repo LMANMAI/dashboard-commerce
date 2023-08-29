@@ -3,7 +3,7 @@ import { IMenu } from "@types";
 export const SideMenu = styled.div<IMenu>`
   height: 100vh;
   transition: width 300ms ease-in-out;
-  width: ${(props) => (props.menustatus ? "175" : "70")}px;
+  width: ${(props) => (props.menustatus ? "275" : "70")}px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -25,16 +25,20 @@ export const MenuContainer = styled.ul<IMenu>`
   list-style: none;
   padding: 0px;
   margin: 0px;
+  padding-left: 15px;
   display: flex;
   flex-direction: column;
   width: 100%;
   .nav_link.active {
+    background: rgb(245, 244, 241);
+    border-radius: 5px;
+    color: #00668c;
     p {
       color: #00668c;
     }
-    color: #00668c;
   }
   .nav_link {
+    margin: 0px 15px;
     text-decoration: none;
     color: #3b3c3d;
     display: flex;
