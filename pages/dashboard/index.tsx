@@ -14,13 +14,13 @@ const DashboardPage = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const menu = [
     { icon: HomeOutlined, label: "Inicio", path: "" },
-    { icon: PlusCircleOutlined, label: "Agregar", path: "add" },
+    { icon: PlusCircleOutlined, label: "Agregar productos", path: "add" },
     { icon: FolderOpenOutlined, label: "Mis productos", path: "products" },
-    { icon: RiseOutlined, label: "Mis ventas", path: "sales" },
+    { icon: RiseOutlined, label: "Mis estadisticas", path: "sales" },
   ];
 
   return (
-    <div style={{ display: "flex", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <div
         style={{
           display: "flex",
@@ -42,6 +42,7 @@ const DashboardPage = () => {
               return (
                 <NavLink
                   to={item.path}
+                  title={item.label}
                   className={() =>
                     `nav_link ${index === activeIndex ? "active" : ""}`
                   }
@@ -58,7 +59,8 @@ const DashboardPage = () => {
           </MenuContainer>
         </SideMenu>
       </div>
-      <div style={{ width: "100%", paddingLeft: "5px" }}>
+
+      <div style={{ width: "calc(100% - 70px)", padding: "0px 5px" }}>
         <Outlet />
       </div>
     </div>

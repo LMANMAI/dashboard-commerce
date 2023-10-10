@@ -10,7 +10,6 @@ export const AddForm = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  margin: 10px;
   padding: 0px 15px;
 `;
 export const AddButonContainer = styled.button`

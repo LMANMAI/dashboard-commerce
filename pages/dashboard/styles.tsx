@@ -3,7 +3,7 @@ import { IMenu } from "@types";
 export const SideMenu = styled.div<IMenu>`
   height: 100vh;
   transition: width 300ms ease-in-out;
-  width: ${(props) => (props.menustatus ? "275" : "70")}px;
+  width: ${(props) => (props.menustatus ? "275" : "50")}px;
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -12,7 +12,7 @@ export const SideMenu = styled.div<IMenu>`
 `;
 export const MenuOpenedButton = styled.button<IMenu>`
   width: 30px;
-  transition: all 300ms ease-in-out;
+  transition: align 500ms ease-in-out;
   align-self: ${(props) => (props.menustatus ? "end" : "center")};
   margin: 5px;
   outline: none;
@@ -25,12 +25,10 @@ export const MenuContainer = styled.ul<IMenu>`
   list-style: none;
   padding: 0px;
   margin: 0px;
-  padding-left: 15px;
   display: flex;
   flex-direction: column;
   width: 100%;
   .nav_link.active {
-    background: rgb(245, 244, 241);
     border-radius: 5px;
     color: #00668c;
     p {
