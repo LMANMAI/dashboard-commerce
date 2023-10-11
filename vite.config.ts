@@ -17,7 +17,7 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
-        modifyVars: customTheme, // Usa el tema personalizado aquí
+        modifyVars: customTheme,
         javascriptEnabled: true,
       },
     },
