@@ -38,14 +38,16 @@ const AgregarProductos = () => {
       <Title>Agregar productos al inventario</Title>
       <AddFormContainer>
         <AddForm>
-          <div className="input__formadd_container">
+          <div className="box input__formadd_container">
             <Input
+              addonBefore="Nombre"
               className="input__addform"
               placeholder="Nombre"
               type="text"
             />
             <Input
-              className="input__addform"
+              addonBefore="Precio"
+              className="input__addform precio"
               placeholder="Precio"
               type="number"
             />
@@ -73,30 +75,30 @@ const AgregarProductos = () => {
                 { value: "lucy", label: "Unisex" },
               ]}
             />
-            <div className="input__formadd_container_talle">
-              <Input
-                className="input__addform"
-                placeholder="Cantidad"
-                type="number"
-              />
-              <Select
-                defaultValue="Tamaño"
-                onChange={handleChange}
-                style={{ width: 250 }}
-                options={[
-                  { value: "jack", label: "Elige un Tamaño" },
-                  { value: "jack", label: "9" },
-                  { value: "lucy", label: "9.5" },
-                  { value: "lucy", label: "10" },
-                ]}
-              />
-              <StyledCustomButton type="primary" icon={<SaveOutlined />}>
-                Guardar producto con este talle
-              </StyledCustomButton>
-            </div>
           </div>
-
-          <div className="button__formadd">
+          <div className="box input__formadd_container_talle">
+            <Input
+              className="input__addform qty"
+              placeholder="Cantidad"
+              type="number"
+              addonBefore="Cantidad"
+            />
+            <Select
+              defaultValue="Tamaño"
+              onChange={handleChange}
+              style={{ width: 250 }}
+              options={[
+                { value: "jack", label: "Elige un Tamaño" },
+                { value: "jack", label: "9" },
+                { value: "lucy", label: "9.5" },
+                { value: "lucy", label: "10" },
+              ]}
+            />
+            <Button type="default" icon={<SaveOutlined />}>
+              Guardar
+            </Button>
+          </div>
+          <div className="box button__formadd">
             <Upload {...props}>
               <Button icon={<UploadOutlined />}>
                 Imagen de portada del producto
@@ -111,7 +113,7 @@ const AgregarProductos = () => {
           </div>
         </AddForm>
         <Card
-          hoverable
+          // hoverable
           className="card__product_add"
           style={{ width: 275, height: 300 }}
           cover={

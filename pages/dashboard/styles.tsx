@@ -8,10 +8,10 @@ export const Container = styled.div`
   background-color: ${customTheme["@secondary-color"]};
 `;
 export const MainWrapper = styled.main<IMenu>`
-  width: calc(100% - ${(props) => (props.menustatus ? "320" : "60")}px);
   padding: 0px 5px;
   background: ${customTheme["@primary-color"]};
   overflow-y: auto;
+  width: 100%;
 `;
 export const SideMenu = styled.div<IMenu>`
   height: 100vh;
