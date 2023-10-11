@@ -39,12 +39,17 @@ const DashboardPage = () => {
         <SideMenu menustatus={menustatus}>
           <MenuContainer menustatus={menustatus}>
             {menu.map((item, index) => {
+              console.log(item.path);
               return (
                 <NavLink
                   to={item.path}
                   title={item.label}
                   className={() =>
-                    `nav_link ${index === activeIndex ? "active" : ""}`
+                    `nav_link ${
+                      item.path === window.location.pathname.slice(1)
+                        ? "active"
+                        : ""
+                    }`
                   }
                   onClick={() => setActiveIndex(index)}
                 >
