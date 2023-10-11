@@ -27,6 +27,7 @@
       "@containers/*": ["containers/*"],
       "@services": ["services/index.tsx"],
       "@types": ["src/types/index.ts"],
+      "@customTheme": ["customTheme.ts"],
     },
   },
   "include": ["src"],

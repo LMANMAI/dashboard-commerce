@@ -1,5 +1,18 @@
 import styled from "styled-components";
 import { IMenu } from "@types";
+import customTheme from "@customTheme";
+
+export const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: ${customTheme["@secondary-color"]};
+`;
+export const MainWrapper = styled.main<IMenu>`
+  width: calc(100% - ${(props) => (props.menustatus ? "320" : "60")}px);
+  padding: 0px 5px;
+  background: ${customTheme["@primary-color"]};
+  overflow-y: auto;
+`;
 export const SideMenu = styled.div<IMenu>`
   height: 100vh;
   transition: width 300ms ease-in-out;
@@ -28,32 +41,30 @@ export const MenuContainer = styled.ul<IMenu>`
   display: flex;
   flex-direction: column;
   width: 100%;
+  &:hover {
+    color: ${customTheme["@secondary-color-dark"]};
+  }
   .nav_link.active {
     border-radius: 5px;
-    color: #00668c;
+    background: ${customTheme["@primary-color"]};
+    color: ${customTheme["@secondary-color"]};
     p {
-      color: #00668c;
+      color: ${customTheme["@secondary-color"]};
     }
   }
   .nav_link {
-    margin: 0px 15px;
     text-decoration: none;
-    color: #3b3c3d;
+    color: ${customTheme["@primary-color"]};
     display: flex;
     align-items: center;
-    padding: 5px 8px;
     transition: all 300ms ease-in-out;
     flex-wrap: nowrap;
     justify-content: ${(props) => (props.menustatus ? "start" : "center")};
 
-    &:hover {
-      color: #00668c;
-    }
     .icon_link {
       font-size: 20px !important;
       padding: 10px;
       border-radius: 5px;
-      background: #f5f4f1M;
     }
     &.label {
       font-size: 14px;
