@@ -1,6 +1,4 @@
 import styled from "styled-components";
-import { Button } from "antd";
-import customTheme from "@customTheme";
 
 export const AddFormContainer = styled.div`
   display: flex;
@@ -46,18 +44,4 @@ export const AddForm = styled.div`
 export const AddButonContainer = styled.button`
   align-self: end;
   margin: 0px 15px;
-`;
-
-export const StyledCustomButton = styled(Button)`
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  margin: 10px auto;
-  background-color: ${customTheme["@action-color"]};
-  &:hover {
-    background-color: #3e617d !important;
-  }
 `;

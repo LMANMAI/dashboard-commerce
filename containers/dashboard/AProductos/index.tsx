@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AddFormContainer, AddForm, StyledCustomButton } from "./styles";
-import { Title } from "../styles";
+import { AddFormContainer, AddForm } from "./styles";
+import { Title, StyledCustomButton } from "../styles";
 import { UploadOutlined } from "@ant-design/icons";
 import type { DatePickerProps, UploadProps } from "antd";
 import { Input, DatePicker, Select, Button, message, Upload, Card } from "antd";
@@ -35,7 +35,7 @@ const AgregarProductos = () => {
 
   return (
     <div>
-      <Title>Agregar productos al inventario</Title>
+      {/* <Title>Agregar productos al inventario</Title> */}
       <AddFormContainer>
         <AddForm>
           <div className="box input__formadd_container">
@@ -113,7 +113,6 @@ const AgregarProductos = () => {
           </div>
         </AddForm>
         <Card
-          // hoverable
           className="card__product_add"
           style={{ width: 275, height: 300 }}
           cover={
