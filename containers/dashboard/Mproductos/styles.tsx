@@ -12,7 +12,6 @@ export const TaleContainer = styled.div`
 export const MisProductosContainer = styled.div`
   max-width: 90%;
   margin: 0px auto;
-
   .misproductos__box {
     display: none;
   }
@@ -23,7 +22,6 @@ export const MisProductosContainer = styled.div`
     gap: 10px;
     padding: 10px 0px;
   }
-
   @media (min-width: 768px) {
     .misproductos__box {
       display: block;
@@ -31,6 +29,7 @@ export const MisProductosContainer = styled.div`
       border: 1px solid #eee;
       border-radius: 5px;
       margin: 15px 0px;
+      margin-bottom: 0px;
     }
 
     .misproductos__formulario {

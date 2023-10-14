@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { getProducts } from "@services";
-import { Table, Input, Select, Button, Modal } from "antd";
+import { Table, Input, Select, Button, Modal, Steps } from "antd";
 import { TaleContainer, MisProductosContainer } from "./styles";
 import { Title, StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
@@ -141,6 +141,7 @@ const MisProductos: React.FC = () => {
         <Modal
           title="Detalles del Producto"
           visible={visible}
+          centered
           onOk={handleCancel}
           onCancel={handleCancel}
         >

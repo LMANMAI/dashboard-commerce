@@ -4,8 +4,14 @@ export const AddFormContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 15px 0px;
+  margin: 35px;
   justify-content: space-evenly;
+
+  .steps {
+    width: 100%;
+    margin: 0px auto;
+    max-width: 1200px;
+  }
   @media (min-width: 768px) {
   }
 
@@ -25,23 +31,41 @@ export const AddFormContainer = styled.div`
 export const AddForm = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  .box {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 0px 5px;
-  }
- 
+  gap: 15px;
   @media (min-width: 768px) {
     grid-template-columns: 1fr 1fr;
-   
   }
-
-  @media (min-width: 1440px) {
-    grid-template-columns: repeat(3, 1fr);
-  
 `;
 export const AddButonContainer = styled.button`
   align-self: end;
   margin: 0px 15px;
+`;
+
+export const StepsContainer = styled.section`
+  margin-top: 20px;
+  max-width: 800px;
+  padding: 10px 20px;
+  min-height: 300px;
+  .button__formadd {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    button {
+      min-width: 260px;
+    }
+  }
+  .input__formadd_container_talle {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  @media (min-width: 1024px) {
+    .button__formadd {
+      flex-direction: row;
+    }
+    .input__formadd_container_talle {
+      flex-direction: row;
+    }
+  }
 `;
