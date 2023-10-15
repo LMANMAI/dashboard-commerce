@@ -43,7 +43,6 @@ export const AddButonContainer = styled.button`
 
 export const StepsContainer = styled.section`
   margin-top: 20px;
-  max-width: 800px;
   padding: 10px 20px;
   min-height: 300px;
   .button__formadd {

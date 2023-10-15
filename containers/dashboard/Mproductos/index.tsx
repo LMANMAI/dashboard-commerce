@@ -8,7 +8,8 @@ interface Product {
   key: string;
   name: string;
   price: number;
-  description: string;
+  imgs: [];
+  _id: string;
 }
 
 const MisProductos: React.FC = () => {
@@ -29,8 +30,9 @@ const MisProductos: React.FC = () => {
   const getData = async () => {
     setLoad(true);
     const req = await getProducts();
-    if (req) {
-      setProducts(req.sneakers);
+    if (req.status === 200) {
+      console.log(req);
+      setProducts(req.data);
       setLoad(false);
     }
   };
@@ -43,11 +45,33 @@ const MisProductos: React.FC = () => {
   }, []);
 
   const modalContent = (
-    <div>
+    <div style={{ overflowY: "auto", maxHeight: "750px" }}>
       <h2>Detalles del Producto</h2>
       <p>Nombre: {selectedItem && selectedItem.name}</p>
       <p>Precio: {selectedItem && selectedItem.price}</p>
-      <p>Descripción: {selectedItem && selectedItem.description}</p>
+      <div style={{ height: "300px", width: "300px" }}>
+        <p>imagenes de poster</p>
+        {selectedItem && (
+          <img
+            style={{ width: "100%" }}
+            src={`${import.meta.env.VITE_URL_EP}/sneaker/image/${
+              selectedItem._id
+            }/poster/0`}
+          />
+        )}
+      </div>
+      <p>imagenes adicionales</p>
+      {selectedItem &&
+        selectedItem.imgs.map((item, index) => (
+          <div style={{ height: "300px", width: "300px" }}>
+            <img
+              style={{ width: "100%" }}
+              src={`${import.meta.env.VITE_URL_EP}/sneaker/image/${
+                selectedItem._id
+              }/imgs/${index}`}
+            />
+          </div>
+        ))}
     </div>
   );
 
@@ -144,6 +168,7 @@ const MisProductos: React.FC = () => {
           centered
           onOk={handleCancel}
           onCancel={handleCancel}
+          destroyOnClose={true}
         >
           {modalContent}
         </Modal>
