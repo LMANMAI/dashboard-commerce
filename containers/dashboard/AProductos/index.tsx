@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { AddFormContainer, AddForm, StepsContainer } from "./styles";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
@@ -16,6 +16,9 @@ import { SaveOutlined } from "@ant-design/icons";
 import axios from "axios";
 const { Meta } = Card;
 import dayjs from "dayjs";
+interface InputRef {
+  input: HTMLInputElement | null;
+}
 
 const AgregarProductos = () => {
   const { Step } = Steps;
@@ -25,7 +28,7 @@ const AgregarProductos = () => {
   const [imgs2, setImgsList2] = useState<any>();
   const [imgs3, setImgsList3] = useState<any>();
   const [product, setProduct] = useState({
-    sizes: [],
+    sizes: [] as { size: string; qty: string }[],
     name: "",
     relaseYear: "2021-04-15",
     price: 0,
@@ -33,6 +36,8 @@ const AgregarProductos = () => {
     genre: "",
     quantity: 0,
   });
+  const [inputValue, setInputValue] = useState<string>("");
+  const [sizevalue, setSizevalue] = useState<string>("");
 
   const onFinish = async () => {
     const formData = new FormData();
@@ -45,7 +50,6 @@ const AgregarProductos = () => {
         },
       })
       .then((response) => {
-        // Manejar la respuesta
         console.log(imgs1, imgs2, imgs3);
         const formDataImages = new FormData();
         formDataImages.append("images", imgs1.originFileObj);
@@ -70,7 +74,6 @@ const AgregarProductos = () => {
         console.log(error);
       });
   };
-
   const onChange = (date: any) => {
     if (date) {
       const dayjsDate = dayjs(date.toDate());
@@ -81,9 +84,27 @@ const AgregarProductos = () => {
       });
     }
   };
+  const handleSaveStock = () => {
+    const newSize = {
+      size: sizevalue,
+      qty: inputValue,
+    };
+    const prevStock: { size: string; qty: string }[] = product.sizes;
+    setProduct({
+      ...product,
+      sizes: [...prevStock, newSize],
+    });
 
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
+    setSizevalue("");
+    setInputValue("");
+    console.log(product);
+  };
+  const handleChangeSizeStock = (value: string) => {
+    setSizevalue(value);
+  };
+  const handleSizeInputChange = (e: any) => {
+    const { value } = e.target;
+    setInputValue(value);
   };
 
   const handleGenreChange = (value: any) => {
@@ -221,32 +242,6 @@ const AgregarProductos = () => {
     );
   };
 
-  const StepThree = () => {
-    return (
-      <div className="input__formadd_container_talle">
-        <Input
-          className="input__addform qty"
-          placeholder="Cantidad"
-          type="number"
-          addonBefore="Cantidad"
-        />
-        <Select
-          defaultValue="Tamaño"
-          onChange={handleChange}
-          style={{ width: 250 }}
-          options={[
-            { value: "jack", label: "Elige un Tamaño" },
-            { value: "jack", label: "9" },
-            { value: "lucy", label: "9.5" },
-            { value: "lucy", label: "10" },
-          ]}
-        />
-        <Button type="default" icon={<SaveOutlined />}>
-          Guardar
-        </Button>
-      </div>
-    );
-  };
   const LastStep = () => {
     return (
       <div style={{ display: "flex", justifyContent: "center" }}>
@@ -270,11 +265,11 @@ const AgregarProductos = () => {
     <div style={{ width: "100%" }}>
       <AddFormContainer>
         <div className="steps">
-          <Steps current={currentStep}>
-            <Step title="informacion del producto" />
-            <Step title="Cargar imagenes" />
-            <Step title="Cargar stock" />
-            <Step title="Guardar producto" />
+          <Steps size="small" current={currentStep} labelPlacement="vertical">
+            <Step title="información" />
+            <Step title="Imagenes" />
+            {/* <Step  title="Cargar stock" /> */}
+            <Step title="Guardar" />
           </Steps>
           <StepsContainer>
             {currentStep === 0 && (
@@ -304,39 +299,82 @@ const AgregarProductos = () => {
                   value={dayjs(product.relaseYear, "YYYY-MM-DD")}
                   format={"DD/MM/YY"}
                 />
-                <Select
-                  onChange={handleBrandChange}
-                  style={{ width: 250 }}
-                  value={product.brand}
-                  options={[
-                    { label: "Elige una marca", value: "" },
-                    { label: "Adidas", value: "ADIDAS" },
-                    { label: "Nike", value: "NIKE" },
-                    { label: "New Balance", value: "NEW BALANCE" },
-                    { label: "Air Jordan", value: "AIR JORDAN" },
-                    { label: "Yeezy", value: "YEEZY" },
-                    { label: "Converse", value: "CONVERSE" },
-                    { label: "Vans", value: "VANS" },
-                    { label: "Revengexstorm", value: "REVENGEXSTORM" },
-                  ]}
-                />
-                <Select
-                  onChange={handleGenreChange}
-                  style={{ width: 250 }}
-                  value={product.genre}
-                  options={[
-                    { value: "", label: "Elige un genero" },
-                    { value: "MEN", label: "Hombre" },
-                    { value: "WOMAN", label: "Mujer" },
-                    { value: "UNISEX", label: "Unisex" },
-                  ]}
-                />
+                <div className="select__formcontain">
+                  <Select
+                    onChange={handleBrandChange}
+                    style={{ width: 250 }}
+                    value={product.brand}
+                    options={[
+                      { label: "Elige una marca", value: "" },
+                      { label: "Adidas", value: "ADIDAS" },
+                      { label: "Nike", value: "NIKE" },
+                      { label: "New Balance", value: "NEW BALANCE" },
+                      { label: "Air Jordan", value: "AIR JORDAN" },
+                      { label: "Yeezy", value: "YEEZY" },
+                      { label: "Converse", value: "CONVERSE" },
+                      { label: "Vans", value: "VANS" },
+                      { label: "Revengexstorm", value: "REVENGEXSTORM" },
+                    ]}
+                  />
+                  <Select
+                    onChange={handleGenreChange}
+                    style={{ width: 250 }}
+                    value={product.genre}
+                    options={[
+                      { value: "", label: "Elige un genero" },
+                      { value: "MEN", label: "Hombre" },
+                      { value: "WOMAN", label: "Mujer" },
+                      { value: "UNISEX", label: "Unisex" },
+                    ]}
+                  />
+                </div>
+
+                <div className="input__formadd_container_talle">
+                  <Input
+                    className="input__addform qty"
+                    placeholder="Cantidad"
+                    value={inputValue}
+                    type="text"
+                    addonBefore="Cantidad"
+                    onChange={handleSizeInputChange}
+                  />
+                  <Select
+                    defaultValue="Tamaño"
+                    onChange={handleChangeSizeStock}
+                    style={{ width: 250 }}
+                    options={[
+                      { value: "", label: "Elige un Tamaño" },
+                      { value: "5", label: "5" },
+                      { value: "5.5", label: "5.5" },
+                      { value: "6", label: "6" },
+                      { value: "6.5", label: "6.5" },
+                      { value: "7", label: "7" },
+                      { value: "7.5", label: "7.5" },
+                      { value: "8", label: "8" },
+                      { value: "8.5", label: "8.5" },
+                      { value: "9", label: "9" },
+                      { value: "9.5", label: "9.5" },
+                      { value: "10", label: "10" },
+                      { value: "10.5", label: "10.5" },
+                      { value: "11", label: "11" },
+                      { value: "11.5", label: "11.5" },
+                      { value: "12", label: "12" },
+                    ]}
+                  />
+                  <Button
+                    onClick={() => handleSaveStock()}
+                    type="default"
+                    icon={<SaveOutlined />}
+                  >
+                    Guardar
+                  </Button>
+                </div>
               </AddForm>
             )}
             {currentStep === 1 && <StepTwo />}
-            {currentStep === 2 && <StepThree />}
-            {currentStep === 3 && <LastStep />}
+            {currentStep === 2 && <LastStep />}
           </StepsContainer>
+
           <div style={{ marginTop: "20px" }}>
             {currentStep > 0 && (
               <Button
@@ -347,7 +385,7 @@ const AgregarProductos = () => {
                 Anterior
               </Button>
             )}
-            {currentStep < 3 && (
+            {currentStep < 2 && (
               <Button
                 type="primary"
                 onClick={() => {
@@ -357,7 +395,7 @@ const AgregarProductos = () => {
                 Siguiente
               </Button>
             )}
-            {currentStep === 3 && (
+            {currentStep === 2 && (
               <Button type="primary" onClick={() => onFinish()}>
                 Guardar
               </Button>

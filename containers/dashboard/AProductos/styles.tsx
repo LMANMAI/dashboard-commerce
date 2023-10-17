@@ -29,11 +29,21 @@ export const AddFormContainer = styled.div`
   }
 `;
 export const AddForm = styled.div`
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-direction: column;
   gap: 15px;
+  .select__formcontain {
+    display: flex;
+    justify-content: start;
+    flex-direction: column;
+    gap: 15px;
+  }
   @media (min-width: 768px) {
+    display: grid;
     grid-template-columns: 1fr 1fr;
+    .select__formcontain {
+      flex-direction: row;
+    }
   }
 `;
 export const AddButonContainer = styled.button`
@@ -57,6 +67,7 @@ export const StepsContainer = styled.section`
     display: flex;
     gap: 10px;
     flex-direction: column;
+    margin: 0px auto;
   }
 
   @media (min-width: 1024px) {
@@ -65,6 +76,7 @@ export const StepsContainer = styled.section`
     }
     .input__formadd_container_talle {
       flex-direction: row;
+      //width: 50%;
     }
   }
 `;
