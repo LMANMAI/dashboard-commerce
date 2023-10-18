@@ -10,6 +10,7 @@ interface Product {
   price: number;
   imgs: [];
   _id: string;
+  posterPathImage: string;
 }
 
 const MisProductos: React.FC = () => {
@@ -54,9 +55,9 @@ const MisProductos: React.FC = () => {
         {selectedItem && (
           <img
             style={{ width: "100%" }}
-            src={`${import.meta.env.VITE_URL_EP}/sneaker/image/${
-              selectedItem._id
-            }/poster/0`}
+            src={`https://res.cloudinary.com/${
+              import.meta.env.VITE_CLOUD_NAME
+            }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
           />
         )}
       </div>

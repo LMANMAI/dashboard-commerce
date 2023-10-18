@@ -39,7 +39,6 @@ const DashboardPage = () => {
         <SideMenu menustatus={menustatus}>
           <MenuContainer menustatus={menustatus}>
             {menu.map((item, index) => {
-              console.log(item.path);
               return (
                 <NavLink
                   to={item.path}

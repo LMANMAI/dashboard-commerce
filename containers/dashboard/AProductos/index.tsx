@@ -41,38 +41,21 @@ const AgregarProductos = () => {
 
   const onFinish = async () => {
     const formData = new FormData();
+
     formData.append("image", file.originFileObj);
     formData.append("sneaker", JSON.stringify(product));
+
+    console.log(formData);
     axios
-      .post(`${import.meta.env.VITE_URL_EP}/sneaker/create`, formData, {
+      .post(`${import.meta.env.VITE_URL_EP}sneaker/create`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((response) => {
-        console.log(imgs1, imgs2, imgs3);
-        const formDataImages = new FormData();
-        formDataImages.append("images", imgs1.originFileObj);
-        formDataImages.append("images", imgs2.originFileObj);
-        formDataImages.append("images", imgs3.originFileObj);
-
-        axios
-          .put(
-            `${import.meta.env.VITE_URL_EP}/sneaker/productimages/${
-              response.data.sneaker._id
-            }`,
-            formDataImages,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          )
-          .then((response) => console.log(response));
+        console.log(response);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch((error) => {});
   };
   const onChange = (date: any) => {
     if (date) {
@@ -97,7 +80,6 @@ const AgregarProductos = () => {
 
     setSizevalue("");
     setInputValue("");
-    console.log(product);
   };
   const handleChangeSizeStock = (value: string) => {
     setSizevalue(value);
@@ -147,14 +129,12 @@ const AgregarProductos = () => {
         authorization: "authorization-text",
       },
       onChange(info) {
-        // console.log(info.file);
         if (info.file.status === "uploading") {
           setImgsList1(info.file);
           message.success(`${info.file.name} file uploaded successfully`);
         } else if (info.file.status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
-        console.log(info.file.name);
       },
     };
     const props2: UploadProps = {
@@ -164,7 +144,6 @@ const AgregarProductos = () => {
         authorization: "authorization-text",
       },
       onChange(info) {
-        // console.log(info.file);
         if (info.file.status === "done") {
           setImgsList2(info.file);
           message.success(`${info.file.name} file uploaded successfully`);
@@ -175,7 +154,6 @@ const AgregarProductos = () => {
         } else if (info.file.status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
-        console.log(info.file.name);
       },
     };
     const props3: UploadProps = {
@@ -185,14 +163,12 @@ const AgregarProductos = () => {
         authorization: "authorization-text",
       },
       onChange(info) {
-        // console.log(info.file);
         if (info.file.status === "uploading") {
           setImgsList3(info.file);
           message.success(`${info.file.name} file uploaded successfully`);
         } else if (info.file.status === "error") {
           message.error(`${info.file.name} file upload failed.`);
         }
-        console.log(info.file.name);
       },
     };
 
@@ -212,7 +188,7 @@ const AgregarProductos = () => {
           <p>{file?.name}</p>
         </Upload>
 
-        <div>
+        {/* <div>
           <Upload multiple={true} {...props1}>
             <Button
               title="Imagenes complementarias del producto"
@@ -237,7 +213,7 @@ const AgregarProductos = () => {
               Imagenes del producto
             </Button>
           </Upload>
-        </div>
+        </div> */}
       </div>
     );
   };
@@ -248,14 +224,9 @@ const AgregarProductos = () => {
         <Card
           className="card__product_add"
           style={{ width: 275, height: 300 }}
-          cover={
-            <img
-              alt="example"
-              src="https://os.alipayobjects.com/rmsportal/QBnOOoLaAfKPirc.png"
-            />
-          }
+          cover={<img alt="example" src={file.thumbUrl} />}
         >
-          <Meta title="Europe Street beat" description="www.instagram.com" />
+          <Meta title={product.name} description="www.instagram.com" />
         </Card>
       </div>
     );
