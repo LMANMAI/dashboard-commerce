@@ -19,7 +19,11 @@ const MisProductos: React.FC = () => {
   const [load, setLoad] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<Product | null>(null);
-
+  const [pagination, setPagination] = useState<any>({
+    current: 1,
+    pageSize: 10,
+    total: 123,
+  });
   const showDetails = (item: Product) => {
     setSelectedItem(item);
     setVisible(true);
@@ -28,11 +32,18 @@ const MisProductos: React.FC = () => {
   const handleCancel = () => {
     setVisible(false);
   };
-  const getData = async () => {
+  const getData = async (page: any, pageSize: any) => {
     setLoad(true);
-    const req = await getProducts();
+    const req = await getProducts({
+      page: page,
+      pageSize: pageSize,
+    });
     if (req.status === 200) {
-      console.log(req);
+      setPagination({
+        current: req.currenPage,
+        pageSize: 10,
+        total: req.totalSneakers,
+      });
       setProducts(req.data);
       setLoad(false);
     }
@@ -40,10 +51,6 @@ const MisProductos: React.FC = () => {
   const handleChange = (value: string) => {
     console.log(`selected ${value}`);
   };
-  useEffect(() => {
-    setLoad(true);
-    getData();
-  }, []);
 
   const modalContent = (
     <div style={{ overflowY: "auto", maxHeight: "750px" }}>
@@ -114,11 +121,12 @@ const MisProductos: React.FC = () => {
       key: "address",
     },
   ];
-
+  useEffect(() => {
+    setLoad(true);
+    getData(1, 10);
+  }, []);
   return (
     <div>
-      {/* <Title>Mis productos</Title> */}
-
       <MisProductosContainer>
         <div className="misproductos__box"></div>
         <div className="misproductos__formulario">
@@ -155,13 +163,21 @@ const MisProductos: React.FC = () => {
             title="Buscar producto"
             type="primary"
             icon={<SearchOutlined />}
-            onClick={() => getData()}
+            onClick={() => getData(1, 10)}
           >
             Buscar producto
           </StyledCustomButton>
         </div>
         <TaleContainer>
-          <Table dataSource={products} columns={columns} loading={load} />
+          <Table
+            dataSource={products}
+            columns={columns}
+            loading={load}
+            pagination={pagination}
+            onChange={(pagination) => {
+              getData(pagination.current, 10);
+            }}
+          />
         </TaleContainer>
         <Modal
           title="Detalles del Producto"

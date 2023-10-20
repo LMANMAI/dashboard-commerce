@@ -2,6 +2,7 @@ const customTheme = {
   "@primary-color": "#FAFAFA",
   "@secondary-color": "#944646",
   "@secondary-color-dark": "#6b3232",
+  "@action-color-transparent": "#4e7a9c94",
   "@action-color": "#4E7A9C",
 };
 

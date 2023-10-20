@@ -14,7 +14,6 @@ export const StyledCustomButton = styled(Button)`
   padding: 10px 20px;
   display: flex;
   align-items: center;
-  margin: 10px auto;
   background-color: ${customTheme["@action-color"]};
   &:hover {
     background-color: #3e617d !important;

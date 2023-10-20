@@ -1,10 +1,13 @@
 import instance from "../config";
-
-const getProducts = async () => {
+interface IPageProps {
+  page: number;
+  pageSize: number;
+}
+const getProducts = async ({ page, pageSize }: IPageProps) => {
   try {
-    const { data, status } = await instance("/sneaker");
-
-    console.log("req", data);
+    const { data } = await instance(
+      `/sneaker?page=${page}&pageSize=${pageSize}`
+    );
     return data;
   } catch (error) {
     return [];

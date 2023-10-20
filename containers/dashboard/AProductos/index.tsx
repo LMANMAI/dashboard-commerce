@@ -1,24 +1,19 @@
-import React, { useState, useRef } from "react";
-import { AddFormContainer, AddForm, StepsContainer } from "./styles";
+import React, { useState } from "react";
+import {
+  AddFormContainer,
+  AddForm,
+  StepsContainer,
+  CustomSteps,
+  CustomInput,
+} from "./styles";
 import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
-import {
-  Input,
-  DatePicker,
-  Select,
-  Button,
-  message,
-  Upload,
-  Card,
-  Steps,
-} from "antd";
+import { DatePicker, Select, Button, message, Upload, Card, Steps } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
+import { StyledCustomButton } from "../styles";
 import axios from "axios";
 const { Meta } = Card;
 import dayjs from "dayjs";
-interface InputRef {
-  input: HTMLInputElement | null;
-}
 
 const AgregarProductos = () => {
   const { Step } = Steps;
@@ -45,7 +40,6 @@ const AgregarProductos = () => {
     formData.append("image", file.originFileObj);
     formData.append("sneaker", JSON.stringify(product));
 
-    console.log(formData);
     axios
       .post(`${import.meta.env.VITE_URL_EP}sneaker/create`, formData, {
         headers: {
@@ -112,7 +106,6 @@ const AgregarProductos = () => {
       },
 
       onChange(info) {
-        console.log(info.file);
         if (info.file.status === "uploading") {
           setFileList(info.file);
           message.success(`${info.file.name} file uploaded successfully`);
@@ -137,40 +130,6 @@ const AgregarProductos = () => {
         }
       },
     };
-    const props2: UploadProps = {
-      name: "images",
-      action: "http://localhost:5173/add",
-      headers: {
-        authorization: "authorization-text",
-      },
-      onChange(info) {
-        if (info.file.status === "done") {
-          setImgsList2(info.file);
-          message.success(`${info.file.name} file uploaded successfully`);
-        }
-        if (info.file.status === "uploading") {
-          setImgsList2(info.file);
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === "error") {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
-    const props3: UploadProps = {
-      name: "images",
-      action: "http://localhost:5173/add",
-      headers: {
-        authorization: "authorization-text",
-      },
-      onChange(info) {
-        if (info.file.status === "uploading") {
-          setImgsList3(info.file);
-          message.success(`${info.file.name} file uploaded successfully`);
-        } else if (info.file.status === "error") {
-          message.error(`${info.file.name} file upload failed.`);
-        }
-      },
-    };
 
     return (
       <div className="button__formadd">
@@ -188,32 +147,14 @@ const AgregarProductos = () => {
           <p>{file?.name}</p>
         </Upload>
 
-        {/* <div>
-          <Upload multiple={true} {...props1}>
-            <Button
-              title="Imagenes complementarias del producto"
-              icon={<UploadOutlined />}
-            >
-              Imagenes del producto
-            </Button>
-          </Upload>
-          <Upload multiple={true} {...props2}>
-            <Button
-              title="Imagenes complementarias del producto"
-              icon={<UploadOutlined />}
-            >
-              Imagenes del producto
-            </Button>
-          </Upload>
-          <Upload multiple={true} {...props3}>
-            <Button
-              title="Imagenes complementarias del producto"
-              icon={<UploadOutlined />}
-            >
-              Imagenes del producto
-            </Button>
-          </Upload>
-        </div> */}
+        <Upload multiple={true} {...props1}>
+          <Button
+            title="Imagenes complementarias del producto"
+            icon={<UploadOutlined />}
+          >
+            Imagenes del producto
+          </Button>
+        </Upload>
       </div>
     );
   };
@@ -236,16 +177,19 @@ const AgregarProductos = () => {
     <div style={{ width: "100%" }}>
       <AddFormContainer>
         <div className="steps">
-          <Steps size="small" current={currentStep} labelPlacement="vertical">
+          <CustomSteps
+            size="small"
+            current={currentStep}
+            labelPlacement="vertical"
+          >
             <Step title="información" />
             <Step title="Imagenes" />
-            {/* <Step  title="Cargar stock" /> */}
             <Step title="Guardar" />
-          </Steps>
+          </CustomSteps>
           <StepsContainer>
             {currentStep === 0 && (
               <AddForm>
-                <Input
+                <CustomInput
                   addonBefore="Nombre"
                   className="input__addform"
                   placeholder="Nombre"
@@ -254,7 +198,7 @@ const AgregarProductos = () => {
                   value={product.name}
                   onChange={handleInputChange}
                 />
-                <Input
+                <CustomInput
                   addonBefore="Precio"
                   className="input__addform precio"
                   placeholder="Precio"
@@ -301,7 +245,7 @@ const AgregarProductos = () => {
                 </div>
 
                 <div className="input__formadd_container_talle">
-                  <Input
+                  <CustomInput
                     className="input__addform qty"
                     placeholder="Cantidad"
                     value={inputValue}
@@ -346,30 +290,30 @@ const AgregarProductos = () => {
             {currentStep === 2 && <LastStep />}
           </StepsContainer>
 
-          <div style={{ marginTop: "20px" }}>
+          <div style={{ marginTop: "20px", display: "flex" }}>
             {currentStep > 0 && (
-              <Button
+              <StyledCustomButton
                 type="primary"
                 onClick={() => setCurrentStep(currentStep - 1)}
                 style={{ marginRight: "10px" }}
               >
                 Anterior
-              </Button>
+              </StyledCustomButton>
             )}
             {currentStep < 2 && (
-              <Button
+              <StyledCustomButton
                 type="primary"
                 onClick={() => {
                   setCurrentStep(currentStep + 1);
                 }}
               >
                 Siguiente
-              </Button>
+              </StyledCustomButton>
             )}
             {currentStep === 2 && (
-              <Button type="primary" onClick={() => onFinish()}>
+              <StyledCustomButton type="primary" onClick={() => onFinish()}>
                 Guardar
-              </Button>
+              </StyledCustomButton>
             )}
           </div>
         </div>

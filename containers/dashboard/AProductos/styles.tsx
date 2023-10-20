@@ -1,5 +1,6 @@
 import styled from "styled-components";
-
+import { Steps, Input, Button } from "antd";
+import customTheme from "@customTheme";
 export const AddFormContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -77,6 +78,41 @@ export const StepsContainer = styled.section`
     .input__formadd_container_talle {
       flex-direction: row;
       //width: 50%;
+    }
+  }
+`;
+
+export const CustomSteps = styled(Steps)`
+  && {
+    .ant-steps-item.ant-steps-item-process.ant-steps-item-active {
+      .ant-steps-item-icon {
+        border-color: ${customTheme["@action-color"]}!important;
+        background-color: ${customTheme["@action-color"]}!important;
+      }
+    }
+    .ant-steps-item.ant-steps-item-finish {
+      .ant-steps-item-icon {
+        background-color: ${customTheme["@action-color-transparent"]}!important;
+
+        .ant-steps-icon {
+          color: ${customTheme["@primary-color"]}!important;
+        }
+      }
+    }
+    .ant-steps-item-tail {
+      &:after {
+        background-color: ${customTheme["@action-color"]}!important;
+      }
+    }
+  }
+`;
+
+export const CustomInput = styled(Input)`
+  && {
+    input {
+      &:focus {
+        border: 1px solid ${customTheme["@action-color"]}!important;
+      }
     }
   }
 `;
