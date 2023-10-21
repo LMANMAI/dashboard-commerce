@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Steps, Input, Button } from "antd";
+import { Steps, Input, Button, Select } from "antd";
 import customTheme from "@customTheme";
 export const AddFormContainer = styled.div`
   display: flex;
@@ -110,7 +110,8 @@ export const CustomSteps = styled(Steps)`
 export const CustomInput = styled(Input)`
   && {
     input {
-      &:focus {
+      &:focus,
+      &:hover {
         border: 1px solid ${customTheme["@action-color"]}!important;
       }
     }
