@@ -69,6 +69,8 @@ const AgregarProductos = () => {
           imagesFormData.append("images", imgs1[0]?.originFileObj);
           imagesFormData.append("images", imgs1[1]?.originFileObj);
           imagesFormData.append("images", imgs1[2]?.originFileObj);
+          //                http://localhost:4000/sneaker/productimages/653688fb61bb68fe55b818c1
+          //https://sneakeers-api-vb8y.vercel.app/sneaker/productimages/65368a514ca2ac421fe028f8
           await axios
             .put(
               `${import.meta.env.VITE_URL_EP}sneaker/productimages/${
@@ -78,6 +80,7 @@ const AgregarProductos = () => {
               {
                 headers: {
                   "Content-Type": "multipart/form-data",
+                  "Access-Control-Allow-Origin": "*",
                 },
               }
             )
@@ -97,7 +100,8 @@ const AgregarProductos = () => {
                 "Producto agregado correctamente",
                 "Se agrego el producto correctamente, lo vera reflejado en el menu de mis productos."
               );
-            });
+            })
+            .catch((error) => console.log(error));
         } else {
           openNotification(
             "Ocurrio un error al agregar el producto",

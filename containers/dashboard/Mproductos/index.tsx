@@ -74,9 +74,9 @@ const MisProductos: React.FC = () => {
           <div style={{ height: "300px", width: "300px" }}>
             <img
               style={{ width: "100%" }}
-              src={`${import.meta.env.VITE_URL_EP}/sneaker/image/${
-                selectedItem._id
-              }/imgs/${index}`}
+              src={`https://res.cloudinary.com/${
+                import.meta.env.VITE_CLOUD_NAME
+              }/image/upload/v1697492964/${item}`}
             />
           </div>
         ))}
