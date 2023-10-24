@@ -64,44 +64,24 @@ const AgregarProductos = () => {
         },
       })
       .then(async (response) => {
+        const imagesFormData = new FormData();
+        imagesFormData.append("images", imgs1[0]?.originFileObj);
+        imagesFormData.append("images", imgs1[1]?.originFileObj);
+        imagesFormData.append("images", imgs1[2]?.originFileObj);
+        //                http://localhost:4000/sneaker/productimages/653688fb61bb68fe55b818c1
+        //https://sneakeers-api-vb8y.vercel.app/sneaker/productimages/65368a514ca2ac421fe028f8
+        return await fetch(
+          `${import.meta.env.VITE_URL_EP}sneaker/productimages/${
+            response.data.sneaker._id
+          }`,
+          {
+            method: "PUT",
+            body: imagesFormData,
+          }
+        )
+          .then((res) => console.log(res, "res"))
+          .catch((err) => console.log(err));
         if (response.status === 200) {
-          const imagesFormData = new FormData();
-          imagesFormData.append("images", imgs1[0]?.originFileObj);
-          imagesFormData.append("images", imgs1[1]?.originFileObj);
-          imagesFormData.append("images", imgs1[2]?.originFileObj);
-          //                http://localhost:4000/sneaker/productimages/653688fb61bb68fe55b818c1
-          //https://sneakeers-api-vb8y.vercel.app/sneaker/productimages/65368a514ca2ac421fe028f8
-          await axios
-            .put(
-              `${import.meta.env.VITE_URL_EP}sneaker/productimages/${
-                response.data.sneaker._id
-              }`,
-              imagesFormData,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  "Access-Control-Allow-Origin": "*",
-                },
-              }
-            )
-            .then(() => {
-              // setCurrentStep(0);
-              // setFileList(null);
-              // setProduct({
-              //   sizes: [],
-              //   name: "",
-              //   relaseYear: "2021-04-15",
-              //   price: 0,
-              //   brand: "",
-              //   genre: "",
-              //   quantity: 0,
-              // });
-              openNotification(
-                "Producto agregado correctamente",
-                "Se agrego el producto correctamente, lo vera reflejado en el menu de mis productos."
-              );
-            })
-            .catch((error) => console.log(error));
         } else {
           openNotification(
             "Ocurrio un error al agregar el producto",
