@@ -38,10 +38,39 @@ export const AddForm = styled.div`
     justify-content: start;
     flex-direction: column;
     gap: 15px;
+    .ant-select {
+      width: 100% !important;
+    }
+  }
+  .badge__container {
+    .button_badge {
+      position: relative;
+      &:hover {
+        .button__delete_badge {
+          visibility: visible;
+        }
+      }
+    }
+    .button__delete_badge {
+      visibility: hidden;
+      position: absolute;
+      bottom: -12px;
+      border-radius: 100%;
+      outline: none;
+      height: 15px;
+      width: 15px;
+      border: 1px solid;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: -5px;
+    }
   }
   @media (min-width: 768px) {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 50%);
     .select__formcontain {
       flex-direction: row;
     }
@@ -69,6 +98,10 @@ export const StepsContainer = styled.section`
     gap: 10px;
     flex-direction: column;
     margin: 0px auto;
+    width: 100%;
+    .ant-select {
+      width: 100% !important;
+    }
   }
 
   @media (min-width: 1024px) {

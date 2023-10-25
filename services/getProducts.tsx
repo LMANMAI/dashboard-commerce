@@ -5,8 +5,8 @@ interface IPageProps {
 }
 const getProducts = async ({ page, pageSize }: IPageProps) => {
   try {
-    const { data } = await instance(
-      `/sneaker?page=${page}&pageSize=${pageSize}`
+    const { data } = await instance.get(
+      `sneaker?page=${page}&pageSize=${pageSize}`
     );
     return data;
   } catch (error) {

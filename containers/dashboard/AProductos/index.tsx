@@ -16,17 +16,20 @@ import {
   Card,
   Steps,
   notification,
+  Avatar,
+  Badge,
+  Space,
 } from "antd";
 import { SaveOutlined } from "@ant-design/icons";
 import { StyledCustomButton } from "../styles";
-import axios from "axios";
 import dayjs from "dayjs";
-
+import { addImagestoProduct, createProducts } from "@services";
 const key = "updatable";
 const AgregarProductos = () => {
   const { Step } = Steps;
   const [currentStep, setCurrentStep] = useState(0);
   const [file, setFileList] = useState<any>();
+  const [load, setLoad] = useState<boolean>(false);
   const [imgs1, setImgsList1] = useState<any>([]);
   const [product, setProduct] = useState({
     sizes: [] as { size: string; qty: string }[],
@@ -54,45 +57,52 @@ const AgregarProductos = () => {
   };
 
   const onFinish = async () => {
+    setLoad(true);
     const formData = new FormData();
     formData.append("image", file.originFileObj);
     formData.append("sneaker", JSON.stringify(product));
-    await axios
-      .post(`${import.meta.env.VITE_URL_EP}sneaker/create`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      })
+    await createProducts({ formData })
       .then(async (response) => {
+        openNotification(
+          "Producto agregado correctamente",
+          "Por favor vuelva a intentar en unos momentos."
+        );
         const imagesFormData = new FormData();
         imagesFormData.append("images", imgs1[0]?.originFileObj);
         imagesFormData.append("images", imgs1[1]?.originFileObj);
         imagesFormData.append("images", imgs1[2]?.originFileObj);
-        //                http://localhost:4000/sneaker/productimages/653688fb61bb68fe55b818c1
-        //https://sneakeers-api-vb8y.vercel.app/sneaker/productimages/65368a514ca2ac421fe028f8
-        return await fetch(
-          `${import.meta.env.VITE_URL_EP}sneaker/productimages/${
-            response.data.sneaker._id
-          }`,
-          {
-            method: "PUT",
-            body: imagesFormData,
-          }
-        )
-          .then((res) => console.log(res, "res"))
-          .catch((err) => console.log(err));
-        if (response.status === 200) {
-        } else {
-          openNotification(
-            "Ocurrio un error al agregar el producto",
-            "Por favor vuelva a intentar en unos momentos."
-          );
-        }
+        const productId = response.sneaker._id;
+        await addImagestoProduct({ productId, imagesFormData })
+          .then(() => {
+            openNotification(
+              "imagenes agregadas correctamente",
+              "Por favor vuelva a intentar en unos momentos."
+            );
+            setFileList(null);
+            setImgsList1([]);
+            setCurrentStep(0);
+            setLoad(false);
+            setProduct({
+              sizes: [],
+              name: "",
+              relaseYear: "2021-04-15",
+              price: 0,
+              brand: "",
+              genre: "",
+              quantity: 0,
+            });
+          })
+          .catch(() => {
+            openNotification(
+              "Ocurrio un error al agregar las imagenes al producto",
+              "Por favor vuelva a intentar en unos momentos."
+            );
+          });
       })
-      .catch((error) => {
+      .catch(() => {
         openNotification(
-          error.message,
-          "Ocurrio un error, por favor contacte al proveedor de datos."
+          "Ocurrio un error al agregar el producto",
+          "Por favor vuelva a intentar en unos momentos."
         );
       });
   };
@@ -142,6 +152,13 @@ const AgregarProductos = () => {
       [name]: value,
     });
   };
+  const handleDeleteStock = (index: number) => {
+    const updatedSizes = product.sizes.filter(
+      (item, itemIndex) => itemIndex !== index
+    );
+
+    setProduct({ ...product, sizes: updatedSizes });
+  };
 
   const StepTwo = () => {
     const propsPosterPath: UploadProps = {
@@ -167,7 +184,6 @@ const AgregarProductos = () => {
       },
       onChange(info) {
         if (info.file.status === "uploading") {
-          console.log(info.fileList);
           setImgsList1(info.fileList);
         } else if (info.file.status === "error") {
         }
@@ -332,6 +348,26 @@ const AgregarProductos = () => {
                     Guardar
                   </Button>
                 </div>
+                <div className="badge__container">
+                  <Space size="middle">
+                    {product.sizes.map((item, index) => (
+                      <div className="button_badge">
+                        <button
+                          className="button__delete_badge"
+                          onClick={() => handleDeleteStock(index)}
+                          title="Eliminar producto del stock"
+                        >
+                          x
+                        </button>
+                        <Badge size="small" count={item.qty} color={"#4E7A9C"}>
+                          <Avatar shape="square" size="small">
+                            {item.size}
+                          </Avatar>
+                        </Badge>
+                      </div>
+                    ))}
+                  </Space>
+                </div>
               </AddForm>
             )}
             {currentStep === 1 && <StepTwo />}
@@ -366,7 +402,11 @@ const AgregarProductos = () => {
               </StyledCustomButton>
             )}
             {currentStep === 2 && (
-              <StyledCustomButton type="primary" onClick={() => onFinish()}>
+              <StyledCustomButton
+                type="primary"
+                onClick={() => onFinish()}
+                disabled={load}
+              >
                 Guardar
               </StyledCustomButton>
             )}
