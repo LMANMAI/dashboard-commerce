@@ -11,6 +11,7 @@ const addProducts = async ({ formData }: IPageProps) => {
     });
     return data;
   } catch (error) {
+    console.log(error);
     return [];
   }
 };

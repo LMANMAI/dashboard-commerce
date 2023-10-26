@@ -92,6 +92,32 @@ export const StepsContainer = styled.section`
     button {
       min-width: 260px;
     }
+    .img_name_upload {
+      border: 1px solid #eee;
+      margin: 5px 0px;
+      padding: 5px;
+      text-align: start;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      &:hover {
+        .img__delete_btn.img__delete_btn {
+          visibility: visible;
+        }
+      }
+      .img__delete_btn.img__delete_btn {
+        min-width: 20px !important;
+        visibility: hidden;
+        cursor: pointer;
+        border: none;
+        color: white;
+        background-color: #4e7a9c;
+        border-radius: 5px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    }
   }
   .input__formadd_container_talle {
     display: flex;

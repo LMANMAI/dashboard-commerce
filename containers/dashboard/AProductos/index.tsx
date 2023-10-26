@@ -93,6 +93,7 @@ const AgregarProductos = () => {
             });
           })
           .catch(() => {
+            setLoad(false);
             openNotification(
               "Ocurrio un error al agregar las imagenes al producto",
               "Por favor vuelva a intentar en unos momentos."
@@ -100,6 +101,7 @@ const AgregarProductos = () => {
           });
       })
       .catch(() => {
+        setLoad(false);
         openNotification(
           "Ocurrio un error al agregar el producto",
           "Por favor vuelva a intentar en unos momentos."
@@ -122,15 +124,28 @@ const AgregarProductos = () => {
       size: sizevalue,
       qty: inputValue,
     };
+
     const prevStock: { size: string; qty: string }[] = product.sizes;
+    const existingSizeIndex = prevStock.findIndex(
+      (item) => item.size === sizevalue
+    );
+
+    if (existingSizeIndex !== -1) {
+      prevStock[existingSizeIndex].qty = (
+        parseInt(prevStock[existingSizeIndex].qty) + parseInt(inputValue)
+      ).toString();
+    } else {
+      prevStock.push(newSize);
+    }
+
     setProduct({
       ...product,
-      sizes: [...prevStock, newSize],
+      sizes: prevStock,
     });
-
     setSizevalue("");
     setInputValue("");
   };
+
   const handleChangeSizeStock = (value: string) => {
     setSizevalue(value);
   };
@@ -192,28 +207,62 @@ const AgregarProductos = () => {
 
     return (
       <div className="button__formadd">
-        <Upload
-          listType="picture"
-          className="upload-list-inline"
-          {...propsPosterPath}
-        >
-          <Button
-            title="Imagen con la que se promociona el producto"
-            icon={<UploadOutlined />}
+        <div>
+          <Upload
+            listType="picture"
+            className="upload-list-inline"
+            {...propsPosterPath}
           >
-            Imagen para la portada
-          </Button>
-          <p>{file?.name}</p>
-        </Upload>
+            <Button
+              title="Imagen con la que se promociona el producto"
+              icon={<UploadOutlined />}
+            >
+              Imagen para la portada
+            </Button>
+          </Upload>
+          {file && (
+            <div className="img_name_upload">
+              <p>{file?.name}</p>
+              <button
+                className="img__delete_btn"
+                onClick={() => setFileList(null)}
+                title="Eliminar imagen del producto"
+              >
+                x
+              </button>
+            </div>
+          )}
+        </div>
 
-        <Upload multiple={true} {...props1}>
-          <Button
-            title="Imagenes complementarias del producto"
-            icon={<UploadOutlined />}
-          >
-            Imagenes del producto
-          </Button>
-        </Upload>
+        <div>
+          <Upload multiple={true} {...props1}>
+            <Button
+              title="Imagenes complementarias del producto"
+              icon={<UploadOutlined />}
+            >
+              Imagenes del producto
+            </Button>
+          </Upload>
+          {imgs1.map((item: any, index: number) => {
+            return (
+              <div className="img_name_upload" key={item.name}>
+                <p>{item?.name}</p>
+                <button
+                  className="img__delete_btn"
+                  onClick={() => {
+                    const updatedImgs1 = imgs1.filter(
+                      (item: any, i: any) => i !== index
+                    );
+                    setImgsList1(updatedImgs1);
+                  }}
+                  title="Eliminar imagen del producto"
+                >
+                  x
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     );
   };
@@ -313,7 +362,7 @@ const AgregarProductos = () => {
                     className="input__addform qty"
                     placeholder="Cantidad"
                     value={inputValue}
-                    type="text"
+                    type="number"
                     addonBefore="Cantidad"
                     onChange={handleSizeInputChange}
                   />
