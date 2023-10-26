@@ -22,6 +22,10 @@ export const MisProductosContainer = styled.div`
     gap: 10px;
     padding: 10px 0px;
   }
+  .select__mproducts {
+    width: 100%;
+  }
+
   @media (min-width: 768px) {
     .misproductos__box {
       display: block;
@@ -34,6 +38,11 @@ export const MisProductosContainer = styled.div`
 
     .misproductos__formulario {
       flex-direction: row;
+    }
+
+    .select__mproducts {
+      width: 100%;
+      max-width: 350px;
     }
   }
 `;

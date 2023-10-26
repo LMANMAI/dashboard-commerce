@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { getProducts } from "@services";
-import { Table, Input, Select, Button, Modal, Steps } from "antd";
+import { getProducts, searchProduct } from "@services";
+import { Table, Input, Select, Button, Modal, notification } from "antd";
 import { TaleContainer, MisProductosContainer } from "./styles";
-import { Title, StyledCustomButton } from "../styles";
+import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
 interface Product {
   key: string;
@@ -14,16 +14,34 @@ interface Product {
 }
 
 const MisProductos: React.FC = () => {
-  const [activeprod, setActiveProd] = useState<any>({});
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
   const [visible, setVisible] = useState<boolean>(false);
+  const [searchparam, setSearchParam] = useState({
+    name: "",
+    genre: "",
+    brand: "",
+  });
   const [selectedItem, setSelectedItem] = useState<Product | null>(null);
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
     total: 123,
   });
+  const key = "updatable";
+  const [api, contextHolder] = notification.useNotification();
+  const openNotification = (message: string, description: string) => {
+    api.open({
+      key,
+      message: message,
+      description: description,
+    });
+
+    setTimeout(() => {
+      api.destroy();
+    }, 3000);
+  };
+
   const showDetails = (item: Product) => {
     setSelectedItem(item);
     setVisible(true);
@@ -48,10 +66,31 @@ const MisProductos: React.FC = () => {
       setLoad(false);
     }
   };
-  const handleChange = (value: string) => {
-    console.log(`selected ${value}`);
+  const handleChange = (value: any, fieldName: string) => {
+    setSearchParam((prevSearchParam) => ({
+      ...prevSearchParam,
+      [fieldName]: value,
+    }));
   };
 
+  const handleSearch = async () => {
+    console.log(searchparam);
+    const req = await searchProduct(searchparam);
+    if (req.status === 200) {
+      setPagination({
+        current: req.currenPage,
+        pageSize: 10,
+        total: req.totalSneakers,
+      });
+      setProducts(req.data);
+      setLoad(false);
+    } else if (req.status === 204) {
+      openNotification(
+        "No se encontro productos que coincidan con la busqueda",
+        "Por favor ajuste los valores y vuelva a intentar."
+      );
+    }
+  };
   const modalContent = (
     <div style={{ overflowY: "auto", maxHeight: "750px" }}>
       <h2>Detalles del Producto</h2>
@@ -82,7 +121,6 @@ const MisProductos: React.FC = () => {
         ))}
     </div>
   );
-
   const columns = [
     {
       title: "Ver",
@@ -120,6 +158,11 @@ const MisProductos: React.FC = () => {
       dataIndex: "relaseYear",
       key: "address",
     },
+    {
+      title: "Marca",
+      dataIndex: "brand",
+      key: "address",
+    },
   ];
   useEffect(() => {
     setLoad(true);
@@ -127,6 +170,7 @@ const MisProductos: React.FC = () => {
   }, []);
   return (
     <div>
+      {contextHolder}
       <MisProductosContainer>
         <div className="misproductos__box"></div>
         <div className="misproductos__formulario">
@@ -138,32 +182,36 @@ const MisProductos: React.FC = () => {
           />
           <Select
             defaultValue="Buscar por marca"
-            onChange={handleChange}
-            style={{ width: 250 }}
+            onChange={(value) => handleChange(value, "brand")}
+            className="select__mproducts"
             options={[
-              { value: "jack", label: "Elige una marca" },
-              { value: "jack", label: "Nike" },
-              { value: "lucy", label: "Adidas" },
-              { value: "Yiminghe", label: "Vans" },
-              { value: "disabled", label: "Converse" },
+              { label: "Elige una marca", value: "" },
+              { label: "Adidas", value: "ADIDAS" },
+              { label: "Nike", value: "NIKE" },
+              { label: "New Balance", value: "NEW BALANCE" },
+              { label: "Air Jordan", value: "AIR JORDAN" },
+              { label: "Yeezy", value: "YEEZY" },
+              { label: "Converse", value: "CONVERSE" },
+              { label: "Vans", value: "VANS" },
+              { label: "Revengexstorm", value: "REVENGEXSTORM" },
             ]}
           />
           <Select
             defaultValue="Buscar por genero"
-            onChange={handleChange}
-            style={{ width: 250 }}
+            onChange={(value) => handleChange(value, "genre")}
+            className="select__mproducts"
             options={[
-              { value: "jack", label: "Elige un genero" },
-              { value: "jack", label: "Hombre" },
-              { value: "lucy", label: "Mujer" },
-              { value: "lucy", label: "Unisex" },
+              { value: "", label: "Elige un genero" },
+              { value: "MEN", label: "Hombre" },
+              { value: "WOMAN", label: "Mujer" },
+              { value: "UNISEX", label: "Unisex" },
             ]}
           />
           <StyledCustomButton
             title="Buscar producto"
             type="primary"
             icon={<SearchOutlined />}
-            onClick={() => getData(1, 10)}
+            onClick={() => handleSearch()}
           >
             Buscar producto
           </StyledCustomButton>

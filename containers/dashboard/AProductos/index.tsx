@@ -154,11 +154,8 @@ const AgregarProductos = () => {
     setInputValue(value);
   };
 
-  const handleGenreChange = (value: any) => {
-    setProduct({ ...product, genre: value });
-  };
-  const handleBrandChange = (value: any) => {
-    setProduct({ ...product, brand: value });
+  const handleChange = (value: any, fieldName: string) => {
+    setProduct({ ...product, [fieldName]: value });
   };
   const handleInputChange = (e: any) => {
     const { name, value } = e.target;
@@ -279,7 +276,6 @@ const AgregarProductos = () => {
           <p>Precio: ${product.price}</p>
           <p>Marca: {product.brand}</p>
           <p>Genero: {product.genre}</p>
-          {/* <p>Stock: {product.qty}</p> */}
         </Card>
       </div>
     );
@@ -329,7 +325,7 @@ const AgregarProductos = () => {
                 />
                 <div className="select__formcontain">
                   <Select
-                    onChange={handleBrandChange}
+                    onChange={(value) => handleChange(value, "brand")}
                     style={{ width: 250 }}
                     value={product.brand}
                     options={[
@@ -345,7 +341,7 @@ const AgregarProductos = () => {
                     ]}
                   />
                   <Select
-                    onChange={handleGenreChange}
+                    onChange={(value) => handleChange(value, "genre")}
                     style={{ width: 250 }}
                     value={product.genre}
                     options={[
