@@ -25,7 +25,6 @@ export const MisProductosContainer = styled.div`
   .select__mproducts {
     width: 100%;
   }
-
   @media (min-width: 768px) {
     .misproductos__box {
       display: block;

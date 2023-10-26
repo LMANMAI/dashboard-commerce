@@ -93,32 +93,38 @@ const MisProductos: React.FC = () => {
   };
   const modalContent = (
     <div style={{ overflowY: "auto", maxHeight: "750px" }}>
-      <h2>Detalles del Producto</h2>
-      <p>Nombre: {selectedItem && selectedItem.name}</p>
-      <p>Precio: {selectedItem && selectedItem.price}</p>
-      <div style={{ height: "300px", width: "300px" }}>
-        <p>imagenes de poster</p>
-        {selectedItem && (
-          <img
-            style={{ width: "100%" }}
-            src={`https://res.cloudinary.com/${
-              import.meta.env.VITE_CLOUD_NAME
-            }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
-          />
-        )}
+      <div>
+        <h2>Detalles del Producto</h2>
+        <p>Nombre: {selectedItem && selectedItem.name}</p>
+        <p>Precio: {selectedItem && selectedItem.price}</p>
       </div>
-      <p>imagenes adicionales</p>
-      {selectedItem &&
-        selectedItem.imgs.map((item, index) => (
-          <div style={{ height: "300px", width: "300px" }}>
+      <div>
+        <p>imagenes de poster</p>
+        <div style={{ height: "300px", width: "300px" }}>
+          {selectedItem && (
             <img
               style={{ width: "100%" }}
               src={`https://res.cloudinary.com/${
                 import.meta.env.VITE_CLOUD_NAME
-              }/image/upload/v1697492964/${item}`}
+              }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
             />
-          </div>
-        ))}
+          )}
+        </div>
+      </div>
+      <div>
+        <p>imagenes adicionales</p>
+        {selectedItem &&
+          selectedItem.imgs.map((item, index) => (
+            <div style={{ height: "300px", width: "300px" }}>
+              <img
+                style={{ width: "100%" }}
+                src={`https://res.cloudinary.com/${
+                  import.meta.env.VITE_CLOUD_NAME
+                }/image/upload/v1697492964/${item}`}
+              />
+            </div>
+          ))}
+      </div>
     </div>
   );
   const columns = [
@@ -234,6 +240,7 @@ const MisProductos: React.FC = () => {
           onOk={handleCancel}
           onCancel={handleCancel}
           destroyOnClose={true}
+          width="80%"
         >
           {modalContent}
         </Modal>
