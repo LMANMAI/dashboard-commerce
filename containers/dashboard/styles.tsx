@@ -15,7 +15,9 @@ export const StyledCustomButton = styled(Button)`
   display: flex;
   align-items: center;
   background-color: ${customTheme["@action-color"]};
+  justify-content: center;
   &:hover {
     background-color: #3e617d !important;
+    color: white !important;
   }
 `;

@@ -1,9 +1,32 @@
 import React, { useState, useEffect } from "react";
 import { getProducts, searchProduct } from "@services";
-import { Table, Input, Select, Button, Modal, notification } from "antd";
-import { TaleContainer, MisProductosContainer } from "./styles";
+import {
+  Table,
+  Input,
+  Select,
+  Button,
+  notification,
+  Drawer,
+  Space,
+  Badge,
+  Avatar,
+  Switch,
+} from "antd";
+import {
+  TaleContainer,
+  MisProductosContainer,
+  DetailImgContainer,
+  DetailImgPosterPath,
+  DetailImgDetail,
+  EditMode,
+  EditPanel,
+} from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
+interface IStock {
+  qty: any;
+  size: any;
+}
 interface Product {
   key: string;
   name: string;
@@ -11,23 +34,43 @@ interface Product {
   imgs: [];
   _id: string;
   posterPathImage: string;
+  sizes: IStock[];
+  genre: string;
+  brand: string;
 }
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
-  const [visible, setVisible] = useState<boolean>(false);
+  const [selectedItem, setSelectedItem] = useState<Product | null>(null);
+  const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
+  const [editmode, setEditMode] = useState<boolean>(false);
   const [searchparam, setSearchParam] = useState({
     name: "",
     genre: "",
     brand: "",
   });
-  const [selectedItem, setSelectedItem] = useState<Product | null>(null);
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
     total: 123,
   });
+  const [open, setOpen] = useState(false);
+
+  const showDrawer = (item: any) => {
+    setOpen(true);
+    setSelectedItem(item);
+    setSelectedItemPoster(
+      `https://res.cloudinary.com/${
+        import.meta.env.VITE_CLOUD_NAME
+      }/image/upload/v1697492964/${item.posterPathImage}`
+    );
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
   const openNotification = (message: string, description: string) => {
@@ -42,14 +85,6 @@ const MisProductos: React.FC = () => {
     }, 3000);
   };
 
-  const showDetails = (item: Product) => {
-    setSelectedItem(item);
-    setVisible(true);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
   const getData = async (page: any, pageSize: any) => {
     setLoad(true);
     const req = await getProducts({
@@ -91,39 +126,134 @@ const MisProductos: React.FC = () => {
       );
     }
   };
+  const onChange = (checked: boolean) => {
+    setEditMode(checked);
+  };
   const modalContent = (
-    <div style={{ overflowY: "auto", maxHeight: "750px" }}>
-      <div>
-        <h2>Detalles del Producto</h2>
-        <p>Nombre: {selectedItem && selectedItem.name}</p>
-        <p>Precio: {selectedItem && selectedItem.price}</p>
-      </div>
-      <div>
-        <p>imagenes de poster</p>
-        <div style={{ height: "300px", width: "300px" }}>
+    <div>
+      <EditMode>
+        <p>Editar producto</p>
+        <Switch size="small" onChange={onChange} />
+      </EditMode>
+      <DetailImgContainer>
+        <DetailImgPosterPath>
           {selectedItem && (
-            <img
-              style={{ width: "100%" }}
-              src={`https://res.cloudinary.com/${
-                import.meta.env.VITE_CLOUD_NAME
-              }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
-            />
+            <img style={{ width: "100%" }} src={selectedItemPoster} />
           )}
-        </div>
-      </div>
-      <div>
-        <p>imagenes adicionales</p>
-        {selectedItem &&
-          selectedItem.imgs.map((item, index) => (
-            <div style={{ height: "300px", width: "300px" }}>
+        </DetailImgPosterPath>
+
+        <DetailImgDetail>
+          {selectedItem && (
+            <div
+              className="img_detail"
+              onClick={() =>
+                setSelectedItemPoster(
+                  `https://res.cloudinary.com/${
+                    import.meta.env.VITE_CLOUD_NAME
+                  }/image/upload/v1697492964/${selectedItem.posterPathImage}`
+                )
+              }
+            >
               <img
                 style={{ width: "100%" }}
                 src={`https://res.cloudinary.com/${
                   import.meta.env.VITE_CLOUD_NAME
-                }/image/upload/v1697492964/${item}`}
+                }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
               />
             </div>
-          ))}
+          )}
+          {selectedItem &&
+            selectedItem.imgs.map((item, index) => (
+              <div
+                className="img_detail"
+                onClick={() =>
+                  setSelectedItemPoster(
+                    `https://res.cloudinary.com/${
+                      import.meta.env.VITE_CLOUD_NAME
+                    }/image/upload/v1697492964/${item}`
+                  )
+                }
+              >
+                <img
+                  style={{ width: "100%" }}
+                  src={`https://res.cloudinary.com/${
+                    import.meta.env.VITE_CLOUD_NAME
+                  }/image/upload/v1697492964/${item}`}
+                />
+              </div>
+            ))}
+        </DetailImgDetail>
+      </DetailImgContainer>
+      {editmode ? (
+        <EditPanel>
+          <Input
+            defaultValue={selectedItem?.name}
+            addonBefore="Nombre"
+            className="input__addform precio"
+            placeholder="Buscar por nombre"
+            type="text"
+          />
+          <Input
+            defaultValue={selectedItem?.price}
+            addonBefore="Precio"
+            className="input__addform precio"
+            placeholder="Buscar por nombre"
+            type="number"
+          />
+          <Select
+            defaultValue={selectedItem?.brand}
+            onChange={(value) => handleChange(value, "brand")}
+            className="select__mproducts"
+            options={[
+              { label: "Elige una marca", value: "" },
+              { label: "Adidas", value: "ADIDAS" },
+              { label: "Nike", value: "NIKE" },
+              { label: "New Balance", value: "NEW BALANCE" },
+              { label: "Air Jordan", value: "AIR JORDAN" },
+              { label: "Yeezy", value: "YEEZY" },
+              { label: "Converse", value: "CONVERSE" },
+              { label: "Vans", value: "VANS" },
+              { label: "Revengexstorm", value: "REVENGEXSTORM" },
+            ]}
+          />
+          <Select
+            defaultValue={selectedItem?.genre}
+            onChange={(value) => handleChange(value, "genre")}
+            className="select__mproducts"
+            options={[
+              { value: "", label: "Elige un genero" },
+              { value: "MEN", label: "Hombre" },
+              { value: "WOMAN", label: "Mujer" },
+              { value: "UNISEX", label: "Unisex" },
+            ]}
+          />
+          <StyledCustomButton onClick={() => console.log(selectedItem)}>
+            Guardar
+          </StyledCustomButton>
+        </EditPanel>
+      ) : (
+        <>
+          <p>Nombre: {selectedItem && selectedItem.name}</p>
+          <p>Precio: {selectedItem && selectedItem.price}</p>
+          <p>Marca: {selectedItem && selectedItem.brand}</p>
+          <p>Genero: {selectedItem && selectedItem.genre}</p>
+        </>
+      )}
+
+      <div>
+        <h3 style={{ marginBottom: "10px" }}>Stock</h3>
+        <Space size="middle">
+          {selectedItem &&
+            selectedItem?.sizes.map((item) => (
+              <div style={{ display: "flex" }}>
+                <Badge size="small" count={item.qty} color={"#4E7A9C"}>
+                  <Avatar shape="square" size="small">
+                    {item.size}
+                  </Avatar>
+                </Badge>
+              </div>
+            ))}
+        </Space>
       </div>
     </div>
   );
@@ -134,7 +264,7 @@ const MisProductos: React.FC = () => {
       key: "name",
       render: (text: string, record: Product) => (
         <Button
-          onClick={() => showDetails(record)}
+          onClick={() => showDrawer(record)}
           icon={<SearchOutlined />}
         ></Button>
       ),
@@ -174,6 +304,7 @@ const MisProductos: React.FC = () => {
     setLoad(true);
     getData(1, 10);
   }, []);
+
   return (
     <div>
       {contextHolder}
@@ -233,17 +364,14 @@ const MisProductos: React.FC = () => {
             }}
           />
         </TaleContainer>
-        <Modal
-          title="Detalles del Producto"
-          visible={visible}
-          centered
-          onOk={handleCancel}
-          onCancel={handleCancel}
-          destroyOnClose={true}
-          width="80%"
+        <Drawer
+          title="Detalle del producto"
+          placement="right"
+          onClose={onClose}
+          open={open}
         >
           {modalContent}
-        </Modal>
+        </Drawer>
       </MisProductosContainer>
     </div>
   );

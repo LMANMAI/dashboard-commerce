@@ -45,3 +45,49 @@ export const MisProductosContainer = styled.div`
     }
   }
 `;
+
+export const EditMode = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+  margin: 10px 0px;
+`;
+export const EditPanel = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
+`;
+
+export const DetailImgContainer = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+export const DetailImgPosterPath = styled.div`
+height: 300px;
+width: 300px;
+}
+img{
+  width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 5px;
+}`;
+export const DetailImgDetail = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  .img_detail {
+    height: 50px;
+    width: 50px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+`;
