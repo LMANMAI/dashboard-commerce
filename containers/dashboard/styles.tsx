@@ -18,6 +18,6 @@ export const StyledCustomButton = styled(Button)`
   justify-content: center;
   &:hover {
     background-color: #3e617d !important;
-    color: white !important;
+    color: white !important ;
   }
 `;

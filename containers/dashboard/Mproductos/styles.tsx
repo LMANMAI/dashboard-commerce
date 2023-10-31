@@ -46,6 +46,34 @@ export const MisProductosContainer = styled.div`
   }
 `;
 
+export const StockContainer = styled.div`
+  .badge__container {
+    .button_badge {
+      position: relative;
+      &:hover {
+        .button__delete_badge {
+          visibility: visible;
+        }
+      }
+    }
+    .button__delete_badge {
+      visibility: hidden;
+      position: absolute;
+      bottom: -12px;
+      border-radius: 100%;
+      outline: none;
+      height: 15px;
+      width: 15px;
+      border: 1px solid;
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      left: -5px;
+    }
+  }
+`;
 export const EditMode = styled.div`
   display: flex;
   align-items: center;
@@ -59,7 +87,15 @@ export const EditPanel = styled.div`
   margin-top: 10px;
   gap: 10px;
 `;
-
+export const InfoPanel = styled.div`
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  p {
+    height: 30px;
+  }
+`;
 export const DetailImgContainer = styled.div`
   display: flex;
   gap: 10px;
