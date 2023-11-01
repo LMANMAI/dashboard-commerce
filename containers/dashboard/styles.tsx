@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Button } from "antd";
 import customTheme from "../../customTheme";
+
 export const Title = styled.h3`
   color: white;
   padding: 10px;
