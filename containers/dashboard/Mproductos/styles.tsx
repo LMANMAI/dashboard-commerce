@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import customTheme from "@customTheme";
+import customTheme from "../../../customTheme";
 
 export const TaleContainer = styled.div`
   margin: 0px auto;

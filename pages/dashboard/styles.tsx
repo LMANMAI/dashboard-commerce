@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { IMenu } from "@types";
-import customTheme from "@customTheme";
+import customTheme from "../../../customTheme";
 
 export const Container = styled.div`
   display: flex;

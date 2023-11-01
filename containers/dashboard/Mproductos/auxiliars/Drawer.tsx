@@ -1,4 +1,3 @@
-import React from "react";
 import { Input, Select, Space, Badge, Avatar, Switch } from "antd";
 import {
   DetailImgContainer,
