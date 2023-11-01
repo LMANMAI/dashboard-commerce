@@ -7,11 +7,10 @@
     "skipLibCheck": true,
 
     /* Bundler mode */
-    "moduleResolution": "bundler",
+     "moduleResolution": "node", 
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
     "jsx": "react-jsx",
 
     /* Linting */
@@ -24,10 +23,10 @@
     "paths": {
       "@assets/*": ["./assets/*"],
       "@components/*": ["./components/*"],
-      "@containers/*": ["containers/*"],
-      "@services": ["services/index.tsx"],
-      "@types": ["src/types/index.ts"],
-      "@customTheme": ["customTheme.ts"],
+      "@containers/*": ["./containers/*"],
+      "@services/*": ["services/*"],
+      "@types/*": ["src/types/*"],
+      "@customTheme": ["customTheme.ts"], 
     },
   },
   "include": ["src"],

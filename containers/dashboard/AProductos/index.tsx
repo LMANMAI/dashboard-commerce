@@ -62,7 +62,7 @@ const AgregarProductos = () => {
     formData.append("image", file.originFileObj);
     formData.append("sneaker", JSON.stringify(product));
     await createProducts({ formData })
-      .then(async (response) => {
+      .then(async (response: any) => {
         openNotification(
           "Producto agregado correctamente",
           "Por favor vuelva a intentar en unos momentos."
