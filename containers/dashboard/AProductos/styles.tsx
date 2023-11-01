@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Steps, Input, Button } from "antd";
-import customTheme from "@customTheme";
+import customTheme from "../../../customTheme";
 export const AddFormContainer = styled.div`
   display: flex;
   flex-direction: column;

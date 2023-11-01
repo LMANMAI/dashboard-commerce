@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   AddFormContainer,
   AddForm,
@@ -166,7 +166,7 @@ const AgregarProductos = () => {
   };
   const handleDeleteStock = (index: number) => {
     const updatedSizes = product.sizes.filter(
-      (item, itemIndex) => itemIndex !== index
+      (_, itemIndex) => itemIndex !== index
     );
 
     setProduct({ ...product, sizes: updatedSizes });
@@ -248,7 +248,7 @@ const AgregarProductos = () => {
                   className="img__delete_btn"
                   onClick={() => {
                     const updatedImgs1 = imgs1.filter(
-                      (item: any, i: any) => i !== index
+                      (_: any, i: any) => i !== index
                     );
                     setImgsList1(updatedImgs1);
                   }}

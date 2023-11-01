@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 
 import {
@@ -17,7 +17,6 @@ import {
 } from "./styles";
 const DashboardPage = () => {
   const [menustatus, setMenuStatus] = useState<boolean>(false);
-  const [activeIndex, setActiveIndex] = useState(0);
   const menu = [
     { icon: HomeOutlined, label: "Inicio", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar productos", path: "add" },
@@ -41,6 +40,7 @@ const DashboardPage = () => {
             {menu.map((item, index) => {
               return (
                 <NavLink
+                  key={index}
                   to={item.path}
                   title={item.label}
                   className={() =>
@@ -50,7 +50,6 @@ const DashboardPage = () => {
                         : ""
                     }`
                   }
-                  onClick={() => setActiveIndex(index)}
                 >
                   <item.icon
                     className="icon_link"

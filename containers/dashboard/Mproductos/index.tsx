@@ -109,7 +109,7 @@ const MisProductos: React.FC = () => {
       title: "Ver",
       dataIndex: "",
       key: "name",
-      render: (text: string, record: IProduct) => (
+      render: (_: string, record: IProduct) => (
         <Button
           onClick={() => showDrawer(record)}
           icon={<SearchOutlined />}
