@@ -62,8 +62,10 @@ const Drawer = ({
             </div>
           )}
           {selectedItem &&
+            selectedItem.imgs.length > 0 &&
             selectedItem.imgs.map((item: any, index: any) => (
               <div
+                key={index}
                 className="img_detail"
                 onClick={() =>
                   setSelectedItemPoster(
