@@ -175,7 +175,7 @@ const AgregarProductos = () => {
   const StepTwo = () => {
     const propsPosterPath: UploadProps = {
       name: "file",
-      action: "http://localhost:5173/add",
+      action: "http://localhost:3000/add",
       headers: {
         authorization: "authorization-text",
       },
@@ -190,7 +190,7 @@ const AgregarProductos = () => {
 
     const props1: UploadProps = {
       name: "images",
-      action: "http://localhost:5173/add",
+      action: "http://localhost:3000/add",
       headers: {
         authorization: "authorization-text",
       },

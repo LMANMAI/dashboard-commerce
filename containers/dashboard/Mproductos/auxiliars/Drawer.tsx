@@ -164,7 +164,9 @@ const Drawer = ({
         <div className="badge__container">
           <Space size="middle">
             {selectedItem &&
-              selectedItem?.sizes.map((item: any) => (
+              selectedItem.sizes &&
+              selectedItem.sizes.length > 0 &&
+              selectedItem.sizes.map((item: any) => (
                 <div className="button_badge">
                   <button
                     className="button__delete_badge"
