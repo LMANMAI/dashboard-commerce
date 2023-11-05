@@ -57,7 +57,7 @@ const AgregarProductos = () => {
   };
 
   const onFinish = async () => {
-    setLoad(true);
+    //setLoad(true);
     const formData = new FormData();
     formData.append("image", file.originFileObj);
     formData.append("sneaker", JSON.stringify(product));

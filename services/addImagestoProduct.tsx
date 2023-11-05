@@ -8,7 +8,7 @@ const addImagestoProduct = async ({
   imagesFormData,
 }: IPageProps) => {
   try {
-    const { data } = await instance.post(
+    const { data } = await instance.put(
       `productimages/${productId}`,
       imagesFormData,
       {

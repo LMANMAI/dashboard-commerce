@@ -17,15 +17,24 @@ const Drawer = ({
   onChange,
   setSelectedItemPoster,
   handleChange,
+  getData,
+  onClose,
 }: any) => {
   const handleUpdateProduct = async (item: any) => {
     const res = await editProduct(item);
-    console.log(res);
+    if (res.status === 200) {
+      getData(1, 10);
+      onChange(false);
+    }
   };
 
   const handleDeleteProduct = async (item: any) => {
     const res = await deleteProduct(item);
     console.log(res);
+    if (res.status === 200) {
+      getData(1, 10);
+      onClose();
+    }
   };
   return (
     <div>

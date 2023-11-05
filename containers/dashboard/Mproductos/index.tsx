@@ -148,7 +148,6 @@ const MisProductos: React.FC = () => {
     },
   ];
   useEffect(() => {
-    setLoad(true);
     getData(1, 10);
   }, []);
 
@@ -224,6 +223,8 @@ const MisProductos: React.FC = () => {
             onChange={onChange}
             setSelectedItemPoster={setSelectedItemPoster}
             handleChange={handleChangeEditMode}
+            getData={getData}
+            onClose={onClose}
           />
         </Drawer>
       </MisProductosContainer>
