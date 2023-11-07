@@ -1,3 +1,5 @@
+import { useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 import { Input, Select, Space, Badge, Avatar, Switch } from "antd";
 import {
   DetailImgContainer,
@@ -6,10 +8,11 @@ import {
   EditMode,
   EditPanel,
   StockContainer,
+  StyledUpload,
 } from "../styles";
 import { StyledCustomButton } from "../../styles";
 import { editProduct, deleteProduct } from "@services";
-
+import type { UploadProps } from "antd";
 const Drawer = ({
   selectedItem,
   selectedItemPoster,
@@ -20,6 +23,7 @@ const Drawer = ({
   getData,
   onClose,
 }: any) => {
+  const [imgs1, setImgsList1] = useState<any>([]);
   const handleUpdateProduct = async (item: any) => {
     const res = await editProduct(item);
     if (res.status === 200) {
@@ -36,6 +40,21 @@ const Drawer = ({
       onClose();
     }
   };
+  const props1: UploadProps = {
+    name: "images",
+    action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem._id}`,
+    method: "PUT",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status === "uploading") {
+        setImgsList1(info.fileList);
+      } else if (info.file.status === "error") {
+      }
+    },
+  };
+
   return (
     <div>
       <EditMode>
@@ -69,28 +88,40 @@ const Drawer = ({
               />
             </div>
           )}
-          {selectedItem &&
-            selectedItem.imgs.length > 0 &&
-            selectedItem.imgs.map((item: any, index: any) => (
-              <div
-                key={index}
-                className="img_detail"
-                onClick={() =>
-                  setSelectedItemPoster(
-                    `https://res.cloudinary.com/${
+          {selectedItem && selectedItem.imgs.length > 0
+            ? selectedItem.imgs.map((item: any, index: any) => (
+                <div
+                  key={index}
+                  className="img_detail"
+                  onClick={() =>
+                    setSelectedItemPoster(
+                      `https://res.cloudinary.com/${
+                        import.meta.env.VITE_CLOUD_NAME
+                      }/image/upload/v1697492964/${item}`
+                    )
+                  }
+                >
+                  <img
+                    style={{ width: "100%" }}
+                    src={`https://res.cloudinary.com/${
                       import.meta.env.VITE_CLOUD_NAME
-                    }/image/upload/v1697492964/${item}`
-                  )
-                }
-              >
-                <img
-                  style={{ width: "100%" }}
-                  src={`https://res.cloudinary.com/${
-                    import.meta.env.VITE_CLOUD_NAME
-                  }/image/upload/v1697492964/${item}`}
-                />
-              </div>
-            ))}
+                    }/image/upload/v1697492964/${item}`}
+                  />
+                </div>
+              ))
+            : null}
+          <StyledUpload
+            style={{ width: "50px" }}
+            listType="picture-card"
+            multiple
+            className="upload-list-inline"
+            {...props1}
+          >
+            <div>
+              <PlusOutlined />
+              <div style={{ marginTop: 8 }}>Subir</div>
+            </div>
+          </StyledUpload>
         </DetailImgDetail>
       </DetailImgContainer>
 
@@ -158,13 +189,13 @@ const Drawer = ({
           >
             Eliminar
           </StyledCustomButton>
-          <StyledCustomButton
+          {/* <StyledCustomButton
             onClick={() => console.log(selectedItem)}
             disabled={!editmode}
-            title="Eliminar imagenes del producto"
+            title="Agregar imagenes"
           >
-            Eliminar imagenes
-          </StyledCustomButton>
+            Agregar imagenes
+          </StyledCustomButton> */}
         </div>
       </EditPanel>
 

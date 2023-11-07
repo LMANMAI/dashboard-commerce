@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import customTheme from "../../../customTheme";
+import { Upload } from "antd";
 
 export const TaleContainer = styled.div`
   margin: 0px auto;
@@ -125,5 +126,34 @@ export const DetailImgDetail = styled.div`
     object-fit: cover;
     cursor: pointer;
     border-radius: 5px;
+  }
+  .upload-list-inline {
+    .ant-upload-list .ant-upload-list-picture-card {
+      .ant-upload .ant-upload {
+        height: 50px !important;
+        width: 50px !important;
+      }
+    }
+    height: 50px !important;
+    width: 50px !important;
+  }
+`;
+
+export const StyledUpload = styled(Upload)`
+  div.ant-upload.ant-upload-select {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  div.ant-upload-list-item.ant-upload-list-item-done {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  div.ant-upload-list-item-container {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  span.ant-upload {
+    width: 50px !important;
+    height: 50px !important;
   }
 `;
