@@ -25,6 +25,8 @@ const MisProductos: React.FC = () => {
   });
   const [open, setOpen] = useState(false);
 
+  const key = "updatable";
+  const [api, contextHolder] = notification.useNotification();
   const showDrawer = (item: any) => {
     setOpen(true);
     setSelectedItem(item);
@@ -34,13 +36,9 @@ const MisProductos: React.FC = () => {
       }/image/upload/v1697492964/${item.posterPathImage}`
     );
   };
-
   const onClose = () => {
     setOpen(false);
   };
-
-  const key = "updatable";
-  const [api, contextHolder] = notification.useNotification();
   const openNotification = (message: string, description: string) => {
     api.open({
       key,
@@ -52,7 +50,6 @@ const MisProductos: React.FC = () => {
       api.destroy();
     }, 3000);
   };
-
   const getData = async (page: any, pageSize: any) => {
     setLoad(true);
     const req = await getProducts({
@@ -111,7 +108,9 @@ const MisProductos: React.FC = () => {
       key: "name",
       render: (_: string, record: IProduct) => (
         <Button
-          onClick={() => showDrawer(record)}
+          onClick={() => {
+            showDrawer(record);
+          }}
           icon={<SearchOutlined />}
         ></Button>
       ),
@@ -225,6 +224,7 @@ const MisProductos: React.FC = () => {
             handleChange={handleChangeEditMode}
             getData={getData}
             onClose={onClose}
+            setSelectedItem={setSelectedItem}
           />
         </Drawer>
       </MisProductosContainer>

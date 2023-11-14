@@ -119,6 +119,7 @@ export const DetailImgDetail = styled.div`
   .img_detail {
     height: 50px;
     width: 50px;
+    position: relative;
   }
   img {
     width: 100%;
@@ -136,6 +137,18 @@ export const DetailImgDetail = styled.div`
     }
     height: 50px !important;
     width: 50px !important;
+  }
+
+  .button__delete_badge {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    border: none;
+    border-radius: 100%;
+    height: 15px;
+    width: 15px;
+    font-size: 10px;
+    cursor: pointer;
   }
 `;
 
@@ -155,5 +168,17 @@ export const StyledUpload = styled(Upload)`
   span.ant-upload {
     width: 50px !important;
     height: 50px !important;
+  }
+`;
+
+export const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  flex-direction: column;
+  p {
+    margin: 5px 0px;
+    color: #4e7a9c;
   }
 `;

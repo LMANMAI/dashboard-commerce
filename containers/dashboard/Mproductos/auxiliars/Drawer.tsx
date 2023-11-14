@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, Select, Space, Badge, Avatar, Switch } from "antd";
+import { Input, Select, Space, Badge, Avatar, Switch, Spin } from "antd";
 import {
   DetailImgContainer,
   DetailImgPosterPath,
@@ -9,9 +9,15 @@ import {
   EditPanel,
   StockContainer,
   StyledUpload,
+  LoadingContainer,
 } from "../styles";
 import { StyledCustomButton } from "../../styles";
-import { editProduct, deleteProduct } from "@services";
+import {
+  editProduct,
+  deleteProduct,
+  getProduct,
+  removeProductImage,
+} from "@services";
 import type { UploadProps } from "antd";
 const Drawer = ({
   selectedItem,
@@ -22,16 +28,23 @@ const Drawer = ({
   handleChange,
   getData,
   onClose,
+  setSelectedItem,
 }: any) => {
   const [loading, setLoading] = useState<boolean>(false);
+
   const handleUpdateProduct = async (item: any) => {
+    setLoading(true);
     const res = await editProduct(item);
     if (res.status === 200) {
+      setLoading(false);
       getData(1, 10);
       onChange(false);
+      const res = await getProduct(selectedItem._id);
+      if (res) {
+        setSelectedItem(res.sneaker);
+      }
     }
   };
-
   const handleDeleteProduct = async (item: any) => {
     const res = await deleteProduct(item);
     console.log(res);
@@ -40,6 +53,27 @@ const Drawer = ({
       onClose();
     }
   };
+  const handleRemoveImageFromProduct = async (
+    id: string,
+    imgId: string,
+    type: string
+  ) => {
+    const res = await removeProductImage(id, imgId.split("/")[1], type);
+    setLoading(true);
+    if (res) {
+      console.log(res.sneaker);
+      setLoading(false);
+      getData(1, 10);
+      setSelectedItemPoster(
+        `https://res.cloudinary.com/${
+          import.meta.env.VITE_CLOUD_NAME
+        }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+      );
+      setSelectedItem(res.sneaker);
+    }
+    console.log(res, "res");
+  };
+
   const props1: UploadProps = {
     name: "images",
     action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem._id}`,
@@ -47,13 +81,55 @@ const Drawer = ({
     headers: {
       authorization: "authorization-text",
     },
-    onChange(info) {
-      if (info.file.status === "done") {
+    async onChange(info) {
+      if (
+        info.file.status === "done" &&
+        info.fileList.every((file) => file.status === "done")
+      ) {
         setLoading(true);
-
+        getData(1, 10);
+        const res = await getProduct(selectedItem._id);
+        if (res) {
+          setSelectedItem(res.sneaker);
+          onChange(false);
+        }
         setTimeout(() => {
           setLoading(false);
-        }, 1500);
+        }, 1000);
+      } else if (info.file.status === "error") {
+      }
+    },
+  };
+
+  const propsPosterImg: UploadProps = {
+    name: "image",
+    action: `${import.meta.env.VITE_URL_EP}/updateposterimage/${
+      selectedItem._id
+    }`,
+    method: "PUT",
+    headers: {
+      authorization: "authorization-text",
+    },
+    async onChange(info) {
+      if (
+        info.file.status === "done" &&
+        info.fileList.every((file) => file.status === "done")
+      ) {
+        setLoading(true);
+        getData(1, 10);
+        const res = await getProduct(selectedItem._id);
+        if (res) {
+          setSelectedItem(res.sneaker);
+          onChange(false);
+          setSelectedItemPoster(
+            `https://res.cloudinary.com/${
+              import.meta.env.VITE_CLOUD_NAME
+            }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+          );
+        }
+        setTimeout(() => {
+          setLoading(false);
+        }, 1000);
       } else if (info.file.status === "error") {
       }
     },
@@ -61,14 +137,19 @@ const Drawer = ({
 
   return (
     <div>
-      <EditMode>
-        <p>Editar producto</p>
-        <Switch size="small" onChange={onChange} />
-      </EditMode>
       {loading ? (
-        "cargando"
+        <div>
+          <LoadingContainer>
+            <p>Obteniendo información</p>
+            <Spin tip="Obteniendo información" size="large" />
+          </LoadingContainer>
+        </div>
       ) : (
         <div>
+          <EditMode>
+            <p>Editar producto</p>
+            <Switch size="small" onChange={onChange} />
+          </EditMode>
           <DetailImgContainer>
             <DetailImgPosterPath>
               {selectedItem && (
@@ -78,60 +159,106 @@ const Drawer = ({
 
             <DetailImgDetail>
               {selectedItem && (
-                <div
-                  className="img_detail"
-                  onClick={() =>
-                    setSelectedItemPoster(
-                      `https://res.cloudinary.com/${
-                        import.meta.env.VITE_CLOUD_NAME
-                      }/image/upload/v1697492964/${
-                        selectedItem.posterPathImage
-                      }`
-                    )
-                  }
-                >
-                  <img
-                    style={{ width: "100%" }}
-                    src={`https://res.cloudinary.com/${
-                      import.meta.env.VITE_CLOUD_NAME
-                    }/image/upload/v1697492964/${selectedItem.posterPathImage}`}
-                  />
-                </div>
-              )}
-              {selectedItem && selectedItem.imgs.length > 0
-                ? selectedItem.imgs.map((item: any, index: any) => (
-                    <div
-                      key={index}
-                      className="img_detail"
+                <div className="img_detail">
+                  {selectedItem.posterPathImage !== "" ? (
+                    <img
+                      style={{ width: "100%" }}
                       onClick={() =>
                         setSelectedItemPoster(
                           `https://res.cloudinary.com/${
                             import.meta.env.VITE_CLOUD_NAME
-                          }/image/upload/v1697492964/${item}`
+                          }/image/upload/v1697492964/${
+                            selectedItem.posterPathImage
+                          }`
                         )
                       }
+                      src={`https://res.cloudinary.com/${
+                        import.meta.env.VITE_CLOUD_NAME
+                      }/image/upload/v1697492964/${
+                        selectedItem.posterPathImage
+                      }`}
+                    />
+                  ) : (
+                    <div title="Agregar imagen de portada.">
+                      <StyledUpload
+                        style={{ width: "50px" }}
+                        listType="picture-card"
+                        className="upload-list-inline"
+                        {...propsPosterImg}
+                      >
+                        <div>
+                          <PlusOutlined />
+                        </div>
+                      </StyledUpload>
+                    </div>
+                  )}
+                  {editmode && selectedItem.posterPathImage !== "" && (
+                    <button
+                      className="button__delete_badge"
+                      onClick={() =>
+                        handleRemoveImageFromProduct(
+                          selectedItem._id,
+                          selectedItem.posterPathImage,
+                          "poster"
+                        )
+                      }
+                      title="Eliminar imagen del producto"
                     >
-                      <img
-                        style={{ width: "100%" }}
-                        src={`https://res.cloudinary.com/${
-                          import.meta.env.VITE_CLOUD_NAME
-                        }/image/upload/v1697492964/${item}`}
-                      />
+                      x
+                    </button>
+                  )}
+                </div>
+              )}
+              {selectedItem && selectedItem.imgs.length > 0
+                ? selectedItem.imgs.map((item: any, index: any) => (
+                    <div key={index} className="img_detail">
+                      <div className="img_container">
+                        {editmode && (
+                          <button
+                            className="button__delete_badge"
+                            onClick={() =>
+                              handleRemoveImageFromProduct(
+                                selectedItem._id,
+                                item,
+                                "image"
+                              )
+                            }
+                            title="Eliminar imagen del producto"
+                          >
+                            x
+                          </button>
+                        )}
+                        <img
+                          onClick={() =>
+                            setSelectedItemPoster(
+                              `https://res.cloudinary.com/${
+                                import.meta.env.VITE_CLOUD_NAME
+                              }/image/upload/v1697492964/${item}`
+                            )
+                          }
+                          style={{ width: "100%" }}
+                          src={`https://res.cloudinary.com/${
+                            import.meta.env.VITE_CLOUD_NAME
+                          }/image/upload/v1697492964/${item}`}
+                        />
+                      </div>
                     </div>
                   ))
                 : null}
               {selectedItem && selectedItem.imgs.length < 3 && editmode && (
-                <StyledUpload
-                  style={{ width: "50px" }}
-                  listType="picture-card"
-                  multiple
-                  className="upload-list-inline"
-                  {...props1}
-                >
-                  <div>
-                    <PlusOutlined />
-                  </div>
-                </StyledUpload>
+                <div title="Agregar imagen de producto.">
+                  <StyledUpload
+                    style={{ width: "50px" }}
+                    listType="picture-card"
+                    multiple
+                    className="upload-list-inline"
+                    {...props1}
+                  >
+                    <div>
+                      <PlusOutlined />
+                    </div>
+                  </StyledUpload>
+                </div>
               )}
             </DetailImgDetail>
           </DetailImgContainer>
@@ -200,13 +327,6 @@ const Drawer = ({
               >
                 Eliminar
               </StyledCustomButton>
-              {/* <StyledCustomButton
-            onClick={() => console.log(selectedItem)}
-            disabled={!editmode}
-            title="Agregar imagenes"
-          >
-            Agregar imagenes
-          </StyledCustomButton> */}
             </div>
           </EditPanel>
 
