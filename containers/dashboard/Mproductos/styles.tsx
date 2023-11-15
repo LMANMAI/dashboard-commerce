@@ -48,6 +48,7 @@ export const MisProductosContainer = styled.div`
 `;
 
 export const StockContainer = styled.div`
+  margin-bottom: 10px;
   .badge__container {
     .button_badge {
       position: relative;
@@ -72,6 +73,26 @@ export const StockContainer = styled.div`
       justify-content: center;
       align-items: center;
       left: -5px;
+    }
+  }
+
+  .input__formadd_container_talle {
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    margin: 0px auto;
+    width: 100%;
+    .ant-select {
+      width: 100% !important;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .button__formadd {
+      flex-direction: row;
+    }
+    .input__formadd_container_talle {
+      flex-direction: row;
     }
   }
 `;

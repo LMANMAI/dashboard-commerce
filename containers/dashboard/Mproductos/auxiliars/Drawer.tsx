@@ -1,6 +1,15 @@
 import { useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { Input, Select, Space, Badge, Avatar, Switch, Spin } from "antd";
+import {
+  Input,
+  Select,
+  Space,
+  Badge,
+  Avatar,
+  Switch,
+  Spin,
+  Button,
+} from "antd";
 import {
   DetailImgContainer,
   DetailImgPosterPath,
@@ -18,6 +27,8 @@ import {
   getProduct,
   removeProductImage,
 } from "@services";
+import { CustomInput } from "../../AProductos/styles";
+import { SaveOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 const Drawer = ({
   selectedItem,
@@ -31,7 +42,12 @@ const Drawer = ({
   setSelectedItem,
 }: any) => {
   const [loading, setLoading] = useState<boolean>(false);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [sizevalue, setSizevalue] = useState<string>("");
 
+  const handleChangeSizeStock = (value: string) => {
+    setSizevalue(value);
+  };
   const handleUpdateProduct = async (item: any) => {
     setLoading(true);
     const res = await editProduct(item);
@@ -53,6 +69,10 @@ const Drawer = ({
       onClose();
     }
   };
+  const handleSizeInputChange = (e: any) => {
+    const { value } = e.target;
+    setInputValue(value);
+  };
   const handleRemoveImageFromProduct = async (
     id: string,
     imgId: string,
@@ -72,6 +92,38 @@ const Drawer = ({
       setSelectedItem(res.sneaker);
     }
     console.log(res, "res");
+  };
+
+  const handleSaveStock = async () => {
+    const newSize = {
+      size: sizevalue,
+      qty: inputValue,
+    };
+
+    const prevStock: { size: string; qty: string }[] = selectedItem.sizes;
+    const existingSizeIndex = prevStock.findIndex(
+      (item) => item.size === sizevalue
+    );
+
+    if (existingSizeIndex !== -1) {
+      prevStock[existingSizeIndex].qty = (
+        parseInt(prevStock[existingSizeIndex].qty) + parseInt(inputValue)
+      ).toString();
+    } else {
+      prevStock.push(newSize);
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 200);
+  };
+
+  const handleDeleteStock = (index: number) => {
+    const updatedSizes = selectedItem.sizes.filter(
+      (_: any, itemIndex: any) => itemIndex !== index
+    );
+
+    setSelectedItem({ ...selectedItem, sizes: updatedSizes });
   };
 
   const props1: UploadProps = {
@@ -264,6 +316,77 @@ const Drawer = ({
           </DetailImgContainer>
 
           <EditPanel>
+            <StockContainer>
+              <div className="input__formadd_container_talle">
+                <CustomInput
+                  className="input__addform qty"
+                  placeholder="Cantidad"
+                  value={inputValue}
+                  type="number"
+                  disabled={!editmode}
+                  addonBefore="Cantidad"
+                  onChange={handleSizeInputChange}
+                />
+                <Select
+                  defaultValue="Tamaño"
+                  onChange={handleChangeSizeStock}
+                  style={{ width: 250 }}
+                  disabled={!editmode}
+                  options={[
+                    { value: "", label: "Elige un Tamaño" },
+                    { value: "5", label: "5" },
+                    { value: "5.5", label: "5.5" },
+                    { value: "6", label: "6" },
+                    { value: "6.5", label: "6.5" },
+                    { value: "7", label: "7" },
+                    { value: "7.5", label: "7.5" },
+                    { value: "8", label: "8" },
+                    { value: "8.5", label: "8.5" },
+                    { value: "9", label: "9" },
+                    { value: "9.5", label: "9.5" },
+                    { value: "10", label: "10" },
+                    { value: "10.5", label: "10.5" },
+                    { value: "11", label: "11" },
+                    { value: "11.5", label: "11.5" },
+                    { value: "12", label: "12" },
+                  ]}
+                />
+                <Button
+                  onClick={() => handleSaveStock()}
+                  type="default"
+                  disabled={!editmode}
+                  icon={<SaveOutlined />}
+                >
+                  Guardar
+                </Button>
+              </div>
+              <h3 style={{ marginBottom: "10px" }}>Stock</h3>
+              <div className="badge__container">
+                <Space size="middle">
+                  {selectedItem &&
+                    selectedItem.sizes &&
+                    selectedItem.sizes.length > 0 &&
+                    selectedItem.sizes.map((item: any, index: number) => (
+                      <div className="button_badge">
+                        {editmode && (
+                          <button
+                            className="button__delete_badge"
+                            onClick={() => handleDeleteStock(index)}
+                            title="Eliminar producto del stock"
+                          >
+                            x
+                          </button>
+                        )}
+                        <Badge size="small" count={item.qty} color={"#4E7A9C"}>
+                          <Avatar shape="square" size="small">
+                            {item.size}
+                          </Avatar>
+                        </Badge>
+                      </div>
+                    ))}
+                </Space>
+              </div>
+            </StockContainer>
             <Input
               defaultValue={selectedItem?.name}
               addonBefore="Nombre"
@@ -329,33 +452,6 @@ const Drawer = ({
               </StyledCustomButton>
             </div>
           </EditPanel>
-
-          <StockContainer>
-            <h3 style={{ marginBottom: "10px" }}>Stock</h3>
-            <div className="badge__container">
-              <Space size="middle">
-                {selectedItem &&
-                  selectedItem.sizes &&
-                  selectedItem.sizes.length > 0 &&
-                  selectedItem.sizes.map((item: any) => (
-                    <div className="button_badge">
-                      <button
-                        className="button__delete_badge"
-                        // onClick={() => handleDeleteStock(index)}
-                        title="Eliminar producto del stock"
-                      >
-                        x
-                      </button>
-                      <Badge size="small" count={item.qty} color={"#4E7A9C"}>
-                        <Avatar shape="square" size="small">
-                          {item.size}
-                        </Avatar>
-                      </Badge>
-                    </div>
-                  ))}
-              </Space>
-            </div>
-          </StockContainer>
         </div>
       )}
     </div>

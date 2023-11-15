@@ -136,7 +136,6 @@ export const StepsContainer = styled.section`
     }
     .input__formadd_container_talle {
       flex-direction: row;
-      //width: 50%;
     }
   }
 `;

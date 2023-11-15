@@ -6,3 +6,4 @@ export { default as editProduct } from "./editProduct";
 export { default as deleteProduct } from "./deleteProduct";
 export { default as getProduct } from "./getProduct";
 export { default as removeProductImage } from "./removeProductImage";
+export { default as updateProduct } from "./updateProduct";
