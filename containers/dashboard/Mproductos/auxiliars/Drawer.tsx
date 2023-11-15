@@ -58,6 +58,7 @@ const Drawer = ({
       const res = await getProduct(selectedItem._id);
       if (res) {
         setSelectedItem(res.sneaker);
+        setInputValue("");
       }
     }
   };
@@ -362,28 +363,37 @@ const Drawer = ({
               </div>
               <h3 style={{ marginBottom: "10px" }}>Stock</h3>
               <div className="badge__container">
-                <Space size="middle">
+                <Space
+                  size="middle"
+                  style={{ display: "flex", flexWrap: "wrap" }}
+                >
                   {selectedItem &&
                     selectedItem.sizes &&
                     selectedItem.sizes.length > 0 &&
-                    selectedItem.sizes.map((item: any, index: number) => (
-                      <div className="button_badge">
-                        {editmode && (
-                          <button
-                            className="button__delete_badge"
-                            onClick={() => handleDeleteStock(index)}
-                            title="Eliminar producto del stock"
+                    selectedItem.sizes
+                      .sort((a: any, b: any) => a.size - b.size)
+                      .map((item: any, index: number) => (
+                        <div className="button_badge">
+                          {editmode && (
+                            <button
+                              className="button__delete_badge"
+                              onClick={() => handleDeleteStock(index)}
+                              title="Eliminar producto del stock"
+                            >
+                              x
+                            </button>
+                          )}
+                          <Badge
+                            size="small"
+                            count={item.qty}
+                            color={"#4E7A9C"}
                           >
-                            x
-                          </button>
-                        )}
-                        <Badge size="small" count={item.qty} color={"#4E7A9C"}>
-                          <Avatar shape="square" size="small">
-                            {item.size}
-                          </Avatar>
-                        </Badge>
-                      </div>
-                    ))}
+                            <Avatar shape="square" size="small">
+                              {item.size}
+                            </Avatar>
+                          </Badge>
+                        </div>
+                      ))}
                 </Space>
               </div>
             </StockContainer>
