@@ -28,6 +28,7 @@ const MisProductos: React.FC = () => {
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
   const showDrawer = (item: any) => {
+    console.log(item);
     setOpen(true);
     setSelectedItem(item);
     setSelectedItemPoster(
@@ -73,7 +74,6 @@ const MisProductos: React.FC = () => {
     }));
   };
   const handleChangeEditMode = (value: any, fieldName: string) => {
-    console.log(value, fieldName);
     setSelectedItem({
       ...selectedItem,
       [fieldName]: value,

@@ -94,16 +94,17 @@ const Drawer = ({
     }
     console.log(res, "res");
   };
-
   const handleSaveStock = async () => {
     const newSize = {
       size: sizevalue,
       qty: inputValue,
     };
+    const prevStock = Array.isArray(selectedItem.sizes)
+      ? selectedItem.sizes
+      : [];
 
-    const prevStock: { size: string; qty: string }[] = selectedItem.sizes;
     const existingSizeIndex = prevStock.findIndex(
-      (item) => item.size === sizevalue
+      (item: any) => item.size === sizevalue
     );
 
     if (existingSizeIndex !== -1) {
@@ -113,12 +114,11 @@ const Drawer = ({
     } else {
       prevStock.push(newSize);
     }
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 200);
+    setSelectedItem({
+      ...selectedItem,
+      sizes: prevStock,
+    });
   };
-
   const handleDeleteStock = (index: number) => {
     const updatedSizes = selectedItem.sizes.filter(
       (_: any, itemIndex: any) => itemIndex !== index
@@ -153,7 +153,6 @@ const Drawer = ({
       }
     },
   };
-
   const propsPosterImg: UploadProps = {
     name: "image",
     action: `${import.meta.env.VITE_URL_EP}/updateposterimage/${
@@ -373,7 +372,7 @@ const Drawer = ({
                     selectedItem.sizes
                       .sort((a: any, b: any) => a.size - b.size)
                       .map((item: any, index: number) => (
-                        <div className="button_badge">
+                        <div className="button_badge" key={index}>
                           {editmode && (
                             <button
                               className="button__delete_badge"
@@ -398,7 +397,7 @@ const Drawer = ({
               </div>
             </StockContainer>
             <Input
-              defaultValue={selectedItem?.name}
+              value={selectedItem.name}
               addonBefore="Nombre"
               className="input__addform precio"
               placeholder="Buscar por nombre"
@@ -407,7 +406,7 @@ const Drawer = ({
               onChange={(value) => handleChange(value.target.value, "name")}
             />
             <Input
-              defaultValue={selectedItem?.price}
+              value={selectedItem.price}
               addonBefore="Precio"
               className="input__addform precio"
               placeholder="Buscar por nombre"
@@ -416,7 +415,7 @@ const Drawer = ({
               onChange={(value) => handleChange(value.target.value, "price")}
             />
             <Select
-              defaultValue={selectedItem?.brand}
+              value={selectedItem.brand}
               onChange={(value) => handleChange(value, "brand")}
               className="select__mproducts"
               options={[
@@ -433,7 +432,7 @@ const Drawer = ({
               disabled={!editmode}
             />
             <Select
-              defaultValue={selectedItem?.genre}
+              value={selectedItem.genre}
               onChange={(value) => handleChange(value, "genre")}
               className="select__mproducts"
               options={[

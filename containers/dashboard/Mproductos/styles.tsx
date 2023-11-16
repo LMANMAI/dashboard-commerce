@@ -86,15 +86,6 @@ export const StockContainer = styled.div`
       width: 100% !important;
     }
   }
-
-  @media (min-width: 1024px) {
-    .button__formadd {
-      flex-direction: row;
-    }
-    .input__formadd_container_talle {
-      flex-direction: row;
-    }
-  }
 `;
 export const EditMode = styled.div`
   display: flex;

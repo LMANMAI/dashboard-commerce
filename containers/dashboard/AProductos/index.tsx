@@ -395,7 +395,7 @@ const AgregarProductos = () => {
                 <div className="badge__container">
                   <Space size="middle">
                     {product.sizes.map((item, index) => (
-                      <div className="button_badge">
+                      <div className="button_badge" key={index}>
                         <button
                           className="button__delete_badge"
                           onClick={() => handleDeleteStock(index)}
