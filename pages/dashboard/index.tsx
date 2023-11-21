@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-
+import { SignOutUser } from "../../config/firebase-config";
 import {
   HomeOutlined,
   PlusCircleOutlined,
@@ -60,6 +60,7 @@ const DashboardPage = () => {
               );
             })}
           </MenuContainer>
+          <button onClick={() => SignOutUser()}>cerrar sesion</button>
         </SideMenu>
       </Container>
 
