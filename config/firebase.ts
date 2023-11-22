@@ -23,3 +23,4 @@ export function getFirebaseConfig() {
     return firebaseConfig;
   }
 }
+export default app;

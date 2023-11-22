@@ -1,6 +1,6 @@
 import { User } from "firebase/auth";
 import { SignOutUser, userStateListener } from "../config/firebase-config";
-import React, { createContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useState, useEffect, ReactNode } from "react";
 
 interface Props {
   children?: ReactNode;
@@ -14,7 +14,6 @@ export const AuthContext = createContext({
 
 export const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-
   useEffect(() => {
     const unsubscribe = userStateListener((user) => {
       if (user) {
@@ -22,12 +21,12 @@ export const AuthProvider = ({ children }: Props) => {
       }
     });
     return unsubscribe;
-  }, [setCurrentUser]);
+  }, [currentUser]);
 
   const signOut = () => {
     SignOutUser();
     setCurrentUser(null);
-    window.location.replace("/");
+    window.location.replace("/auth");
   };
 
   const value = {

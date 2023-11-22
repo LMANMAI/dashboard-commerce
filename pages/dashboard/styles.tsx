@@ -22,6 +22,7 @@ export const SideMenu = styled.div<IMenu>`
   flex-direction: column;
   justify-content: center;
   padding: 0px 7px;
+  position: relative;
 `;
 export const MenuOpenedButton = styled.button<IMenu>`
   width: 30px;
@@ -61,16 +62,16 @@ export const MenuContainer = styled.ul<IMenu>`
     flex-wrap: nowrap;
     justify-content: ${(props) => (props.menustatus ? "start" : "center")};
 
-    .icon_link {
-      font-size: 20px !important;
-      padding: 10px;
-      border-radius: 5px;
-    }
     &.label {
       font-size: 14px;
       transition-delay: 450ms;
       transition: display 350ms ease-in-out;
       display: ${(props) => (props.menustatus ? "inherit" : "none")};
     }
+  }
+  .icon_link {
+    font-size: 20px !important;
+    padding: 10px;
+    border-radius: 5px;
   }
 `;

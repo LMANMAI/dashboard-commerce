@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useState } from "react";
 import { signInUser } from "../../config/firebase-config";
+import { Container, Card } from "./styles";
 const defaultFormFields = {
   email: "",
   password: "",
@@ -8,7 +9,6 @@ const defaultFormFields = {
 const Home = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
-  // const navigate = useNavigate();
 
   const resetFormFields = () => {
     return setFormFields(defaultFormFields);
@@ -18,12 +18,9 @@ const Home = () => {
     event.preventDefault();
 
     try {
-      // Send the email and password to firebase
       const userCredential = await signInUser(email, password);
-
       if (userCredential) {
         resetFormFields();
-        window.location.replace("/");
       }
     } catch (error: any) {
       console.log("User Sign In Failed", error.message);
@@ -36,11 +33,11 @@ const Home = () => {
   };
 
   return (
-    <div className="App">
-      <div className="card">
-        <div className="logo-react"></div>
+    <Container>
+      <Card>
+        <h3>Iniciar sesión</h3>
         <form onSubmit={handleSubmit}>
-          <div>
+          <div className="form__input">
             <input
               type="email"
               name="email"
@@ -50,7 +47,7 @@ const Home = () => {
               required
             />
           </div>
-          <div>
+          <div className="form__input">
             <input
               type="password"
               name="password"
@@ -60,12 +57,12 @@ const Home = () => {
               required
             />
           </div>
-          <div>
-            <input id="recaptcha" type="submit" />
+          <div className="form__input_button">
+            <button type="submit">Ingresar</button>
           </div>
         </form>
-      </div>
-    </div>
+      </Card>
+    </Container>
   );
 };
 

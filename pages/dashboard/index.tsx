@@ -7,6 +7,7 @@ import {
   FolderOpenOutlined,
   RiseOutlined,
   MenuOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import {
   SideMenu,
@@ -59,8 +60,32 @@ const DashboardPage = () => {
                 </NavLink>
               );
             })}
+
+            <div
+              title="Cerrar sesión"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                position: "absolute",
+                bottom: "20px",
+                cursor: "pointer",
+              }}
+              onClick={() => SignOutUser()}
+            >
+              <LogoutOutlined
+                style={{ fontSize: "16px", color: "white" }}
+                className="icon_link"
+              />
+              <p className="nav_link label">Cerrar sesión</p>
+            </div>
           </MenuContainer>
-          <button onClick={() => SignOutUser()}>cerrar sesion</button>
+
+          {/* <button
+            className="nav_link"
+            style={{ position: "absolute", bottom: "20px" }}
+          >
+            cerrar sesion
+          </button> */}
         </SideMenu>
       </Container>
 
