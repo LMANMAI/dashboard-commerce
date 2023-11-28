@@ -177,6 +177,11 @@ export const CustomInput = styled(Input)`
 
 export const CustomButton = styled(Button)`
   && {
+    &:disabled {
+      cursor: not-allowed !important;
+      background-color: #cccccc !important;
+      color: #666666 !important;
+    }
     input {
       &:focus {
         border: 1px solid ${customTheme["@action-color"]}!important;

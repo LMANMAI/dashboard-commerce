@@ -1,6 +1,9 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { FormEvent, useState } from "react";
 import { signInUser } from "../../config/firebase-config";
 import { Container, Card } from "./styles";
+import { Input, notification } from "antd";
+import type { NotificationPlacement } from "antd/es/notification/interface";
+import { CustomButton } from "@containers/dashboard/AProductos/styles";
 const defaultFormFields = {
   email: "",
   password: "",
@@ -9,56 +12,72 @@ const defaultFormFields = {
 const Home = () => {
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
+  const [api, contextHolder] = notification.useNotification();
+  const [load, setLoad] = useState<boolean>(false);
+  const openNotification = (placement: NotificationPlacement, msg: any) => {
+    api.info({
+      message: msg,
+      description:
+        "Es probable que no tenga permisos para ingresar, contactese con el proveedor de datos para solicitar acceso.",
+      placement,
+    });
+  };
 
   const resetFormFields = () => {
     return setFormFields(defaultFormFields);
   };
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: any) => {
     event.preventDefault();
-
+    setLoad(true);
     try {
       const userCredential = await signInUser(email, password);
       if (userCredential) {
         resetFormFields();
+        setLoad(false);
       }
     } catch (error: any) {
-      console.log("User Sign In Failed", error.message);
+      setLoad(false);
+      openNotification("bottomRight", error.message);
     }
   };
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setFormFields({ ...formFields, [name]: value });
+  const handleChange = (value: any, fieldName: string) => {
+    setFormFields({ ...formFields, [fieldName]: value });
   };
 
   return (
     <Container>
       <Card>
+        {contextHolder}
         <h3>Iniciar sesión</h3>
         <form onSubmit={handleSubmit}>
           <div className="form__input">
-            <input
-              type="email"
-              name="email"
+            <Input
               value={email}
-              onChange={handleChange}
-              placeholder="Email"
-              required
+              className="input__addform precio"
+              placeholder="Correo electronico"
+              type="text"
+              onChange={(value) => handleChange(value.target.value, "email")}
             />
           </div>
           <div className="form__input">
-            <input
-              type="password"
-              name="password"
+            <Input
               value={password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
+              className="input__addform precio"
+              placeholder="Contraseña"
+              type="password"
+              onChange={(value) => handleChange(value.target.value, "password")}
             />
           </div>
           <div className="form__input_button">
-            <button type="submit">Ingresar</button>
+            <CustomButton
+              onClick={(e) => handleSubmit(e)}
+              className={`${load ? "disabled" : ""} `}
+              disabled={load}
+            >
+              Ingresar
+            </CustomButton>
           </div>
         </form>
       </Card>
