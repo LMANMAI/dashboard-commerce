@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
 import { SignOutUser } from "../../config/firebase-config";
 import {
-  HomeOutlined,
   PlusCircleOutlined,
   FolderOpenOutlined,
   RiseOutlined,
@@ -19,12 +18,12 @@ import {
 const DashboardPage = () => {
   const [menustatus, setMenuStatus] = useState<boolean>(false);
   const menu = [
-    { icon: HomeOutlined, label: "Inicio", path: "" },
+    { icon: FolderOpenOutlined, label: "Mis productos", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar productos", path: "add" },
-    { icon: FolderOpenOutlined, label: "Mis productos", path: "products" },
     { icon: RiseOutlined, label: "Mis estadisticas", path: "sales" },
   ];
 
+  console.log(window.location.pathname.slice(1));
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Container>
@@ -79,13 +78,6 @@ const DashboardPage = () => {
               <p className="nav_link label">Cerrar sesión</p>
             </div>
           </MenuContainer>
-
-          {/* <button
-            className="nav_link"
-            style={{ position: "absolute", bottom: "20px" }}
-          >
-            cerrar sesion
-          </button> */}
         </SideMenu>
       </Container>
 

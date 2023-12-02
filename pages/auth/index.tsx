@@ -75,6 +75,7 @@ const Home = () => {
               onClick={(e) => handleSubmit(e)}
               className={`${load ? "disabled" : ""} `}
               disabled={load}
+              title="Ingresar a la cuenta"
             >
               Ingresar
             </CustomButton>

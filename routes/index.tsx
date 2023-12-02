@@ -23,9 +23,8 @@ const RoutesComponent = () => {
           <Route path="/" element={<AuthPage />} />
         ) : (
           <Route path="/*" element={<DashboardPage />}>
-            <Route index element={<div>administra los productos</div>} />
+            <Route index element={<MisProductos />} />
             <Route path="add" element={<AgregarProductos />} />
-            <Route path="products" element={<MisProductos />} />
             <Route path="sales" element={<MisVentas />} />
           </Route>
         )}

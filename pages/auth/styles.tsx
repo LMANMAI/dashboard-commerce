@@ -17,8 +17,13 @@ export const Card = styled.div`
   border: 1px solid #ccc;
   border-radius: 5px;
   background: #fafafa;
+  box-shadow: 2px 10px 24px -12px rgba(0, 0, 0, 0.75);
+  h3 {
+    margin: 10px 0px;
+  }
   .form__input {
     margin: 7px 0px;
+
     input {
       width: 100%;
       padding: 5px 2px;
