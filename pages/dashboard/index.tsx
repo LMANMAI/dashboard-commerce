@@ -28,6 +28,7 @@ const DashboardPage = () => {
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Container>
         <MenuOpenedButton
+          title={!menustatus ? `Abrir menu` : "Cerrar menu"}
           menustatus={menustatus}
           onClick={() => {
             setMenuStatus(!menustatus);

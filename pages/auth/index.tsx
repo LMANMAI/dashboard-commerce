@@ -1,4 +1,4 @@
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { signInUser } from "../../config/firebase-config";
 import { Container, Card } from "./styles";
 import { Input, notification } from "antd";
