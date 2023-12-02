@@ -68,6 +68,7 @@ const MisProductos: React.FC = () => {
     }
   };
   const handleChange = (value: any, fieldName: string) => {
+    console.log(value);
     setSearchParam((prevSearchParam) => ({
       ...prevSearchParam,
       [fieldName]: value,
@@ -161,6 +162,9 @@ const MisProductos: React.FC = () => {
             className="input__addform precio"
             placeholder="Buscar por nombre"
             type="text"
+            name="name"
+            value={searchparam.name}
+            onChange={(value) => handleChange(value.target.value, "name")}
           />
           <Select
             defaultValue="Buscar por marca"
