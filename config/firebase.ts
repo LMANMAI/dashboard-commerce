@@ -1,13 +1,13 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 const firebaseConfig = {
-  apiKey: "AIzaSyAH8of3wpOlZDvS6Ao5m0r9JBg4wedPo4Q",
-  authDomain: "dashboard-snekers-hub.firebaseapp.com",
-  projectId: "dashboard-snekers-hub",
-  storageBucket: "dashboard-snekers-hub.appspot.com",
-  messagingSenderId: "81046294714",
-  appId: "1:81046294714:web:e1f44bc07bcc12b1813283",
-  measurementId: "G-52BB3LWPHK",
+  apiKey: import.meta.env.VITE_API_KEY,
+  authDomain: import.meta.env.VITE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_APP_ID,
+  measurementId: import.meta.env.VITE_MEASUREMENT_ID,
 };
 export const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);

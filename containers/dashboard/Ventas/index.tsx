@@ -27,7 +27,7 @@ ChartJS.register(
 const MisVentas = () => {
   const [products, setProducts] = useState<any>({ data: [] });
   const [pagination, setPagination] = useState<any>({
-    current: 2,
+    current: 1,
     pageSize: 10,
     total: 123,
   });
@@ -46,32 +46,46 @@ const MisVentas = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const req = await getProducts({
-        page: pagination.current,
-        pageSize: pagination.pageSize,
-      });
+      let currentPage = 1;
+      let allProducts: { [month: string]: number } = {};
+      let req; // Declare req outside the loop
 
-      if (req.status === 200) {
-        setPagination({
-          current: req.currenPage,
-          pageSize: 10,
-          total: req.totalSneakers,
+      do {
+        req = await getProducts({
+          page: currentPage,
+          pageSize: pagination.pageSize,
         });
 
-        // Process the data to get the count of products per month
-        const productsByMonth: { [month: string]: number } = {};
-        req.data.forEach((product: any) => {
-          const releaseMonth = new Date(product.relaseYear).toLocaleString(
-            "en-US",
-            { month: "long" }
-          );
-          console.log(releaseMonth);
-          productsByMonth[releaseMonth] =
-            (productsByMonth[releaseMonth] || 0) + 1;
-        });
-        console.log(productsByMonth);
-        setProducts({ data: productsByMonth });
-      }
+        if (req.status === 200) {
+          // Process the data to get the count of products per month
+          const productsByMonth: { [month: string]: number } = {};
+          req.data.forEach((product: any) => {
+            const releaseMonth = new Date(product.relaseYear).toLocaleString(
+              "en-US",
+              { month: "long" }
+            );
+
+            productsByMonth[releaseMonth] =
+              (productsByMonth[releaseMonth] || 0) + 1;
+          });
+
+          // Merge the current page's data with the existing data
+          allProducts = { ...allProducts, ...productsByMonth };
+
+          // Update pagination for the next iteration
+          setPagination({
+            current: req.currenPage,
+            pageSize: 10,
+            total: req.totalSneakers,
+          });
+
+          // Move to the next page for the next iteration
+          currentPage++;
+        }
+      } while (currentPage <= req.totalPages);
+
+      // Set the final merged data
+      setProducts({ data: allProducts });
     };
 
     fetchData();
