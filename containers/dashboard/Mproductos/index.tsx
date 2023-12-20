@@ -1,6 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { getProducts, searchProduct } from "@services";
-import { Table, Input, Select, Button, notification, Drawer } from "antd";
+import {
+  Table,
+  Input,
+  Select,
+  Button,
+  notification,
+  Drawer,
+  Modal,
+} from "antd";
 import { TaleContainer, MisProductosContainer } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
@@ -13,6 +21,7 @@ const MisProductos: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<IProduct | any>(null);
   const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
   const [editmode, setEditMode] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [searchparam, setSearchParam] = useState({
     name: "",
     genre: "",
@@ -101,6 +110,17 @@ const MisProductos: React.FC = () => {
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const columns = [
     {
@@ -155,7 +175,75 @@ const MisProductos: React.FC = () => {
     <div>
       {contextHolder}
       <MisProductosContainer>
-        <div className="misproductos__box"></div>
+        <div
+          className="misproductos__box"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "10px",
+          }}
+        >
+          <div
+            onClick={() => {
+              showModal();
+            }}
+            title="Agregar una promocion para los productos en stock"
+            style={{
+              width: "33%",
+              borderRadius: "5px",
+              padding: "10px",
+              cursor: "pointer",
+              backgroundColor: "#4E7A9C",
+              color: "white",
+              height: "45px",
+              fontSize: "13px",
+            }}
+          >
+            Agregar promocion
+          </div>
+          <div
+            onClick={() => {
+              showModal();
+            }}
+            title="Ver promociones vigentes"
+            style={{
+              width: "33%",
+              borderRadius: "5px",
+              padding: "10px",
+              cursor: "pointer",
+              backgroundColor: "#4E7A9C",
+              color: "white",
+              height: "45px",
+              fontSize: "13px",
+            }}
+          >
+            Promociones vigentes
+          </div>
+          <div
+            onClick={() => {
+              showModal();
+            }}
+            title="Eliminar promociones"
+            style={{
+              width: "33%",
+              borderRadius: "5px",
+              padding: "10px",
+              cursor: "pointer",
+              backgroundColor: "#4E7A9C",
+              color: "white",
+              height: "45px",
+              fontSize: "13px",
+            }}
+          >
+            Eliminar promociones
+          </div>
+          <Modal
+            title="Basic Modal"
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+          ></Modal>
+        </div>
         <div className="misproductos__formulario">
           <Input
             addonBefore="Nombre"
@@ -202,6 +290,7 @@ const MisProductos: React.FC = () => {
             Buscar producto
           </StyledCustomButton>
         </div>
+
         <TaleContainer>
           <Table
             dataSource={products}
