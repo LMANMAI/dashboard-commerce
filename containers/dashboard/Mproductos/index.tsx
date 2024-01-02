@@ -33,7 +33,7 @@ const MisProductos: React.FC = () => {
     total: 123,
   });
   const [open, setOpen] = useState(false);
-
+  const [currentContent, setCurrentContent] = useState(1);
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
   const showDrawer = (item: any) => {
@@ -110,8 +110,9 @@ const MisProductos: React.FC = () => {
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
-  const showModal = () => {
+  const showModal = (type: number) => {
     setIsModalOpen(true);
+    setCurrentContent(type);
   };
 
   const handleOk = () => {
@@ -171,6 +172,34 @@ const MisProductos: React.FC = () => {
     getData(1, 10);
   }, []);
 
+  const getContent = () => {
+    switch (currentContent) {
+      case 1:
+        return (
+          <div>
+            <h2>Agregar una promoción</h2>
+            <p>Este es el primer contenido.</p>
+          </div>
+        );
+      case 2:
+        return (
+          <div>
+            <h2>Promociones vigentes</h2>
+            <p>Este es el segundo contenido.</p>
+          </div>
+        );
+      case 3:
+        return (
+          <div>
+            <h2>Eliminar promociones</h2>
+            <p>Este es el tercer contenido.</p>
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
   return (
     <div>
       {contextHolder}
@@ -185,7 +214,7 @@ const MisProductos: React.FC = () => {
         >
           <div
             onClick={() => {
-              showModal();
+              showModal(1);
             }}
             title="Agregar una promocion para los productos en stock"
             style={{
@@ -203,7 +232,7 @@ const MisProductos: React.FC = () => {
           </div>
           <div
             onClick={() => {
-              showModal();
+              showModal(2);
             }}
             title="Ver promociones vigentes"
             style={{
@@ -221,7 +250,7 @@ const MisProductos: React.FC = () => {
           </div>
           <div
             onClick={() => {
-              showModal();
+              showModal(3);
             }}
             title="Eliminar promociones"
             style={{
@@ -237,12 +266,9 @@ const MisProductos: React.FC = () => {
           >
             Eliminar promociones
           </div>
-          <Modal
-            title="Basic Modal"
-            open={isModalOpen}
-            onOk={handleOk}
-            onCancel={handleCancel}
-          ></Modal>
+          <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+            {getContent()}
+          </Modal>
         </div>
         <div className="misproductos__formulario">
           <Input
