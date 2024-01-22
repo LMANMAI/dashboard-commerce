@@ -194,3 +194,16 @@ export const LoadingContainer = styled.div`
     color: #4e7a9c;
   }
 `;
+
+export const ModalAddPromotionsContainer = styled.div`
+  margin: 10px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  .select__discount {
+  }
+  .input__discount {
+    margin: 5px 0px;
+    width: 250px;
+  }
+`;

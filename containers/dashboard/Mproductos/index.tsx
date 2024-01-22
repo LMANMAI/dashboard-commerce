@@ -9,7 +9,11 @@ import {
   Drawer,
   Modal,
 } from "antd";
-import { TaleContainer, MisProductosContainer } from "./styles";
+import {
+  TaleContainer,
+  MisProductosContainer,
+  ModalAddPromotionsContainer,
+} from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
 import { IProduct } from "./statics";
@@ -33,6 +37,7 @@ const MisProductos: React.FC = () => {
     total: 123,
   });
   const [open, setOpen] = useState(false);
+  const [sizevalue, setSizevalue] = useState<string>("");
   const [currentContent, setCurrentContent] = useState(1);
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
@@ -106,7 +111,9 @@ const MisProductos: React.FC = () => {
       );
     }
   };
-
+  const handleChangeSizeStock = (value: string) => {
+    setSizevalue(value);
+  };
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
@@ -178,7 +185,96 @@ const MisProductos: React.FC = () => {
         return (
           <div>
             <h2>Agregar una promoción</h2>
-            <p>Este es el primer contenido.</p>
+            <div>
+              <p>
+                Seleccione el tipo de productos al que quiere aplciarle un
+                descuento, recuerde que las promociones vigentes de pueden
+                visualizar en el menu continuo de{" "}
+                <strong>"Mis promociones"</strong> y se deben eliminar en el
+                menu de <strong>"Eliminar Promociones"</strong>
+              </p>
+
+              <ModalAddPromotionsContainer>
+                <div className="select__discount">
+                  <Select
+                    defaultValue="Buscar por marca"
+                    onChange={(value) => handleChange(value, "brand")}
+                    className="select__mproducts"
+                    style={{ width: 250 }}
+                    options={[
+                      { label: "Elige una marca", value: "" },
+                      { label: "Adidas", value: "ADIDAS" },
+                      { label: "Nike", value: "NIKE" },
+                      { label: "New Balance", value: "NEW BALANCE" },
+                      { label: "Air Jordan", value: "AIR JORDAN" },
+                      { label: "Yeezy", value: "YEEZY" },
+                      { label: "Converse", value: "CONVERSE" },
+                      { label: "Vans", value: "VANS" },
+                      { label: "Revengexstorm", value: "REVENGEXSTORM" },
+                    ]}
+                  />
+                  <div></div>
+                </div>
+
+                <div className="select__discount">
+                  <Select
+                    defaultValue="Buscar por genero"
+                    onChange={(value) => handleChange(value, "genre")}
+                    className="select__mproducts"
+                    style={{ width: 250 }}
+                    options={[
+                      { value: "", label: "Elige un genero" },
+                      { value: "MEN", label: "Hombre" },
+                      { value: "WOMAN", label: "Mujer" },
+                      { value: "UNISEX", label: "Unisex" },
+                    ]}
+                  />
+                  <div></div>
+                </div>
+
+                <div className="select__discount">
+                  <Select
+                    defaultValue="Tamaño"
+                    onChange={handleChangeSizeStock}
+                    style={{ width: 250 }}
+                    options={[
+                      { value: "", label: "Elige un Tamaño" },
+                      { value: "5", label: "5" },
+                      { value: "5.5", label: "5.5" },
+                      { value: "6", label: "6" },
+                      { value: "6.5", label: "6.5" },
+                      { value: "7", label: "7" },
+                      { value: "7.5", label: "7.5" },
+                      { value: "8", label: "8" },
+                      { value: "8.5", label: "8.5" },
+                      { value: "9", label: "9" },
+                      { value: "9.5", label: "9.5" },
+                      { value: "10", label: "10" },
+                      { value: "10.5", label: "10.5" },
+                      { value: "11", label: "11" },
+                      { value: "11.5", label: "11.5" },
+                      { value: "12", label: "12" },
+                    ]}
+                  />
+                  <div></div>
+                </div>
+
+                <div className="input__discount">
+                  <Input
+                    addonBefore="Valor del descuento"
+                    addonAfter="%"
+                    className="input__addform precio"
+                    placeholder="ej: 2"
+                    type="text"
+                    name="name"
+                    value={searchparam.name}
+                    onChange={(value) =>
+                      handleChange(value.target.value, "name")
+                    }
+                  />
+                </div>
+              </ModalAddPromotionsContainer>
+            </div>
           </div>
         );
       case 2:
