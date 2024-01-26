@@ -23,6 +23,7 @@ const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<IProduct | any>(null);
+  const [promotion, setParametersPromotions] = useState<IProduct | any>(null);
   const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
   const [editmode, setEditMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -37,12 +38,12 @@ const MisProductos: React.FC = () => {
     total: 123,
   });
   const [open, setOpen] = useState(false);
-  const [sizevalue, setSizevalue] = useState<string>("");
+  const [promovalue, setPromoValue] = useState<number | any>();
   const [currentContent, setCurrentContent] = useState(1);
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
+
   const showDrawer = (item: any) => {
-    console.log(item);
     setOpen(true);
     setSelectedItem(item);
     setSelectedItemPoster(
@@ -82,8 +83,13 @@ const MisProductos: React.FC = () => {
     }
   };
   const handleChange = (value: any, fieldName: string) => {
-    console.log(value);
     setSearchParam((prevSearchParam) => ({
+      ...prevSearchParam,
+      [fieldName]: value,
+    }));
+  };
+  const handleChangePromotionsDTO = (value: any, fieldName: string) => {
+    setParametersPromotions((prevSearchParam: any) => ({
       ...prevSearchParam,
       [fieldName]: value,
     }));
@@ -111,9 +117,7 @@ const MisProductos: React.FC = () => {
       );
     }
   };
-  const handleChangeSizeStock = (value: string) => {
-    setSizevalue(value);
-  };
+
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
@@ -198,7 +202,9 @@ const MisProductos: React.FC = () => {
                 <div className="select__discount">
                   <Select
                     defaultValue="Buscar por marca"
-                    onChange={(value) => handleChange(value, "brand")}
+                    onChange={(value) =>
+                      handleChangePromotionsDTO(value, "brand")
+                    }
                     className="select__mproducts"
                     style={{ width: 250 }}
                     options={[
@@ -219,7 +225,9 @@ const MisProductos: React.FC = () => {
                 <div className="select__discount">
                   <Select
                     defaultValue="Buscar por genero"
-                    onChange={(value) => handleChange(value, "genre")}
+                    onChange={(value) =>
+                      handleChangePromotionsDTO(value, "genre")
+                    }
                     className="select__mproducts"
                     style={{ width: 250 }}
                     options={[
@@ -235,7 +243,9 @@ const MisProductos: React.FC = () => {
                 <div className="select__discount">
                   <Select
                     defaultValue="Tamaño"
-                    onChange={handleChangeSizeStock}
+                    onChange={(value) =>
+                      handleChangePromotionsDTO(value, "size")
+                    }
                     style={{ width: 250 }}
                     options={[
                       { value: "", label: "Elige un Tamaño" },
@@ -265,14 +275,22 @@ const MisProductos: React.FC = () => {
                     addonAfter="%"
                     className="input__addform precio"
                     placeholder="ej: 2"
-                    type="text"
+                    type="number"
                     name="name"
-                    value={searchparam.name}
-                    onChange={(value) =>
-                      handleChange(value.target.value, "name")
-                    }
+                    value={promovalue}
+                    onChange={(value) => setPromoValue(value.target.value)}
                   />
                 </div>
+                <button
+                  onClick={() =>
+                    console.log({
+                      afectedProduct: promotion,
+                      value: parseFloat(promovalue),
+                    })
+                  }
+                >
+                  Guardar
+                </button>
               </ModalAddPromotionsContainer>
             </div>
           </div>
