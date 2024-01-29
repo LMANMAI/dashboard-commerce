@@ -8,7 +8,9 @@ import {
   notification,
   Drawer,
   Modal,
+  Card,
 } from "antd";
+
 import {
   TaleContainer,
   MisProductosContainer,
@@ -18,6 +20,7 @@ import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
 import { IProduct } from "./statics";
 import { DrawerComponent } from "./auxiliars";
+import { DeleteOutlined } from "@ant-design/icons";
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
@@ -27,6 +30,89 @@ const MisProductos: React.FC = () => {
   const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
   const [editmode, setEditMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [mockdatapromos, setMockDataPromo] = useState<any>([
+    {
+      afectedProduct: {
+        brand: "ADIDAS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "001",
+      value: 3,
+    },
+    {
+      afectedProduct: {
+        brand: "NIKE",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "002",
+      value: 20,
+    },
+    {
+      afectedProduct: {
+        brand: "VANS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "003",
+      value: 36,
+    },
+    {
+      afectedProduct: {
+        brand: "ADIDAS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "004",
+      value: 3,
+    },
+    {
+      afectedProduct: {
+        brand: "NIKE",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "005",
+      value: 20,
+    },
+    {
+      afectedProduct: {
+        brand: "VANS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "006",
+      value: 36,
+    },
+    {
+      afectedProduct: {
+        brand: "ADIDAS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "007",
+      value: 3,
+    },
+    {
+      afectedProduct: {
+        brand: "NIKE",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "008",
+      value: 20,
+    },
+    {
+      afectedProduct: {
+        brand: "VANS",
+        genre: "MEN",
+        size: "6.5",
+      },
+      id: "009",
+      value: 36,
+    },
+  ]);
   const [searchparam, setSearchParam] = useState({
     name: "",
     genre: "",
@@ -182,7 +268,7 @@ const MisProductos: React.FC = () => {
   useEffect(() => {
     getData(1, 10);
   }, []);
-
+  const { Meta } = Card;
   const getContent = () => {
     switch (currentContent) {
       case 1:
@@ -281,7 +367,7 @@ const MisProductos: React.FC = () => {
                     onChange={(value) => setPromoValue(value.target.value)}
                   />
                 </div>
-                <button
+                {/* <button
                   onClick={() =>
                     console.log({
                       afectedProduct: promotion,
@@ -290,7 +376,7 @@ const MisProductos: React.FC = () => {
                   }
                 >
                   Guardar
-                </button>
+                </button> */}
               </ModalAddPromotionsContainer>
             </div>
           </div>
@@ -299,7 +385,42 @@ const MisProductos: React.FC = () => {
         return (
           <div>
             <h2>Promociones vigentes</h2>
-            <p>Este es el segundo contenido.</p>
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                padding: "10px",
+                flexWrap: "wrap",
+                justifyContent: "center",
+                maxHeight: "50dvh",
+                overflowY: "auto",
+              }}
+            >
+              {mockdatapromos.map((item: any) => {
+                return (
+                  <Card
+                    style={{ width: 175 }}
+                    actions={[
+                      <DeleteOutlined
+                        key="setting"
+                        onClick={() => {
+                          const updatedPromos = mockdatapromos.filter(
+                            (itemfilter: any) => item.id !== itemfilter.id
+                          );
+                          setMockDataPromo(updatedPromos);
+                        }}
+                      />,
+                    ]}
+                  >
+                    <Meta title={`Promocion #${item.id}`} />
+                    <p>Marca: {item.afectedProduct.brand}</p>
+                    <p>Talle: {item.afectedProduct.size}</p>
+                    <p>Genero: {item.afectedProduct.genre}</p>
+                    <p>Descuento del {item.value}%</p>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         );
       case 3:
@@ -322,8 +443,9 @@ const MisProductos: React.FC = () => {
           className="misproductos__box"
           style={{
             display: "flex",
-            justifyContent: "space-between",
             gap: "10px",
+            alignItems: "center",
+            padding: "0px 10px",
           }}
         >
           <div
@@ -362,25 +484,26 @@ const MisProductos: React.FC = () => {
           >
             Promociones vigentes
           </div>
-          <div
-            onClick={() => {
-              showModal(3);
-            }}
-            title="Eliminar promociones"
-            style={{
-              width: "33%",
-              borderRadius: "5px",
-              padding: "10px",
-              cursor: "pointer",
-              backgroundColor: "#4E7A9C",
-              color: "white",
-              height: "45px",
-              fontSize: "13px",
-            }}
+          <Modal
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            width={currentContent !== 1 ? "70dvw" : "40dvw"}
+            footer={[
+              <Button
+                key="cancel"
+                onClick={handleCancel}
+                style={{ marginRight: 8 }}
+              >
+                Cancelar
+              </Button>,
+              currentContent === 1 && (
+                <Button key="ok" type="primary" onClick={handleOk}>
+                  Guardar
+                </Button>
+              ),
+            ]}
           >
-            Eliminar promociones
-          </div>
-          <Modal open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
             {getContent()}
           </Modal>
         </div>
