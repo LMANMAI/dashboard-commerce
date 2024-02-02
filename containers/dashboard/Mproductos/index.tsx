@@ -367,16 +367,6 @@ const MisProductos: React.FC = () => {
                     onChange={(value) => setPromoValue(value.target.value)}
                   />
                 </div>
-                {/* <button
-                  onClick={() =>
-                    console.log({
-                      afectedProduct: promotion,
-                      value: parseFloat(promovalue),
-                    })
-                  }
-                >
-                  Guardar
-                </button> */}
               </ModalAddPromotionsContainer>
             </div>
           </div>
@@ -462,6 +452,8 @@ const MisProductos: React.FC = () => {
               color: "white",
               height: "45px",
               fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
             }}
           >
             Agregar promocion
@@ -480,6 +472,8 @@ const MisProductos: React.FC = () => {
               color: "white",
               height: "45px",
               fontSize: "13px",
+              display: "flex",
+              alignItems: "center",
             }}
           >
             Promociones vigentes
@@ -498,7 +492,16 @@ const MisProductos: React.FC = () => {
                 Cancelar
               </Button>,
               currentContent === 1 && (
-                <Button key="ok" type="primary" onClick={handleOk}>
+                <Button
+                  key="ok"
+                  type="primary"
+                  onClick={() =>
+                    console.log({
+                      afectedProduct: promotion,
+                      value: parseFloat(promovalue),
+                    })
+                  }
+                >
                   Guardar
                 </Button>
               ),

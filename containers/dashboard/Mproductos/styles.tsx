@@ -200,6 +200,7 @@ export const ModalAddPromotionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
+  align-items: center;
   .select__discount {
   }
   .input__discount {
