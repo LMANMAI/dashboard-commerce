@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { getProducts, searchProduct } from "@services";
-import {
-  Table,
-  Input,
-  Select,
-  Button,
-  notification,
-  Drawer,
-  Modal,
-  Card,
-} from "antd";
-
+import { Table, Input, Button, notification, Drawer, Modal, Card } from "antd";
+import { SelectComponent } from "../../../components";
 import {
   TaleContainer,
   MisProductosContainer,
   ModalAddPromotionsContainer,
+  ModalCurrentPromotion,
 } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
-import { IProduct } from "./statics";
+import {
+  IProduct,
+  SelectMockDataGenre,
+  SelectMockDataSize,
+  SelectMockDataBrand,
+} from "./statics";
 import { DrawerComponent } from "./auxiliars";
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -268,7 +265,9 @@ const MisProductos: React.FC = () => {
   useEffect(() => {
     getData(1, 10);
   }, []);
+
   const { Meta } = Card;
+
   const getContent = () => {
     switch (currentContent) {
       case 1:
@@ -286,72 +285,36 @@ const MisProductos: React.FC = () => {
 
               <ModalAddPromotionsContainer>
                 <div className="select__discount">
-                  <Select
-                    defaultValue="Buscar por marca"
-                    onChange={(value) =>
-                      handleChangePromotionsDTO(value, "brand")
-                    }
-                    className="select__mproducts"
-                    style={{ width: 250 }}
-                    options={[
-                      { label: "Elige una marca", value: "" },
-                      { label: "Adidas", value: "ADIDAS" },
-                      { label: "Nike", value: "NIKE" },
-                      { label: "New Balance", value: "NEW BALANCE" },
-                      { label: "Air Jordan", value: "AIR JORDAN" },
-                      { label: "Yeezy", value: "YEEZY" },
-                      { label: "Converse", value: "CONVERSE" },
-                      { label: "Vans", value: "VANS" },
-                      { label: "Revengexstorm", value: "REVENGEXSTORM" },
-                    ]}
+                  <SelectComponent
+                    label={"Buscar por marca"}
+                    options={SelectMockDataBrand}
+                    class_select={"select__mproducts"}
+                    value_label={"brand"}
+                    handleChange={handleChangePromotionsDTO}
                   />
                   <div></div>
                 </div>
 
                 <div className="select__discount">
-                  <Select
-                    defaultValue="Buscar por genero"
-                    onChange={(value) =>
-                      handleChangePromotionsDTO(value, "genre")
-                    }
-                    className="select__mproducts"
-                    style={{ width: 250 }}
-                    options={[
-                      { value: "", label: "Elige un genero" },
-                      { value: "MEN", label: "Hombre" },
-                      { value: "WOMAN", label: "Mujer" },
-                      { value: "UNISEX", label: "Unisex" },
-                    ]}
+                  <SelectComponent
+                    label={"Buscar por genero"}
+                    options={SelectMockDataGenre}
+                    class_select={"select__mproducts"}
+                    value_label={"genre"}
+                    handleChange={handleChangePromotionsDTO}
                   />
                   <div></div>
                 </div>
 
                 <div className="select__discount">
-                  <Select
-                    defaultValue="Tamaño"
-                    onChange={(value) =>
-                      handleChangePromotionsDTO(value, "size")
-                    }
-                    style={{ width: 250 }}
-                    options={[
-                      { value: "", label: "Elige un Tamaño" },
-                      { value: "5", label: "5" },
-                      { value: "5.5", label: "5.5" },
-                      { value: "6", label: "6" },
-                      { value: "6.5", label: "6.5" },
-                      { value: "7", label: "7" },
-                      { value: "7.5", label: "7.5" },
-                      { value: "8", label: "8" },
-                      { value: "8.5", label: "8.5" },
-                      { value: "9", label: "9" },
-                      { value: "9.5", label: "9.5" },
-                      { value: "10", label: "10" },
-                      { value: "10.5", label: "10.5" },
-                      { value: "11", label: "11" },
-                      { value: "11.5", label: "11.5" },
-                      { value: "12", label: "12" },
-                    ]}
+                  <SelectComponent
+                    label={"Tamaño"}
+                    options={SelectMockDataSize}
+                    class_select={"select__mproducts"}
+                    value_label={"size"}
+                    handleChange={handleChangePromotionsDTO}
                   />
+
                   <div></div>
                 </div>
 
@@ -373,19 +336,9 @@ const MisProductos: React.FC = () => {
         );
       case 2:
         return (
-          <div>
+          <ModalCurrentPromotion>
             <h2>Promociones vigentes</h2>
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                padding: "10px",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                maxHeight: "50dvh",
-                overflowY: "auto",
-              }}
-            >
+            <div className="current_promotion">
               {mockdatapromos.map((item: any) => {
                 return (
                   <Card
@@ -411,7 +364,7 @@ const MisProductos: React.FC = () => {
                 );
               })}
             </div>
-          </div>
+          </ModalCurrentPromotion>
         );
       case 3:
         return (
@@ -429,32 +382,13 @@ const MisProductos: React.FC = () => {
     <div>
       {contextHolder}
       <MisProductosContainer>
-        <div
-          className="misproductos__box"
-          style={{
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-            padding: "0px 10px",
-          }}
-        >
+        <div className="misproductos__box">
           <div
             onClick={() => {
               showModal(1);
             }}
             title="Agregar una promocion para los productos en stock"
-            style={{
-              width: "33%",
-              borderRadius: "5px",
-              padding: "10px",
-              cursor: "pointer",
-              backgroundColor: "#4E7A9C",
-              color: "white",
-              height: "45px",
-              fontSize: "13px",
-              display: "flex",
-              alignItems: "center",
-            }}
+            className="misproductos__box__button"
           >
             Agregar promocion
           </div>
@@ -462,19 +396,8 @@ const MisProductos: React.FC = () => {
             onClick={() => {
               showModal(2);
             }}
+            className="misproductos__box__button"
             title="Ver promociones vigentes"
-            style={{
-              width: "33%",
-              borderRadius: "5px",
-              padding: "10px",
-              cursor: "pointer",
-              backgroundColor: "#4E7A9C",
-              color: "white",
-              height: "45px",
-              fontSize: "13px",
-              display: "flex",
-              alignItems: "center",
-            }}
           >
             Promociones vigentes
           </div>
@@ -520,33 +443,21 @@ const MisProductos: React.FC = () => {
             value={searchparam.name}
             onChange={(value) => handleChange(value.target.value, "name")}
           />
-          <Select
-            defaultValue="Buscar por marca"
-            onChange={(value) => handleChange(value, "brand")}
-            className="select__mproducts"
-            options={[
-              { label: "Elige una marca", value: "" },
-              { label: "Adidas", value: "ADIDAS" },
-              { label: "Nike", value: "NIKE" },
-              { label: "New Balance", value: "NEW BALANCE" },
-              { label: "Air Jordan", value: "AIR JORDAN" },
-              { label: "Yeezy", value: "YEEZY" },
-              { label: "Converse", value: "CONVERSE" },
-              { label: "Vans", value: "VANS" },
-              { label: "Revengexstorm", value: "REVENGEXSTORM" },
-            ]}
+          <SelectComponent
+            label={"Buscar por marca"}
+            options={SelectMockDataBrand}
+            class_select={"select__mproducts"}
+            value_label={"brand"}
+            handleChange={handleChange}
           />
-          <Select
-            defaultValue="Buscar por genero"
-            onChange={(value) => handleChange(value, "genre")}
-            className="select__mproducts"
-            options={[
-              { value: "", label: "Elige un genero" },
-              { value: "MEN", label: "Hombre" },
-              { value: "WOMAN", label: "Mujer" },
-              { value: "UNISEX", label: "Unisex" },
-            ]}
+          <SelectComponent
+            label={"Buscar por genero"}
+            options={SelectMockDataGenre}
+            class_select={"select__mproducts"}
+            value_label={"genre"}
+            handleChange={handleChange}
           />
+
           <StyledCustomButton
             title="Buscar producto"
             type="primary"

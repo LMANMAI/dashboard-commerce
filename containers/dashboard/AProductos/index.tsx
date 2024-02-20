@@ -10,7 +10,6 @@ import { UploadOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import {
   DatePicker,
-  Select,
   Button,
   Upload,
   Card,
@@ -20,6 +19,12 @@ import {
   Badge,
   Space,
 } from "antd";
+import { SelectComponent } from "../../../components";
+import {
+  SelectMockDataGenre,
+  SelectMockDataSize,
+  SelectMockDataBrand,
+} from "../Mproductos/statics";
 import { SaveOutlined } from "@ant-design/icons";
 import { StyledCustomButton } from "../styles";
 import dayjs from "dayjs";
@@ -323,32 +328,19 @@ const AgregarProductos = () => {
                   format={"DD/MM/YY"}
                 />
                 <div className="select__formcontain">
-                  <Select
-                    onChange={(value) => handleChange(value, "brand")}
-                    style={{ width: 250 }}
-                    value={product.brand}
-                    options={[
-                      { label: "Elige una marca", value: "" },
-                      { label: "Adidas", value: "ADIDAS" },
-                      { label: "Nike", value: "NIKE" },
-                      { label: "New Balance", value: "NEW BALANCE" },
-                      { label: "Air Jordan", value: "AIR JORDAN" },
-                      { label: "Yeezy", value: "YEEZY" },
-                      { label: "Converse", value: "CONVERSE" },
-                      { label: "Vans", value: "VANS" },
-                      { label: "Revengexstorm", value: "REVENGEXSTORM" },
-                    ]}
+                  <SelectComponent
+                    label={"Agregar marca"}
+                    options={SelectMockDataBrand}
+                    class_select={"select__mproducts"}
+                    value_label={"brand"}
+                    handleChange={handleChange}
                   />
-                  <Select
-                    onChange={(value) => handleChange(value, "genre")}
-                    style={{ width: 250 }}
-                    value={product.genre}
-                    options={[
-                      { value: "", label: "Elige un genero" },
-                      { value: "MEN", label: "Hombre" },
-                      { value: "WOMAN", label: "Mujer" },
-                      { value: "UNISEX", label: "Unisex" },
-                    ]}
+                  <SelectComponent
+                    label={"Agregar genero"}
+                    options={SelectMockDataGenre}
+                    class_select={"select__mproducts"}
+                    value_label={"genre"}
+                    handleChange={handleChange}
                   />
                 </div>
 
@@ -361,28 +353,12 @@ const AgregarProductos = () => {
                     addonBefore="Cantidad"
                     onChange={handleSizeInputChange}
                   />
-                  <Select
-                    defaultValue="Tamaño"
-                    onChange={handleChangeSizeStock}
-                    style={{ width: 250 }}
-                    options={[
-                      { value: "", label: "Elige un Tamaño" },
-                      { value: "5", label: "5" },
-                      { value: "5.5", label: "5.5" },
-                      { value: "6", label: "6" },
-                      { value: "6.5", label: "6.5" },
-                      { value: "7", label: "7" },
-                      { value: "7.5", label: "7.5" },
-                      { value: "8", label: "8" },
-                      { value: "8.5", label: "8.5" },
-                      { value: "9", label: "9" },
-                      { value: "9.5", label: "9.5" },
-                      { value: "10", label: "10" },
-                      { value: "10.5", label: "10.5" },
-                      { value: "11", label: "11" },
-                      { value: "11.5", label: "11.5" },
-                      { value: "12", label: "12" },
-                    ]}
+                  <SelectComponent
+                    label={"Tamaño"}
+                    options={SelectMockDataSize}
+                    class_select={"select__mproducts"}
+                    value_label={"size"}
+                    handleChange={handleChangeSizeStock}
                   />
                   <Button
                     onClick={() => handleSaveStock()}

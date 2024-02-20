@@ -15,6 +15,19 @@ export const MisProductosContainer = styled.div`
   margin: 0px auto;
   .misproductos__box {
     display: none;
+
+    .misproductos__box__button {
+      width: 33%;
+      border-radius: 5px;
+      padding: 10px;
+      cursor: pointer;
+      background-color: rgb(78, 122, 156);
+      color: white;
+      height: 45px;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+    }
   }
   .misproductos__formulario {
     display: flex;
@@ -28,7 +41,10 @@ export const MisProductosContainer = styled.div`
   }
   @media (min-width: 768px) {
     .misproductos__box {
-      display: block;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 0px 10px;
       height: 100px;
       border: 1px solid #eee;
       border-radius: 5px;
@@ -206,5 +222,16 @@ export const ModalAddPromotionsContainer = styled.div`
   .input__discount {
     margin: 5px 0px;
     width: 250px;
+  }
+`;
+
+export const ModalCurrentPromotion = styled.div`
+  .current_promotion {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    flex-wrap: wrap;
+    max-height: 50dvh;
+    overflow-y: auto;
   }
 `;
