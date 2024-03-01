@@ -257,6 +257,11 @@ const MisProductos: React.FC = () => {
       key: "address",
     },
     {
+      title: "Promocion",
+      dataIndex: "",
+      key: "address",
+    },
+    {
       title: "Marca",
       dataIndex: "brand",
       key: "address",
@@ -366,13 +371,7 @@ const MisProductos: React.FC = () => {
             </div>
           </ModalCurrentPromotion>
         );
-      case 3:
-        return (
-          <div>
-            <h2>Eliminar promociones</h2>
-            <p>Este es el tercer contenido.</p>
-          </div>
-        );
+
       default:
         return null;
     }

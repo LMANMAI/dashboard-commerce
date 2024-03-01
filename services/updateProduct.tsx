@@ -2,7 +2,7 @@ import instance from "../config";
 
 const updateProduct = async (selectedItem: any) => {
   try {
-    const { data } = await instance.put(`/update/${selectedItem._id}`, {
+    const { data } = await instance.put(`/product/update/${selectedItem._id}`, {
       selectedItem,
     });
     return data;

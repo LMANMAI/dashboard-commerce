@@ -2,7 +2,7 @@ import instance from "../config";
 
 const getProduct = async (productId: string) => {
   try {
-    const { data } = await instance.get(`/${productId}`);
+    const { data } = await instance.get(`/product/${productId}`);
     return data;
   } catch (error) {
     return [];

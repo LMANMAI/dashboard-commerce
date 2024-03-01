@@ -9,7 +9,7 @@ const addImagestoProduct = async ({
 }: IPageProps) => {
   try {
     const { data } = await instance.put(
-      `productimages/${productId}`,
+      `product/productimages/${productId}`,
       imagesFormData,
       {
         headers: {

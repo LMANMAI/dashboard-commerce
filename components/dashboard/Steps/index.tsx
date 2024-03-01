@@ -1,5 +1,5 @@
-import React from "react";
-import dayjs from "dayjs";
+import React, { useState } from "react";
+import dayjs, { Dayjs } from "dayjs";
 import {
   DatePicker,
   Button,
@@ -9,13 +9,14 @@ import {
   Avatar,
   Badge,
   Space,
+  Input,
   UploadProps,
 } from "antd";
 import {
   AddForm,
   StepsContainer,
   CustomSteps,
-  CustomInput,
+  // Input,
 } from "../../../containers/dashboard/AProductos/styles";
 import { SelectComponent } from "../../../components";
 import {
@@ -23,21 +24,21 @@ import {
   SelectMockDataSize,
   SelectMockDataBrand,
 } from "../../../containers/dashboard/Mproductos/statics";
-import { SaveOutlined } from "@ant-design/icons";
-import { UploadOutlined } from "@ant-design/icons";
+import { SaveOutlined, UploadOutlined } from "@ant-design/icons";
 
 interface ISteps {
-  product: any;
+  product?: any;
   sizevalue: any;
   inputValue: any;
   file: any;
   imgs1: any;
   currentStep: any;
-  setProduct: any;
+  setProduct?: any;
   setSizevalue: any;
   setInputValue: any;
   setFileList: any;
   setImgsList1: any;
+  handleInputChange: any;
 }
 const StepsCompoent: React.FC<ISteps> = ({
   product,
@@ -51,10 +52,10 @@ const StepsCompoent: React.FC<ISteps> = ({
   setInputValue,
   setFileList,
   setImgsList1,
+  handleInputChange,
 }) => {
   const { Step } = Steps;
-
-  const onChange = (date: any) => {
+  const onChange = (date: Dayjs | null, dateString: string) => {
     if (date) {
       const dayjsDate = dayjs(date.toDate());
       const formattedDate = dayjsDate.format("YYYY-MM-DD");
@@ -98,15 +99,12 @@ const StepsCompoent: React.FC<ISteps> = ({
     setInputValue(value);
   };
   const handleChange = (value: any, fieldName: string) => {
-    setProduct({ ...product, [fieldName]: value });
+    setProduct((prevSearchParam: any) => ({
+      ...prevSearchParam,
+      [fieldName]: value,
+    }));
   };
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setProduct({
-      ...product,
-      [name]: value,
-    });
-  };
+
   const handleDeleteStock = (index: number) => {
     const updatedSizes = product.sizes.filter(
       (_: any, itemIndex: any) => itemIndex !== index
@@ -115,28 +113,30 @@ const StepsCompoent: React.FC<ISteps> = ({
     setProduct({ ...product, sizes: updatedSizes });
   };
 
+  const { name, price } = product;
   //Componentes del step
   const StepOne = () => {
     return (
       <AddForm>
-        <CustomInput
+        <Input
           addonBefore="Nombre"
           className="input__addform"
           placeholder="Nombre"
           type="text"
           name="name"
-          value={product.name}
+          value={name}
           onChange={handleInputChange}
         />
-        <CustomInput
+        <Input
           addonBefore="Precio"
           className="input__addform precio"
           placeholder="Precio"
           type="number"
           name="price"
-          value={product.price}
+          value={price}
           onChange={handleInputChange}
         />
+
         <DatePicker
           className="datepicker__addform"
           onChange={onChange}
@@ -160,7 +160,7 @@ const StepsCompoent: React.FC<ISteps> = ({
           />
         </div>
         <div className="input__formadd_container_talle">
-          <CustomInput
+          <Input
             className="input__addform qty"
             placeholder="Cantidad"
             value={inputValue}
@@ -316,7 +316,7 @@ const StepsCompoent: React.FC<ISteps> = ({
   return (
     <div>
       <CustomSteps size="small" current={currentStep} labelPlacement="vertical">
-        <Step title="información" />
+        <Step title="Información" />
         <Step title="Imagenes" />
         <Step title="Guardar" />
       </CustomSteps>

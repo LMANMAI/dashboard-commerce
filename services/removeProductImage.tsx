@@ -7,7 +7,7 @@ const removeProductImage = async (
 ) => {
   try {
     const { data } = await instance.put(
-      `/deleteproductimage/${productId}/${imageId}/${type}`
+      `/product/deleteproductimage/${productId}/${imageId}/${type}`
     );
     console.log(data);
     return data;

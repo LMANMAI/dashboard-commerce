@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getProducts } from "@services";
 import { Line } from "react-chartjs-2";
+import { GraphicContainer } from "./styles";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -107,9 +108,17 @@ const MisVentas = () => {
   return (
     <div>
       <h3>Mis ventas</h3>
-      <div>
-        <Line options={options} data={data} />
-      </div>
+      <GraphicContainer>
+        <div className="graphic graphic_line">
+          <Line options={options} data={data} />
+        </div>
+        <div className="graphic graphic_line">
+          <Line options={options} data={data} />
+        </div>
+        <div className="graphic graphic_line">
+          <Line options={options} data={data} />
+        </div>
+      </GraphicContainer>
     </div>
   );
 };

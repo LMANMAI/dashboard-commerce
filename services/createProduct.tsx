@@ -4,7 +4,7 @@ interface IPageProps {
 }
 const addProducts = async ({ formData }: IPageProps) => {
   try {
-    const { data } = await instance.post(`/create`, formData, {
+    const { data } = await instance.post(`/product/create`, formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },

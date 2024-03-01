@@ -1,152 +1,326 @@
-import { useState } from "react";
-import { AddFormContainer } from "./styles";
-import { notification } from "antd";
+import React, { useState } from "react";
+import { SaveOutlined } from "@ant-design/icons";
+import {
+  AddFormContainer,
+  AddForm,
+  StepsContainer,
+  CustomSteps,
+  CustomInput,
+} from "./styles";
 import { StyledCustomButton } from "../styles";
-import { addImagestoProduct, createProducts } from "@services";
-import { StepsCompoent } from "../../../components";
-const key = "updatable";
+import { DatePicker, Select, Button, notification, Steps } from "antd";
+import AgregarProductoPasoDos from "./AgregarProductoPasoDos";
+import AgregarProductoPasoTres from "./AgregarProductoPasoTres";
+import { createProducts, addImagestoProduct } from "@services";
+import dayjs from "dayjs";
 
-const AgregarProductos = () => {
-  const [currentStep, setCurrentStep] = useState(0);
-  const [file, setFileList] = useState<any>();
+const AgregarProductosContainer: React.FC = () => {
+  const { Step } = Steps;
+  const [currentStep, setCurrentStep] = useState<number>(0);
+  const [inputValue, setInputValue] = useState<string>("");
+  const [sizevalue, setSizevalue] = useState<string>("");
+  const [file, setFile] = useState<any>(null);
   const [load, setLoad] = useState<boolean>(false);
-  const [imgs1, setImgsList1] = useState<any>([]);
-  const [product, setProduct] = useState({
-    sizes: [] as { size: string; qty: string }[],
+  const [imgs1, setImgs1] = useState<any>([]);
+  const [product, setProduct] = useState<any>({
+    sizes: [],
     name: "",
-    relaseYear: "2021-04-15",
+    releaseYear: "2021-04-15",
     price: 0,
     brand: "",
     genre: "",
     quantity: 0,
   });
-  const [inputValue, setInputValue] = useState<string>("");
-  const [sizevalue, setSizevalue] = useState<string>("");
 
-  const [api, contextHolder] = notification.useNotification();
   const openNotification = (message: string, description: string) => {
-    api.open({
-      key,
+    notification.open({
+      key: "updatable",
       message: message,
       description: description,
     });
-
     setTimeout(() => {
-      api.destroy();
+      notification.destroy();
     }, 3000);
   };
 
   const onFinish = async () => {
-    const formData = new FormData();
-    formData.append("image", file.originFileObj);
-    formData.append("sneaker", JSON.stringify(product));
-    await createProducts({ formData })
-      .then(async (response: any) => {
-        openNotification(
-          "Producto agregado correctamente",
-          "Por favor vuelva a intentar en unos momentos."
-        );
-        const imagesFormData = new FormData();
-        imagesFormData.append("images", imgs1[0]?.originFileObj);
-        imagesFormData.append("images", imgs1[1]?.originFileObj);
-        imagesFormData.append("images", imgs1[2]?.originFileObj);
-        const productId = response.sneaker._id;
-        await addImagestoProduct({ productId, imagesFormData })
-          .then(() => {
-            openNotification(
-              "imagenes agregadas correctamente",
-              "Por favor vuelva a intentar en unos momentos."
-            );
-            setFileList(null);
-            setImgsList1([]);
-            setCurrentStep(0);
-            setLoad(false);
-            setProduct({
-              sizes: [],
-              name: "",
-              relaseYear: "2021-04-15",
-              price: 0,
-              brand: "",
-              genre: "",
-              quantity: 0,
-            });
-          })
-          .catch(() => {
-            setLoad(false);
-            openNotification(
-              "Ocurrio un error al agregar las imagenes al producto",
-              "Por favor vuelva a intentar en unos momentos."
-            );
-          });
-      })
-      .catch(() => {
-        setLoad(false);
-        openNotification(
-          "Ocurrio un error al agregar el producto",
-          "Por favor vuelva a intentar en unos momentos."
-        );
+    try {
+      setLoad(true);
+      const formData = new FormData();
+      formData.append("image", file.originFileObj);
+      formData.append("sneaker", JSON.stringify(product));
+
+      const response = await createProducts({ formData });
+      openNotification(
+        "Producto agregado correctamente",
+        "Por favor vuelva a intentar en unos momentos."
+      );
+
+      const imagesFormData = new FormData();
+      imgs1.forEach((image: any) => {
+        imagesFormData.append("images", image.originFileObj);
       });
+
+      await addImagestoProduct({
+        productId: response.sneaker._id,
+        imagesFormData,
+      });
+      resetForm();
+    } catch (error) {
+      setLoad(false);
+      openNotification(
+        "Ocurrió un error al agregar el producto",
+        "Por favor vuelva a intentar en unos momentos."
+      );
+    }
   };
 
+  const resetForm = () => {
+    setFile(null);
+    setImgs1([]);
+    setCurrentStep(0);
+    setLoad(false);
+    setProduct({
+      sizes: [],
+      name: "",
+      releaseYear: "2021-04-15",
+      price: 0,
+      brand: "",
+      genre: "",
+      quantity: 0,
+    });
+  };
+
+  const handleChangeSizeStock = (value: string) => {
+    setSizevalue(value);
+  };
+
+  const handleSizeInputChange = (value: string) => {
+    setInputValue(value);
+  };
+
+  const handleDeleteStock = (index: number) => {
+    const updatedSizes = product.sizes.filter(
+      (_: any, itemIndex: any) => itemIndex !== index
+    );
+    setProduct({ ...product, sizes: updatedSizes });
+  };
+
+  const handleChange = (fieldName: string, value: any) => {
+    console.log(fieldName);
+    setProduct({ ...product, [fieldName]: value });
+  };
+
+  const handlePrevStep = () => {
+    setCurrentStep(currentStep - 1);
+  };
+
+  const handleChangeFile = (file: any) => {
+    setFile(file);
+  };
+
+  const handleChangeImages = (images: any) => {
+    setImgs1(images);
+  };
+
+  const handleSaveStock = () => {
+    const newSize = {
+      size: sizevalue,
+      qty: inputValue,
+    };
+  };
   return (
-    <div style={{ width: "100%" }}>
-      {contextHolder}
-      <AddFormContainer>
-        <div className="steps">
-          <StepsCompoent
-            product={product}
-            sizevalue={sizevalue}
-            inputValue={inputValue}
-            file={file}
-            imgs1={imgs1}
-            currentStep={currentStep}
-            setProduct={setProduct}
-            setSizevalue={setSizevalue}
-            setInputValue={setInputValue}
-            setFileList={setFileList}
-            setImgsList1={setImgsList1}
-          />
-          <div style={{ marginTop: "20px", display: "flex" }}>
-            {currentStep > 0 && (
-              <StyledCustomButton
-                type="primary"
-                onClick={() => setCurrentStep(currentStep - 1)}
-                style={{ marginRight: "10px" }}
-              >
-                Anterior
-              </StyledCustomButton>
-            )}
-            {currentStep < 2 && (
-              <StyledCustomButton
-                type="primary"
-                onClick={() => {
-                  setCurrentStep(currentStep + 1);
+    <AddFormContainer>
+      <div className="steps">
+        <CustomSteps
+          size="small"
+          current={currentStep}
+          labelPlacement="vertical"
+        >
+          <Step title="información" />
+          <Step title="Imagenes" />
+          <Step title="Guardar" />
+        </CustomSteps>
+        <StepsContainer>
+          {currentStep === 0 && (
+            <AddForm>
+              <CustomInput
+                addonBefore="Nombre"
+                className="input__addform"
+                placeholder="Nombre"
+                type="text"
+                name="name"
+                value={product.name}
+                onChange={(e) => handleChange("name", e.target.value)}
+              />
+              <CustomInput
+                addonBefore="Precio"
+                className="input__addform precio"
+                placeholder="Precio"
+                type="number"
+                name="price"
+                value={product.price}
+                onChange={(e) => handleChange("price", e.target.value)}
+              />
+              <DatePicker
+                className="datepicker__addform"
+                onChange={(date) => {
+                  if (date) {
+                    const formattedDate = date.format("YYYY-MM-DD");
+                    setProduct({
+                      ...product,
+                      relaseYear: formattedDate,
+                    });
+                  }
                 }}
-                disabled={
-                  (currentStep === 0 &&
-                    (product.name === "" ||
-                      product.genre === "" ||
-                      product.brand === "")) ||
-                  (currentStep === 1 && !file)
-                }
-              >
-                Siguiente
-              </StyledCustomButton>
-            )}
-            {currentStep === 2 && (
-              <StyledCustomButton
-                type="primary"
-                onClick={() => onFinish()}
-                disabled={load}
-              >
-                Guardar
-              </StyledCustomButton>
-            )}
-          </div>
-        </div>
-      </AddFormContainer>
-    </div>
+                value={dayjs(product.relaseYear)}
+                format={"DD/MM/YY"}
+              />
+              <div className="select__formcontain">
+                <Select
+                  onChange={(value) => handleChange("brand", value)}
+                  style={{ width: 250 }}
+                  value={product.brand}
+                  options={[
+                    { label: "Elige una marca", value: "" },
+                    { label: "Adidas", value: "ADIDAS" },
+                    { label: "Nike", value: "NIKE" },
+                    { label: "New Balance", value: "NEW BALANCE" },
+                    { label: "Air Jordan", value: "AIR JORDAN" },
+                    { label: "Yeezy", value: "YEEZY" },
+                    { label: "Converse", value: "CONVERSE" },
+                    { label: "Vans", value: "VANS" },
+                    { label: "Revengexstorm", value: "REVENGEXSTORM" },
+                  ]}
+                />
+                <Select
+                  onChange={(value) => handleChange("genre", value)}
+                  style={{ width: 250 }}
+                  value={product.genre}
+                  options={[
+                    { value: "", label: "Elige un genero" },
+                    { value: "MEN", label: "Hombre" },
+                    { value: "WOMAN", label: "Mujer" },
+                    { value: "UNISEX", label: "Unisex" },
+                  ]}
+                />
+              </div>
+
+              <div className="input__formadd_container_talle">
+                <CustomInput
+                  className="input__addform qty"
+                  placeholder="Cantidad"
+                  value={inputValue}
+                  type="number"
+                  addonBefore="Cantidad"
+                  onChange={(e) => handleSizeInputChange(e.target.value)}
+                />
+                <Select
+                  defaultValue="Tamaño"
+                  onChange={handleChangeSizeStock}
+                  style={{ width: 250 }}
+                  options={[
+                    { value: "", label: "Elige un Tamaño" },
+                    { value: "5", label: "5" },
+                    { value: "5.5", label: "5.5" },
+                    { value: "6", label: "6" },
+                    { value: "6.5", label: "6.5" },
+                    { value: "7", label: "7" },
+                    { value: "7.5", label: "7.5" },
+                    { value: "8", label: "8" },
+                    { value: "8.5", label: "8.5" },
+                    { value: "9", label: "9" },
+                    { value: "9.5", label: "9.5" },
+                    { value: "10", label: "10" },
+                    { value: "10.5", label: "10.5" },
+                    { value: "11", label: "11" },
+                    { value: "11.5", label: "11.5" },
+                    { value: "12", label: "12" },
+                  ]}
+                />
+                <Button
+                  onClick={() => handleSaveStock()}
+                  type="default"
+                  icon={<SaveOutlined />}
+                >
+                  Guardar
+                </Button>
+              </div>
+              <div className="badge__container">
+                {product.sizes.map((item: any, index: any) => (
+                  <div className="button_badge" key={index}>
+                    <button
+                      className="button__delete_badge"
+                      onClick={() => handleDeleteStock(index)}
+                      title="Eliminar producto del stock"
+                    >
+                      x
+                    </button>
+                    <span>{item.qty}</span>
+                    <span>{item.size}</span>
+                  </div>
+                ))}
+              </div>
+            </AddForm>
+          )}
+          {currentStep === 1 && (
+            <AgregarProductoPasoDos
+              file={file}
+              imgs1={imgs1}
+              onFinish={onFinish}
+              handlePrevStep={handlePrevStep}
+              handleChangeFile={handleChangeFile}
+              handleChangeImages={handleChangeImages}
+            />
+          )}
+          {currentStep === 2 && (
+            <AgregarProductoPasoTres
+              product={product}
+              handlePrevStep={handlePrevStep}
+            />
+          )}
+        </StepsContainer>
+      </div>
+
+      <div style={{ marginTop: "20px", display: "flex" }}>
+        {currentStep > 0 && (
+          <StyledCustomButton
+            type="primary"
+            onClick={() => setCurrentStep(currentStep - 1)}
+            style={{ marginRight: "10px" }}
+          >
+            Anterior
+          </StyledCustomButton>
+        )}
+        {currentStep < 2 && (
+          <StyledCustomButton
+            type="primary"
+            onClick={() => {
+              setCurrentStep(currentStep + 1);
+            }}
+            disabled={
+              (currentStep === 0 &&
+                (product.name === "" ||
+                  product.genre === "" ||
+                  product.brand === "")) ||
+              (currentStep === 1 && !file)
+            }
+          >
+            Siguiente
+          </StyledCustomButton>
+        )}
+        {currentStep === 2 && (
+          <StyledCustomButton
+            type="primary"
+            onClick={() => onFinish()}
+            disabled={load}
+          >
+            Guardar
+          </StyledCustomButton>
+        )}
+      </div>
+    </AddFormContainer>
   );
 };
 
-export default AgregarProductos;
+export default AgregarProductosContainer;
