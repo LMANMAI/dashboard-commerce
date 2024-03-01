@@ -11,9 +11,17 @@ const AgregarProductoPasoTres: React.FC<Props> = ({
   handlePrevStep,
 }) => {
   return (
-    <div>
-      {/* Renderizar campos de formulario del paso tres */}
-      <Button onClick={handlePrevStep}>Anterior</Button>
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <Card
+        className="card__product_add"
+        style={{ width: 275 }}
+        cover={<img alt="example" src={file.thumbUrl} />}
+        title={product.name}
+      >
+        <p>Precio: ${product.price}</p>
+        <p>Marca: {product.brand}</p>
+        <p>Genero: {product.genre}</p>
+      </Card>
     </div>
   );
 };
