@@ -19,9 +19,9 @@ const AgregarProductosContainer: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<number>(0);
   const [inputValue, setInputValue] = useState<string>("");
   const [sizevalue, setSizevalue] = useState<string>("");
-  const [file, setFile] = useState<any>(null);
   const [load, setLoad] = useState<boolean>(false);
-  const [imgs1, setImgs1] = useState<any>([]);
+  const [imgsToProduct, setImgsListToProduct] = useState<any>([]);
+  const [imgProduct, setImgProduct] = useState<any>();
   const [product, setProduct] = useState<any>({
     sizes: [],
     name: "",
@@ -47,8 +47,11 @@ const AgregarProductosContainer: React.FC = () => {
     try {
       setLoad(true);
       const formData = new FormData();
-      formData.append("image", file.originFileObj);
-      formData.append("sneaker", JSON.stringify(product));
+      formData.append("image", imgProduct.originFileObj);
+      formData.append("product", JSON.stringify(product));
+
+      console.log("image", imgProduct);
+      console.log("product", JSON.stringify(product));
 
       const response = await createProducts({ formData });
       openNotification(
@@ -57,8 +60,8 @@ const AgregarProductosContainer: React.FC = () => {
       );
 
       const imagesFormData = new FormData();
-      imgs1.forEach((image: any) => {
-        imagesFormData.append("images", image.originFileObj);
+      imgsToProduct.forEach((imaToProducte: any) => {
+        imagesFormData.append("images", imaToProducte.originFileObj);
       });
 
       await addImagestoProduct({
@@ -76,8 +79,8 @@ const AgregarProductosContainer: React.FC = () => {
   };
 
   const resetForm = () => {
-    setFile(null);
-    setImgs1([]);
+    setImgProduct(null);
+    setImgsListToProduct([]);
     setCurrentStep(0);
     setLoad(false);
     setProduct({
@@ -107,20 +110,7 @@ const AgregarProductosContainer: React.FC = () => {
   };
 
   const handleChange = (fieldName: string, value: any) => {
-    console.log(fieldName);
     setProduct({ ...product, [fieldName]: value });
-  };
-
-  const handlePrevStep = () => {
-    setCurrentStep(currentStep - 1);
-  };
-
-  const handleChangeFile = (file: any) => {
-    setFile(file);
-  };
-
-  const handleChangeImages = (images: any) => {
-    setImgs1(images);
   };
 
   const handleSaveStock = () => {
@@ -265,18 +255,15 @@ const AgregarProductosContainer: React.FC = () => {
           )}
           {currentStep === 1 && (
             <AgregarProductoPasoDos
-              file={file}
-              imgs1={imgs1}
-              onFinish={onFinish}
-              handlePrevStep={handlePrevStep}
-              handleChangeFile={handleChangeFile}
-              handleChangeImages={handleChangeImages}
+              file={imgProduct}
+              handleChangeImages={setImgProduct}
+              setImgsListToProduct={setImgsListToProduct}
             />
           )}
           {currentStep === 2 && (
             <AgregarProductoPasoTres
               product={product}
-              handlePrevStep={handlePrevStep}
+              productImg={imgProduct}
             />
           )}
         </StepsContainer>
@@ -303,7 +290,7 @@ const AgregarProductosContainer: React.FC = () => {
                 (product.name === "" ||
                   product.genre === "" ||
                   product.brand === "")) ||
-              (currentStep === 1 && !file)
+              (currentStep === 1 && !imgProduct)
             }
           >
             Siguiente

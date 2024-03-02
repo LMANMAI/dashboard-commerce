@@ -1,21 +1,19 @@
 import React from "react";
-import { Button } from "antd";
+import { Card } from "antd";
 
 interface Props {
   product: any;
-  handlePrevStep: () => void;
+  productImg: any;
 }
 
-const AgregarProductoPasoTres: React.FC<Props> = ({
-  product,
-  handlePrevStep,
-}) => {
+const AgregarProductoPasoTres: React.FC<Props> = ({ product, productImg }) => {
+  console.log(product, "product");
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Card
         className="card__product_add"
         style={{ width: 275 }}
-        cover={<img alt="example" src={file.thumbUrl} />}
+        cover={<img alt="example" src={productImg.thumbUrl} />}
         title={product.name}
       >
         <p>Precio: ${product.price}</p>

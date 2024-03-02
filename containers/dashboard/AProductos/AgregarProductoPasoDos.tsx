@@ -1,50 +1,49 @@
 import React from "react";
-import { Button } from "antd";
+import { Button, Upload, UploadProps, message } from "antd";
+import { UploadOutlined } from "@ant-design/icons";
 
 interface Props {
   file: any;
-  imgs1: any[];
-  onFinish: () => void;
-  handlePrevStep: () => void;
-  handleChangeFile: (file: any) => void;
-  handleChangeImages: (images: any[]) => void;
+  handleChangeImages: (image: any) => void;
+  setImgsListToProduct: (file: any) => void;
 }
 
 const AgregarProductoPasoDos: React.FC<Props> = ({
   file,
-  imgs1,
-  onFinish,
-  handlePrevStep,
-  handleChangeFile,
   handleChangeImages,
+  setImgsListToProduct,
 }) => {
+  const handleRemove = () => {
+    handleChangeImages(null);
+  };
+
   const propsPosterPath: UploadProps = {
     name: "file",
-    action: "http://localhost:3000/add",
-    headers: {
-      authorization: "authorization-text",
-    },
+    action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    onRemove: handleRemove,
     onChange(info) {
       if (info.file.status === "uploading") {
-        setFileList(info.file);
+        handleChangeImages(info.file);
+        console.log(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
+        console.log(`${info.file.name} file upload failed.`);
       }
     },
   };
   const props1: UploadProps = {
     name: "images",
-    action: "http://localhost:3000/add",
+    action: `https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188`,
     headers: {
       authorization: "authorization-text",
     },
     onChange(info) {
       if (info.file.status === "uploading") {
-        setImgsList1(info.fileList);
+        setImgsListToProduct(info.fileList);
       } else if (info.file.status === "error") {
+        console.log(`${info.file.name} file upload failed.`);
       }
     },
   };
-
   return (
     <div className="button__formadd">
       <div>
@@ -60,18 +59,6 @@ const AgregarProductoPasoDos: React.FC<Props> = ({
             Imagen para la portada
           </Button>
         </Upload>
-        {file && (
-          <div className="img_name_upload">
-            <p>{file?.name}</p>
-            <button
-              className="img__delete_btn"
-              onClick={() => setFileList(null)}
-              title="Eliminar imagen del producto"
-            >
-              x
-            </button>
-          </div>
-        )}
       </div>
       <div>
         <Upload multiple={true} {...props1}>
@@ -82,25 +69,6 @@ const AgregarProductoPasoDos: React.FC<Props> = ({
             Imagenes del producto
           </Button>
         </Upload>
-        {imgs1.map((item: any, index: number) => {
-          return (
-            <div className="img_name_upload" key={item.name}>
-              <p>{item?.name}</p>
-              <button
-                className="img__delete_btn"
-                onClick={() => {
-                  const updatedImgs1 = imgs1.filter(
-                    (_: any, i: any) => i !== index
-                  );
-                  setImgsList1(updatedImgs1);
-                }}
-                title="Eliminar imagen del producto"
-              >
-                x
-              </button>
-            </div>
-          );
-        })}
       </div>
     </div>
   );
