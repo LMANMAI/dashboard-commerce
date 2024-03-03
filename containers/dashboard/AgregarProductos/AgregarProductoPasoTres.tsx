@@ -7,7 +7,6 @@ interface Props {
 }
 
 const AgregarProductoPasoTres: React.FC<Props> = ({ product, productImg }) => {
-  console.log(product, "product");
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Card

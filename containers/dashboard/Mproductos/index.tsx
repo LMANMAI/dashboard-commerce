@@ -118,7 +118,7 @@ const MisProductos: React.FC = () => {
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
-    total: 123,
+    total: 10,
   });
   const [open, setOpen] = useState(false);
   const [promovalue, setPromoValue] = useState<number | any>();
@@ -159,7 +159,7 @@ const MisProductos: React.FC = () => {
       setPagination({
         current: req.currenPage,
         pageSize: 10,
-        total: req.totalSneakers,
+        total: req.totalproducts,
       });
       setProducts(req.data);
       setLoad(false);
@@ -216,6 +216,37 @@ const MisProductos: React.FC = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+  const formatNumber = (number: number) => {
+    const hasDecimals = number % 1 !== 0;
+    const formattedNumber = hasDecimals
+      ? number.toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2,
+        })
+      : number.toLocaleString("en-US");
+
+    return formattedNumber;
+  };
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) {
+      return "Fecha no disponible";
+    }
+    const date = new Date(dateString);
+    const isISODate = dateString.includes("T");
+    const year = isISODate ? date.getUTCFullYear() : date.getFullYear();
+    const month = String(
+      isISODate ? date.getUTCMonth() + 1 : date.getMonth() + 1
+    ).padStart(2, "0");
+    const day = String(isISODate ? date.getUTCDate() : date.getDate()).padStart(
+      2,
+      "0"
+    );
+
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate;
+  };
 
   const columns = [
     {
@@ -239,22 +270,24 @@ const MisProductos: React.FC = () => {
     {
       title: "Precio",
       dataIndex: "price",
-      key: "age",
+      key: "price",
+      render: (salary: any) => <span>{`$ ${formatNumber(salary)}`}</span>,
     },
     {
       title: "Genero",
       dataIndex: "genre",
-      key: "address",
+      key: "genre",
     },
     {
       title: "Cantidad total",
-      dataIndex: "",
-      key: "address",
+      dataIndex: "quantity",
+      key: "quantity",
     },
     {
       title: "Fecha de lanzamiento",
-      dataIndex: "relaseYear",
-      key: "address",
+      dataIndex: "releaseYear",
+      key: "releaseYear",
+      render: (date: any) => <span>{`${formatDate(date)}`}</span>,
     },
     {
       title: "Promocion",
@@ -264,7 +297,7 @@ const MisProductos: React.FC = () => {
     {
       title: "Marca",
       dataIndex: "brand",
-      key: "address",
+      key: "brand",
     },
   ];
   useEffect(() => {

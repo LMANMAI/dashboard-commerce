@@ -8,7 +8,16 @@ import {
   CustomInput,
 } from "./styles";
 import { StyledCustomButton } from "../styles";
-import { DatePicker, Select, Button, notification, Steps } from "antd";
+import {
+  DatePicker,
+  Select,
+  Button,
+  notification,
+  Steps,
+  Space,
+  Badge,
+  Avatar,
+} from "antd";
 import AgregarProductoPasoDos from "./AgregarProductoPasoDos";
 import AgregarProductoPasoTres from "./AgregarProductoPasoTres";
 import { createProducts, addImagestoProduct } from "@services";
@@ -25,7 +34,7 @@ const AgregarProductosContainer: React.FC = () => {
   const [product, setProduct] = useState<any>({
     sizes: [],
     name: "",
-    releaseYear: "2021-04-15",
+    releaseYear: dayjs().format("DD-MM-YYYY"),
     price: 0,
     brand: "",
     genre: "",
@@ -50,25 +59,25 @@ const AgregarProductosContainer: React.FC = () => {
       formData.append("image", imgProduct.originFileObj);
       formData.append("product", JSON.stringify(product));
 
-      console.log("image", imgProduct);
-      console.log("product", JSON.stringify(product));
-
       const response = await createProducts({ formData });
-      openNotification(
-        "Producto agregado correctamente",
-        "Por favor vuelva a intentar en unos momentos."
-      );
 
-      const imagesFormData = new FormData();
-      imgsToProduct.forEach((imaToProducte: any) => {
-        imagesFormData.append("images", imaToProducte.originFileObj);
-      });
+      if (response && response.product) {
+        openNotification(
+          "Producto agregado correctamente",
+          "La ventana volvera automaticamente a la primer instancia."
+        );
 
-      await addImagestoProduct({
-        productId: response.sneaker._id,
-        imagesFormData,
-      });
-      resetForm();
+        const imagesFormData = new FormData();
+        imgsToProduct.forEach((imaToProducte: any) => {
+          imagesFormData.append("images", imaToProducte.originFileObj);
+        });
+
+        await addImagestoProduct({
+          productId: response.product._id,
+          imagesFormData,
+        });
+        resetForm();
+      }
     } catch (error) {
       setLoad(false);
       openNotification(
@@ -86,7 +95,7 @@ const AgregarProductosContainer: React.FC = () => {
     setProduct({
       sizes: [],
       name: "",
-      releaseYear: "2021-04-15",
+      releaseYear: dayjs().format("DD-MM-YYYY"),
       price: 0,
       brand: "",
       genre: "",
@@ -118,6 +127,23 @@ const AgregarProductosContainer: React.FC = () => {
       size: sizevalue,
       qty: inputValue,
     };
+    const prevStock: { size: string; qty: string }[] = product.sizes;
+    const existingSizeIndex = prevStock.findIndex(
+      (item) => item.size === sizevalue
+    );
+    if (existingSizeIndex !== -1) {
+      prevStock[existingSizeIndex].qty = (
+        parseInt(prevStock[existingSizeIndex].qty) + parseInt(inputValue)
+      ).toString();
+    } else {
+      prevStock.push(newSize);
+    }
+    setProduct({
+      ...product,
+      sizes: prevStock,
+    });
+    setSizevalue("");
+    setInputValue("");
   };
   return (
     <AddFormContainer>
@@ -156,14 +182,15 @@ const AgregarProductosContainer: React.FC = () => {
                 className="datepicker__addform"
                 onChange={(date) => {
                   if (date) {
-                    const formattedDate = date.format("YYYY-MM-DD");
+                    const formattedDate = date.format("DD/MM/YY");
                     setProduct({
                       ...product,
-                      relaseYear: formattedDate,
+                      releaseYear: formattedDate,
                     });
                   }
                 }}
-                value={dayjs(product.relaseYear)}
+                defaultValue={dayjs()}
+                value={product.relaseYear}
                 format={"DD/MM/YY"}
               />
               <div className="select__formcontain">
@@ -237,25 +264,29 @@ const AgregarProductosContainer: React.FC = () => {
                 </Button>
               </div>
               <div className="badge__container">
-                {product.sizes.map((item: any, index: any) => (
-                  <div className="button_badge" key={index}>
-                    <button
-                      className="button__delete_badge"
-                      onClick={() => handleDeleteStock(index)}
-                      title="Eliminar producto del stock"
-                    >
-                      x
-                    </button>
-                    <span>{item.qty}</span>
-                    <span>{item.size}</span>
-                  </div>
-                ))}
+                <Space size="middle">
+                  {product.sizes.map((item: any, index: any) => (
+                    <div className="button_badge" key={index}>
+                      <button
+                        className="button__delete_badge"
+                        onClick={() => handleDeleteStock(index)}
+                        title="Eliminar producto del stock"
+                      >
+                        x
+                      </button>
+                      <Badge size="small" count={item.qty} color={"#4E7A9C"}>
+                        <Avatar shape="square" size="small">
+                          {item.size}
+                        </Avatar>
+                      </Badge>
+                    </div>
+                  ))}
+                </Space>
               </div>
             </AddForm>
           )}
           {currentStep === 1 && (
             <AgregarProductoPasoDos
-              file={imgProduct}
               handleChangeImages={setImgProduct}
               setImgsListToProduct={setImgsListToProduct}
             />

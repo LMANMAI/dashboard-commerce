@@ -23,7 +23,6 @@ const DashboardPage = () => {
     { icon: RiseOutlined, label: "Mis estadisticas", path: "sales" },
   ];
 
-  console.log(window.location.pathname.slice(1));
   return (
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Container>

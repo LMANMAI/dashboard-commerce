@@ -9,6 +9,7 @@ import {
   Switch,
   Spin,
   Button,
+  DatePicker,
 } from "antd";
 import {
   DetailImgContainer,
@@ -27,9 +28,10 @@ import {
   getProduct,
   removeProductImage,
 } from "@services";
-import { CustomInput } from "../../AProductos/styles";
+import { CustomInput } from "../../AgregarProductos/styles";
 import { SaveOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
+import dayjs from "dayjs";
 const Drawer = ({
   selectedItem,
   selectedItemPoster,
@@ -55,11 +57,7 @@ const Drawer = ({
       setLoading(false);
       getData(1, 10);
       onChange(false);
-      const res = await getProduct(selectedItem._id);
-      if (res) {
-        setSelectedItem(res.sneaker);
-        setInputValue("");
-      }
+      onClose();
     }
   };
   const handleDeleteProduct = async (item: any) => {
@@ -82,17 +80,16 @@ const Drawer = ({
     const res = await removeProductImage(id, imgId.split("/")[1], type);
     setLoading(true);
     if (res) {
-      console.log(res.sneaker);
+      console.log(res.product);
       setLoading(false);
       getData(1, 10);
       setSelectedItemPoster(
         `https://res.cloudinary.com/${
           import.meta.env.VITE_CLOUD_NAME
-        }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+        }/image/upload/v1697492964/${res.product.posterPathImage}`
       );
-      setSelectedItem(res.sneaker);
+      setSelectedItem(res.product);
     }
-    console.log(res, "res");
   };
   const handleSaveStock = async () => {
     const newSize = {
@@ -143,7 +140,7 @@ const Drawer = ({
         getData(1, 10);
         const res = await getProduct(selectedItem._id);
         if (res) {
-          setSelectedItem(res.sneaker);
+          setSelectedItem(res.product);
           onChange(false);
         }
         setTimeout(() => {
@@ -186,7 +183,7 @@ const Drawer = ({
       }
     },
   };
-
+  console.log(selectedItem);
   return (
     <div>
       {loading ? (
@@ -351,6 +348,7 @@ const Drawer = ({
                     { value: "12", label: "12" },
                   ]}
                 />
+
                 <Button
                   onClick={() => handleSaveStock()}
                   type="default"
@@ -443,6 +441,25 @@ const Drawer = ({
               ]}
               disabled={!editmode}
             />
+
+            <DatePicker
+              className="datepicker__addform"
+              disabled={!editmode}
+              value={
+                selectedItem.releaseYear && dayjs(selectedItem.releaseYear)
+              }
+              onChange={(date: any) => {
+                if (date) {
+                  const formattedDate = date.format("DD/MM/YYYY");
+                  setSelectedItem({
+                    ...selectedItem,
+                    releaseYear: formattedDate,
+                  });
+                }
+              }}
+              format={"DD/MM/YY"}
+            />
+
             <div style={{ display: "flex", gap: "5px", margin: "10px 0px" }}>
               <StyledCustomButton
                 onClick={() => handleUpdateProduct(selectedItem)}

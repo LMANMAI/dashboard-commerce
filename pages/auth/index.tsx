@@ -3,7 +3,7 @@ import { signInUser } from "../../config/firebase-config";
 import { Container, Card } from "./styles";
 import { Input, notification } from "antd";
 import type { NotificationPlacement } from "antd/es/notification/interface";
-import { CustomButton } from "@containers/dashboard/AProductos/styles";
+import { CustomButton } from "@containers/dashboard/AgregarProductos/styles";
 const defaultFormFields = {
   email: "",
   password: "",

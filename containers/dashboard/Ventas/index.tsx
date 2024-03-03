@@ -61,7 +61,7 @@ const MisVentas = () => {
           // Process the data to get the count of products per month
           const productsByMonth: { [month: string]: number } = {};
           req.data.forEach((product: any) => {
-            const releaseMonth = new Date(product.relaseYear).toLocaleString(
+            const releaseMonth = new Date(product.releaseYear).toLocaleString(
               "en-US",
               { month: "long" }
             );

@@ -9,6 +9,7 @@ const addProducts = async ({ formData }: IPageProps) => {
         "Content-Type": "multipart/form-data",
       },
     });
+
     return data;
   } catch (error) {
     console.log(error);

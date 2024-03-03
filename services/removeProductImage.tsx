@@ -9,7 +9,6 @@ const removeProductImage = async (
     const { data } = await instance.put(
       `/product/deleteproductimage/${productId}/${imageId}/${type}`
     );
-    console.log(data);
     return data;
   } catch (error) {
     console.log(error);

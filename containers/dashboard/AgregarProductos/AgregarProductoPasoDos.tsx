@@ -3,13 +3,11 @@ import { Button, Upload, UploadProps, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 
 interface Props {
-  file: any;
   handleChangeImages: (image: any) => void;
   setImgsListToProduct: (file: any) => void;
 }
 
 const AgregarProductoPasoDos: React.FC<Props> = ({
-  file,
   handleChangeImages,
   setImgsListToProduct,
 }) => {
@@ -24,9 +22,7 @@ const AgregarProductoPasoDos: React.FC<Props> = ({
     onChange(info) {
       if (info.file.status === "uploading") {
         handleChangeImages(info.file);
-        console.log(`${info.file.name} file uploaded successfully`);
       } else if (info.file.status === "error") {
-        console.log(`${info.file.name} file upload failed.`);
       }
     },
   };
@@ -40,7 +36,6 @@ const AgregarProductoPasoDos: React.FC<Props> = ({
       if (info.file.status === "uploading") {
         setImgsListToProduct(info.fileList);
       } else if (info.file.status === "error") {
-        console.log(`${info.file.name} file upload failed.`);
       }
     },
   };
