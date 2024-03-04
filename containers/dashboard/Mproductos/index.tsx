@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { getProducts, searchProduct } from "@services";
+import {
+  getProducts,
+  searchProduct,
+  createPromotion,
+  getCurrentPromotions,
+  deletePromotion,
+} from "@services";
 import { Table, Input, Button, notification, Drawer, Modal, Card } from "antd";
 import { SelectComponent } from "../../../components";
 import {
@@ -10,12 +16,7 @@ import {
 } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
-import {
-  IProduct,
-  SelectMockDataGenre,
-  SelectMockDataSize,
-  SelectMockDataBrand,
-} from "./statics";
+import { IProduct, SelectMockDataGenre, SelectMockDataBrand } from "./statics";
 import { DrawerComponent } from "./auxiliars";
 import { DeleteOutlined } from "@ant-design/icons";
 
@@ -23,7 +24,10 @@ const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
   const [selectedItem, setSelectedItem] = useState<IProduct | any>(null);
-  const [promotion, setParametersPromotions] = useState<IProduct | any>(null);
+  const [promotion, setParametersPromotions] = useState<IProduct | any>({
+    brand: "",
+    genre: "",
+  });
   const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
   const [editmode, setEditMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -200,7 +204,6 @@ const MisProductos: React.FC = () => {
       );
     }
   };
-
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
@@ -208,11 +211,9 @@ const MisProductos: React.FC = () => {
     setIsModalOpen(true);
     setCurrentContent(type);
   };
-
   const handleOk = () => {
     setIsModalOpen(false);
   };
-
   const handleCancel = () => {
     setIsModalOpen(false);
   };
@@ -227,7 +228,6 @@ const MisProductos: React.FC = () => {
 
     return formattedNumber;
   };
-
   const formatDate = (dateString: string) => {
     if (!dateString) {
       return "Fecha no disponible";
@@ -290,16 +290,44 @@ const MisProductos: React.FC = () => {
       render: (date: any) => <span>{`${formatDate(date)}`}</span>,
     },
     {
-      title: "Promocion",
-      dataIndex: "",
-      key: "address",
-    },
-    {
       title: "Marca",
       dataIndex: "brand",
       key: "brand",
     },
   ];
+
+  const savePromotion = async (promotion: any) => {
+    const req = await createPromotion({ promotion });
+    if (req.status === 200) {
+      setPromoValue(null);
+      setParametersPromotions({
+        brand: "",
+        genre: "",
+      });
+      openNotification(
+        "Promocion agregada correctamente",
+        "Se restablecera el formulario para agregar otra promoción"
+      );
+    }
+  };
+  const getActivePromotions = async () => {
+    const res = await getCurrentPromotions();
+    if (res.status === 200) {
+      setMockDataPromo(res.currentPromotions);
+    }
+  };
+
+  const deleteCurrentPromotion = async (promotionId: string) => {
+    const res = await deletePromotion(promotionId);
+
+    if (res.status === 200) {
+      openNotification(
+        "Promocion eliminada correctamente",
+        "Se elimino la promoción y los productos volvieron a su precio original."
+      );
+    }
+  };
+
   useEffect(() => {
     getData(1, 10);
   }, []);
@@ -324,7 +352,7 @@ const MisProductos: React.FC = () => {
               <ModalAddPromotionsContainer>
                 <div className="select__discount">
                   <SelectComponent
-                    label={"Buscar por marca"}
+                    value={promotion.brand}
                     options={SelectMockDataBrand}
                     class_select={"select__mproducts"}
                     value_label={"brand"}
@@ -335,24 +363,12 @@ const MisProductos: React.FC = () => {
 
                 <div className="select__discount">
                   <SelectComponent
-                    label={"Buscar por genero"}
+                    value={promotion.genre}
                     options={SelectMockDataGenre}
                     class_select={"select__mproducts"}
                     value_label={"genre"}
                     handleChange={handleChangePromotionsDTO}
                   />
-                  <div></div>
-                </div>
-
-                <div className="select__discount">
-                  <SelectComponent
-                    label={"Tamaño"}
-                    options={SelectMockDataSize}
-                    class_select={"select__mproducts"}
-                    value_label={"size"}
-                    handleChange={handleChangePromotionsDTO}
-                  />
-
                   <div></div>
                 </div>
 
@@ -377,7 +393,7 @@ const MisProductos: React.FC = () => {
           <ModalCurrentPromotion>
             <h2>Promociones vigentes</h2>
             <div className="current_promotion">
-              {mockdatapromos.map((item: any) => {
+              {mockdatapromos.map((item: any, index: number) => {
                 return (
                   <Card
                     style={{ width: 175 }}
@@ -386,18 +402,18 @@ const MisProductos: React.FC = () => {
                         key="setting"
                         onClick={() => {
                           const updatedPromos = mockdatapromos.filter(
-                            (itemfilter: any) => item.id !== itemfilter.id
+                            (itemfilter: any) => item._id !== itemfilter._id
                           );
                           setMockDataPromo(updatedPromos);
+                          deleteCurrentPromotion(item._id);
                         }}
                       />,
                     ]}
                   >
-                    <Meta title={`Promocion #${item.id}`} />
-                    <p>Marca: {item.afectedProduct.brand}</p>
-                    <p>Talle: {item.afectedProduct.size}</p>
-                    <p>Genero: {item.afectedProduct.genre}</p>
-                    <p>Descuento del {item.value}%</p>
+                    <Meta title={`Promocion #${index}`} />
+                    <p>Marca: {item.afectedProduct?.brand}</p>
+                    <p>Genero: {item.afectedProduct?.genre}</p>
+                    <p>Descuento del {item.discountAmount}%</p>
                   </Card>
                 );
               })}
@@ -426,6 +442,7 @@ const MisProductos: React.FC = () => {
           </div>
           <div
             onClick={() => {
+              getActivePromotions();
               showModal(2);
             }}
             className="misproductos__box__button"
@@ -451,9 +468,9 @@ const MisProductos: React.FC = () => {
                   key="ok"
                   type="primary"
                   onClick={() =>
-                    console.log({
+                    savePromotion({
                       afectedProduct: promotion,
-                      value: parseFloat(promovalue),
+                      discountAmount: parseFloat(promovalue),
                     })
                   }
                 >
@@ -476,14 +493,14 @@ const MisProductos: React.FC = () => {
             onChange={(value) => handleChange(value.target.value, "name")}
           />
           <SelectComponent
-            label={"Buscar por marca"}
+            value={searchparam.brand}
             options={SelectMockDataBrand}
             class_select={"select__mproducts"}
             value_label={"brand"}
             handleChange={handleChange}
           />
           <SelectComponent
-            label={"Buscar por genero"}
+            value={searchparam.genre}
             options={SelectMockDataGenre}
             class_select={"select__mproducts"}
             value_label={"genre"}

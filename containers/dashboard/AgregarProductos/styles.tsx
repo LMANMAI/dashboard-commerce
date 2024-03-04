@@ -48,6 +48,7 @@ export const AddForm = styled.div`
       &:hover {
         .button__delete_badge {
           visibility: visible;
+          z-index: 99;
         }
       }
     }
@@ -141,6 +142,8 @@ export const StepsContainer = styled.section`
 `;
 
 export const CustomSteps = styled(Steps)`
+  width: 50%;
+  margin: 0px auto;
   && {
     .ant-steps-item.ant-steps-item-process.ant-steps-item-active {
       .ant-steps-item-icon {

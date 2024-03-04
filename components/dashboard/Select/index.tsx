@@ -2,7 +2,7 @@ import React from "react";
 import { Select } from "antd";
 
 interface ISelect {
-  label: string;
+  value: string;
   options: any;
   class_select: string;
   value_label: string;
@@ -10,7 +10,7 @@ interface ISelect {
 }
 
 const SelectComponent: React.FC<ISelect> = ({
-  label,
+  value,
   options,
   class_select,
   value_label,
@@ -18,7 +18,8 @@ const SelectComponent: React.FC<ISelect> = ({
 }) => {
   return (
     <Select
-      defaultValue={label}
+      defaultValue={value_label}
+      value={value}
       onChange={(value) => handleChange(value, value_label)}
       className={class_select}
       options={options}

@@ -7,3 +7,8 @@ export { default as deleteProduct } from "./deleteProduct";
 export { default as getProduct } from "./getProduct";
 export { default as removeProductImage } from "./removeProductImage";
 export { default as updateProduct } from "./updateProduct";
+
+//promociones
+export { default as getCurrentPromotions } from "./getCurrentPromotions";
+export { default as createPromotion } from "./createPromotion";
+export { default as deletePromotion } from "./deletePromotion";

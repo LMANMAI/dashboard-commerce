@@ -64,7 +64,6 @@ export const MisProductosContainer = styled.div`
 `;
 
 export const StockContainer = styled.div`
-  margin-bottom: 10px;
   .badge__container {
     .button_badge {
       position: relative;
@@ -82,13 +81,17 @@ export const StockContainer = styled.div`
       outline: none;
       height: 15px;
       width: 15px;
-      border: 1px solid;
-      font-size: 12px;
+      border: 1px solid white;
+      font-size: 10px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       left: -5px;
+      line-height: 5px;
+      background-color: #944646;
+      color: white;
+      z-index: 99;
     }
   }
 
@@ -98,6 +101,7 @@ export const StockContainer = styled.div`
     flex-direction: column;
     margin: 0px auto;
     width: 100%;
+    margin-top: 20px;
     .ant-select {
       width: 100% !important;
     }

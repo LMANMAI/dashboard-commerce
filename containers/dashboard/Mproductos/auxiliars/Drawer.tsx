@@ -80,7 +80,6 @@ const Drawer = ({
     const res = await removeProductImage(id, imgId.split("/")[1], type);
     setLoading(true);
     if (res) {
-      console.log(res.product);
       setLoading(false);
       getData(1, 10);
       setSelectedItemPoster(
@@ -183,7 +182,7 @@ const Drawer = ({
       }
     },
   };
-  console.log(selectedItem);
+
   return (
     <div>
       {loading ? (
@@ -314,55 +313,15 @@ const Drawer = ({
 
           <EditPanel>
             <StockContainer>
-              <div className="input__formadd_container_talle">
-                <CustomInput
-                  className="input__addform qty"
-                  placeholder="Cantidad"
-                  value={inputValue}
-                  type="number"
-                  disabled={!editmode}
-                  addonBefore="Cantidad"
-                  onChange={handleSizeInputChange}
-                />
-                <Select
-                  defaultValue="Tamaño"
-                  onChange={handleChangeSizeStock}
-                  style={{ width: 250 }}
-                  disabled={!editmode}
-                  options={[
-                    { value: "", label: "Elige un Tamaño" },
-                    { value: "5", label: "5" },
-                    { value: "5.5", label: "5.5" },
-                    { value: "6", label: "6" },
-                    { value: "6.5", label: "6.5" },
-                    { value: "7", label: "7" },
-                    { value: "7.5", label: "7.5" },
-                    { value: "8", label: "8" },
-                    { value: "8.5", label: "8.5" },
-                    { value: "9", label: "9" },
-                    { value: "9.5", label: "9.5" },
-                    { value: "10", label: "10" },
-                    { value: "10.5", label: "10.5" },
-                    { value: "11", label: "11" },
-                    { value: "11.5", label: "11.5" },
-                    { value: "12", label: "12" },
-                  ]}
-                />
-
-                <Button
-                  onClick={() => handleSaveStock()}
-                  type="default"
-                  disabled={!editmode}
-                  icon={<SaveOutlined />}
-                >
-                  Guardar
-                </Button>
-              </div>
               <h3 style={{ marginBottom: "10px" }}>Stock</h3>
               <div className="badge__container">
                 <Space
                   size="middle"
-                  style={{ display: "flex", flexWrap: "wrap" }}
+                  style={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    margin: "10px 0px",
+                  }}
                 >
                   {selectedItem &&
                     selectedItem.sizes &&
@@ -393,6 +352,53 @@ const Drawer = ({
                       ))}
                 </Space>
               </div>
+
+              {editmode && (
+                <div className="input__formadd_container_talle">
+                  <CustomInput
+                    className="input__addform qty"
+                    placeholder="Cantidad"
+                    value={inputValue}
+                    type="number"
+                    disabled={!editmode}
+                    addonBefore="Cantidad"
+                    onChange={handleSizeInputChange}
+                  />
+                  <Select
+                    defaultValue="Tamaño"
+                    onChange={handleChangeSizeStock}
+                    style={{ width: 250 }}
+                    disabled={!editmode}
+                    options={[
+                      { value: "", label: "Elige un Tamaño" },
+                      { value: "5", label: "5" },
+                      { value: "5.5", label: "5.5" },
+                      { value: "6", label: "6" },
+                      { value: "6.5", label: "6.5" },
+                      { value: "7", label: "7" },
+                      { value: "7.5", label: "7.5" },
+                      { value: "8", label: "8" },
+                      { value: "8.5", label: "8.5" },
+                      { value: "9", label: "9" },
+                      { value: "9.5", label: "9.5" },
+                      { value: "10", label: "10" },
+                      { value: "10.5", label: "10.5" },
+                      { value: "11", label: "11" },
+                      { value: "11.5", label: "11.5" },
+                      { value: "12", label: "12" },
+                    ]}
+                  />
+
+                  <Button
+                    onClick={() => handleSaveStock()}
+                    type="default"
+                    disabled={!editmode}
+                    icon={<SaveOutlined />}
+                  >
+                    Guardar
+                  </Button>
+                </div>
+              )}
             </StockContainer>
             <Input
               value={selectedItem.name}
@@ -450,10 +456,9 @@ const Drawer = ({
               }
               onChange={(date: any) => {
                 if (date) {
-                  const formattedDate = date.format("DD/MM/YYYY");
                   setSelectedItem({
                     ...selectedItem,
-                    releaseYear: formattedDate,
+                    releaseYear: date,
                   });
                 }
               }}

@@ -34,7 +34,7 @@ const AgregarProductosContainer: React.FC = () => {
   const [product, setProduct] = useState<any>({
     sizes: [],
     name: "",
-    releaseYear: dayjs().format("DD-MM-YYYY"),
+    releaseYear: dayjs(),
     price: 0,
     brand: "",
     genre: "",
@@ -95,7 +95,7 @@ const AgregarProductosContainer: React.FC = () => {
     setProduct({
       sizes: [],
       name: "",
-      releaseYear: dayjs().format("DD-MM-YYYY"),
+      releaseYear: dayjs(),
       price: 0,
       brand: "",
       genre: "",
@@ -182,10 +182,9 @@ const AgregarProductosContainer: React.FC = () => {
                 className="datepicker__addform"
                 onChange={(date) => {
                   if (date) {
-                    const formattedDate = date.format("DD/MM/YY");
                     setProduct({
                       ...product,
-                      releaseYear: formattedDate,
+                      releaseYear: date,
                     });
                   }
                 }}
