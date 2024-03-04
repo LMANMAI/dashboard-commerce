@@ -31,89 +31,7 @@ const MisProductos: React.FC = () => {
   const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
   const [editmode, setEditMode] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [mockdatapromos, setMockDataPromo] = useState<any>([
-    {
-      afectedProduct: {
-        brand: "ADIDAS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "001",
-      value: 3,
-    },
-    {
-      afectedProduct: {
-        brand: "NIKE",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "002",
-      value: 20,
-    },
-    {
-      afectedProduct: {
-        brand: "VANS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "003",
-      value: 36,
-    },
-    {
-      afectedProduct: {
-        brand: "ADIDAS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "004",
-      value: 3,
-    },
-    {
-      afectedProduct: {
-        brand: "NIKE",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "005",
-      value: 20,
-    },
-    {
-      afectedProduct: {
-        brand: "VANS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "006",
-      value: 36,
-    },
-    {
-      afectedProduct: {
-        brand: "ADIDAS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "007",
-      value: 3,
-    },
-    {
-      afectedProduct: {
-        brand: "NIKE",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "008",
-      value: 20,
-    },
-    {
-      afectedProduct: {
-        brand: "VANS",
-        genre: "MEN",
-        size: "6.5",
-      },
-      id: "009",
-      value: 36,
-    },
-  ]);
+  const [mockdatapromos, setMockDataPromo] = useState<any>([]);
   const [searchparam, setSearchParam] = useState({
     name: "",
     genre: "",
@@ -393,7 +311,7 @@ const MisProductos: React.FC = () => {
           <ModalCurrentPromotion>
             <h2>Promociones vigentes</h2>
             <div className="current_promotion">
-              {mockdatapromos.map((item: any, index: number) => {
+              {mockdatapromos.map((item: any) => {
                 return (
                   <Card
                     style={{ width: 175 }}
@@ -410,7 +328,7 @@ const MisProductos: React.FC = () => {
                       />,
                     ]}
                   >
-                    <Meta title={`Promocion #${index}`} />
+                    <Meta title={item?.discountNameId} />
                     <p>Marca: {item.afectedProduct?.brand}</p>
                     <p>Genero: {item.afectedProduct?.genre}</p>
                     <p>Descuento del {item.discountAmount}%</p>
@@ -433,6 +351,7 @@ const MisProductos: React.FC = () => {
         <div className="misproductos__box">
           <div
             onClick={() => {
+              getActivePromotions();
               showModal(1);
             }}
             title="Agregar una promocion para los productos en stock"
@@ -467,12 +386,14 @@ const MisProductos: React.FC = () => {
                 <Button
                   key="ok"
                   type="primary"
-                  onClick={() =>
+                  onClick={() => {
                     savePromotion({
                       afectedProduct: promotion,
                       discountAmount: parseFloat(promovalue),
-                    })
-                  }
+                      discountNameId: `Promoción #${mockdatapromos.length + 1}`,
+                      replaceExistedPromotion: true,
+                    });
+                  }}
                 >
                   Guardar
                 </Button>
