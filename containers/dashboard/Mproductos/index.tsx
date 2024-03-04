@@ -226,6 +226,7 @@ const MisProductos: React.FC = () => {
         "Promocion agregada correctamente",
         "Se restablecera el formulario para agregar otra promoción"
       );
+      getActivePromotions();
     }
   };
   const getActivePromotions = async () => {
@@ -262,9 +263,8 @@ const MisProductos: React.FC = () => {
               <p>
                 Seleccione el tipo de productos al que quiere aplciarle un
                 descuento, recuerde que las promociones vigentes de pueden
-                visualizar en el menu continuo de{" "}
-                <strong>"Mis promociones"</strong> y se deben eliminar en el
-                menu de <strong>"Eliminar Promociones"</strong>
+                visualizar y eliminar en el menu continuo de{" "}
+                <strong>"Mis promociones"</strong>
               </p>
 
               <ModalAddPromotionsContainer>
@@ -310,32 +310,41 @@ const MisProductos: React.FC = () => {
         return (
           <ModalCurrentPromotion>
             <h2>Promociones vigentes</h2>
-            <div className="current_promotion">
-              {mockdatapromos.map((item: any) => {
-                return (
-                  <Card
-                    style={{ width: 175 }}
-                    actions={[
-                      <DeleteOutlined
-                        key="setting"
-                        onClick={() => {
-                          const updatedPromos = mockdatapromos.filter(
-                            (itemfilter: any) => item._id !== itemfilter._id
-                          );
-                          setMockDataPromo(updatedPromos);
-                          deleteCurrentPromotion(item._id);
-                        }}
-                      />,
-                    ]}
-                  >
-                    <Meta title={item?.discountNameId} />
-                    <p>Marca: {item.afectedProduct?.brand}</p>
-                    <p>Genero: {item.afectedProduct?.genre}</p>
-                    <p>Descuento del {item.discountAmount}%</p>
-                  </Card>
-                );
-              })}
-            </div>
+            {mockdatapromos.length > 0 ? (
+              <div className="current_promotion">
+                {mockdatapromos.map((item: any) => {
+                  return (
+                    <Card
+                      style={{ width: 175 }}
+                      actions={[
+                        <DeleteOutlined
+                          key="setting"
+                          onClick={() => {
+                            const updatedPromos = mockdatapromos.filter(
+                              (itemfilter: any) => item._id !== itemfilter._id
+                            );
+                            setMockDataPromo(updatedPromos);
+                            deleteCurrentPromotion(item._id);
+                          }}
+                        />,
+                      ]}
+                    >
+                      <Meta title={item?.discountNameId} />
+                      <p>Marca: {item.afectedProduct?.brand}</p>
+                      <p>Genero: {item.afectedProduct?.genre}</p>
+                      <p>Descuento del {item.discountAmount}%</p>
+                    </Card>
+                  );
+                })}
+              </div>
+            ) : (
+              <div>
+                <p>
+                  Todavia no se registran promociones, las mismas se pueden
+                  agregar desde el boton de <strong>Agregar Promoción</strong>
+                </p>
+              </div>
+            )}
           </ModalCurrentPromotion>
         );
 
@@ -373,7 +382,7 @@ const MisProductos: React.FC = () => {
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            width={currentContent !== 1 ? "70dvw" : "40dvw"}
+            width={currentContent !== 1 ? "70dvw" : "50dvw"}
             footer={[
               <Button
                 key="cancel"
@@ -459,6 +468,7 @@ const MisProductos: React.FC = () => {
             selectedItem={selectedItem}
             selectedItemPoster={selectedItemPoster}
             editmode={editmode}
+            open={open}
             onChange={onChange}
             setSelectedItemPoster={setSelectedItemPoster}
             handleChange={handleChangeEditMode}

@@ -32,7 +32,7 @@ import { CustomInput } from "../../AgregarProductos/styles";
 import { SaveOutlined } from "@ant-design/icons";
 import type { UploadProps } from "antd";
 import dayjs from "dayjs";
-const Drawer = ({
+const DrawerComponent = ({
   selectedItem,
   selectedItemPoster,
   editmode,
@@ -489,4 +489,4 @@ const Drawer = ({
   );
 };
 
-export default Drawer;
+export default DrawerComponent;

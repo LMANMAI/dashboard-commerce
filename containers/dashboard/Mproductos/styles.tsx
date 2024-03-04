@@ -220,9 +220,7 @@ export const ModalAddPromotionsContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
-  align-items: center;
-  .select__discount {
-  }
+
   .input__discount {
     margin: 5px 0px;
     width: 250px;
@@ -232,6 +230,7 @@ export const ModalAddPromotionsContainer = styled.div`
 export const ModalCurrentPromotion = styled.div`
   .current_promotion {
     display: flex;
+    justify-content: center;
     gap: 10px;
     padding: 10px;
     flex-wrap: wrap;
