@@ -49,7 +49,7 @@ const MisVentas = () => {
     const fetchData = async () => {
       let currentPage = 1;
       let allProducts: { [month: string]: number } = {};
-      let req; // Declare req outside the loop
+      let req;
 
       do {
         req = await getProducts({
@@ -58,7 +58,6 @@ const MisVentas = () => {
         });
 
         if (req.status === 200) {
-          // Process the data to get the count of products per month
           const productsByMonth: { [month: string]: number } = {};
           req.data.forEach((product: any) => {
             const releaseMonth = new Date(product.releaseYear).toLocaleString(
@@ -69,23 +68,16 @@ const MisVentas = () => {
             productsByMonth[releaseMonth] =
               (productsByMonth[releaseMonth] || 0) + 1;
           });
-
-          // Merge the current page's data with the existing data
           allProducts = { ...allProducts, ...productsByMonth };
-
-          // Update pagination for the next iteration
           setPagination({
             current: req.currenPage,
             pageSize: 10,
             total: req.totalSneakers,
           });
-
-          // Move to the next page for the next iteration
           currentPage++;
         }
       } while (currentPage <= req.totalPages);
 
-      // Set the final merged data
       setProducts({ data: allProducts });
     };
 

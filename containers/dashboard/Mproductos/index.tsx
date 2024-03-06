@@ -6,19 +6,22 @@ import {
   getCurrentPromotions,
   deletePromotion,
 } from "@services";
-import { Table, Input, Button, notification, Drawer, Modal, Card } from "antd";
+import { Table, Input, Button, notification, Drawer, Modal } from "antd";
 import { SelectComponent } from "../../../components";
-import {
-  TaleContainer,
-  MisProductosContainer,
-  ModalAddPromotionsContainer,
-  ModalCurrentPromotion,
-} from "./styles";
+import { TaleContainer, MisProductosContainer } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
 import { IProduct, SelectMockDataGenre, SelectMockDataBrand } from "./statics";
-import { DrawerComponent } from "./auxiliars";
-import { DeleteOutlined } from "@ant-design/icons";
+import {
+  AddPromotionComponent,
+  CurrentPromotionsComponent,
+  DrawerComponent,
+} from "./auxiliars";
+import { formatNumber, formatDate } from "./utils";
+interface SearchParams {
+  brand?: string;
+  genre?: string;
+}
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
@@ -71,6 +74,8 @@ const MisProductos: React.FC = () => {
       api.destroy();
     }, 3000);
   };
+
+  //llamadas a los servicios
   const getData = async (page: any, pageSize: any) => {
     setLoad(true);
     const req = await getProducts({
@@ -87,23 +92,36 @@ const MisProductos: React.FC = () => {
       setLoad(false);
     }
   };
-  const handleChange = (value: any, fieldName: string) => {
-    setSearchParam((prevSearchParam) => ({
-      ...prevSearchParam,
-      [fieldName]: value,
-    }));
+  const savePromotion = async (promotion: any) => {
+    const req = await createPromotion({ promotion });
+    if (req.status === 200) {
+      setPromoValue(null);
+      setParametersPromotions({
+        brand: "",
+        genre: "",
+      });
+      openNotification(
+        "Promocion agregada correctamente",
+        "Se restablecera el formulario para agregar otra promoción"
+      );
+      getActivePromotions();
+    }
   };
-  const handleChangePromotionsDTO = (value: any, fieldName: string) => {
-    setParametersPromotions((prevSearchParam: any) => ({
-      ...prevSearchParam,
-      [fieldName]: value,
-    }));
+  const getActivePromotions = async () => {
+    const res = await getCurrentPromotions();
+    if (res.status === 200) {
+      setMockDataPromo(res.currentPromotions);
+    }
   };
-  const handleChangeEditMode = (value: any, fieldName: string) => {
-    setSelectedItem({
-      ...selectedItem,
-      [fieldName]: value,
-    });
+  const deleteCurrentPromotion = async (promotionId: string) => {
+    const res = await deletePromotion(promotionId);
+
+    if (res.status === 200) {
+      openNotification(
+        "Promocion eliminada correctamente",
+        "Se elimino la promoción y los productos volvieron a su precio original."
+      );
+    }
   };
   const handleSearch = async () => {
     const req = await searchProduct(searchparam);
@@ -122,6 +140,29 @@ const MisProductos: React.FC = () => {
       );
     }
   };
+  //eventos onchange
+  const handleChange = (value: any, fieldName: string) => {
+    setSearchParam((prevSearchParam) => ({
+      ...prevSearchParam,
+      [fieldName]: value,
+    }));
+  };
+  const handleChangePromotionsDTO = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { value, name } = event.target;
+    setParametersPromotions((prevSearchParam: SearchParams) => ({
+      ...prevSearchParam,
+      [name]: value,
+    }));
+  };
+  const handleChangeEditMode = (value: any, fieldName: string) => {
+    setSelectedItem({
+      ...selectedItem,
+      [fieldName]: value,
+    });
+  };
+
   const onChange = (checked: boolean) => {
     setEditMode(checked);
   };
@@ -134,36 +175,6 @@ const MisProductos: React.FC = () => {
   };
   const handleCancel = () => {
     setIsModalOpen(false);
-  };
-  const formatNumber = (number: number) => {
-    const hasDecimals = number % 1 !== 0;
-    const formattedNumber = hasDecimals
-      ? number.toLocaleString("en-US", {
-          minimumFractionDigits: 2,
-          maximumFractionDigits: 2,
-        })
-      : number.toLocaleString("en-US");
-
-    return formattedNumber;
-  };
-  const formatDate = (dateString: string) => {
-    if (!dateString) {
-      return "Fecha no disponible";
-    }
-    const date = new Date(dateString);
-    const isISODate = dateString.includes("T");
-    const year = isISODate ? date.getUTCFullYear() : date.getFullYear();
-    const month = String(
-      isISODate ? date.getUTCMonth() + 1 : date.getMonth() + 1
-    ).padStart(2, "0");
-    const day = String(isISODate ? date.getUTCDate() : date.getDate()).padStart(
-      2,
-      "0"
-    );
-
-    const formattedDate = `${day}/${month}/${year}`;
-
-    return formattedDate;
   };
 
   const columns = [
@@ -214,138 +225,28 @@ const MisProductos: React.FC = () => {
     },
   ];
 
-  const savePromotion = async (promotion: any) => {
-    const req = await createPromotion({ promotion });
-    if (req.status === 200) {
-      setPromoValue(null);
-      setParametersPromotions({
-        brand: "",
-        genre: "",
-      });
-      openNotification(
-        "Promocion agregada correctamente",
-        "Se restablecera el formulario para agregar otra promoción"
-      );
-      getActivePromotions();
-    }
-  };
-  const getActivePromotions = async () => {
-    const res = await getCurrentPromotions();
-    if (res.status === 200) {
-      setMockDataPromo(res.currentPromotions);
-    }
-  };
-
-  const deleteCurrentPromotion = async (promotionId: string) => {
-    const res = await deletePromotion(promotionId);
-
-    if (res.status === 200) {
-      openNotification(
-        "Promocion eliminada correctamente",
-        "Se elimino la promoción y los productos volvieron a su precio original."
-      );
-    }
-  };
-
   useEffect(() => {
     getData(1, 10);
   }, []);
-
-  const { Meta } = Card;
 
   const getContent = () => {
     switch (currentContent) {
       case 1:
         return (
-          <div>
-            <h2>Agregar una promoción</h2>
-            <div>
-              <p>
-                Seleccione el tipo de productos al que quiere aplciarle un
-                descuento, recuerde que las promociones vigentes de pueden
-                visualizar y eliminar en el menu continuo de{" "}
-                <strong>"Mis promociones"</strong>
-              </p>
-
-              <ModalAddPromotionsContainer>
-                <div className="select__discount">
-                  <SelectComponent
-                    value={promotion.brand}
-                    options={SelectMockDataBrand}
-                    class_select={"select__mproducts"}
-                    value_label={"brand"}
-                    handleChange={handleChangePromotionsDTO}
-                  />
-                  <div></div>
-                </div>
-
-                <div className="select__discount">
-                  <SelectComponent
-                    value={promotion.genre}
-                    options={SelectMockDataGenre}
-                    class_select={"select__mproducts"}
-                    value_label={"genre"}
-                    handleChange={handleChangePromotionsDTO}
-                  />
-                  <div></div>
-                </div>
-
-                <div className="input__discount">
-                  <Input
-                    addonBefore="Valor del descuento"
-                    addonAfter="%"
-                    className="input__addform precio"
-                    placeholder="ej: 2"
-                    type="number"
-                    name="name"
-                    value={promovalue}
-                    onChange={(value) => setPromoValue(value.target.value)}
-                  />
-                </div>
-              </ModalAddPromotionsContainer>
-            </div>
-          </div>
+          <AddPromotionComponent
+            promotion={promotion}
+            promovalue={promovalue}
+            setPromoValue={setPromoValue}
+            handleChangePromotionsDTO={handleChangePromotionsDTO}
+          />
         );
       case 2:
         return (
-          <ModalCurrentPromotion>
-            <h2>Promociones vigentes</h2>
-            {mockdatapromos.length > 0 ? (
-              <div className="current_promotion">
-                {mockdatapromos.map((item: any) => {
-                  return (
-                    <Card
-                      style={{ width: 175 }}
-                      actions={[
-                        <DeleteOutlined
-                          key="setting"
-                          onClick={() => {
-                            const updatedPromos = mockdatapromos.filter(
-                              (itemfilter: any) => item._id !== itemfilter._id
-                            );
-                            setMockDataPromo(updatedPromos);
-                            deleteCurrentPromotion(item._id);
-                          }}
-                        />,
-                      ]}
-                    >
-                      <Meta title={item?.discountNameId} />
-                      <p>Marca: {item.afectedProduct?.brand}</p>
-                      <p>Genero: {item.afectedProduct?.genre}</p>
-                      <p>Descuento del {item.discountAmount}%</p>
-                    </Card>
-                  );
-                })}
-              </div>
-            ) : (
-              <div>
-                <p>
-                  Todavia no se registran promociones, las mismas se pueden
-                  agregar desde el boton de <strong>Agregar Promoción</strong>
-                </p>
-              </div>
-            )}
-          </ModalCurrentPromotion>
+          <CurrentPromotionsComponent
+            mockDataPromos={mockdatapromos}
+            setMockDataPromo={setMockDataPromo}
+            deleteCurrentPromotion={deleteCurrentPromotion}
+          />
         );
 
       default:

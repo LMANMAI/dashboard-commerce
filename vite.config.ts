@@ -13,6 +13,7 @@ export default defineConfig({
       "@containers": path.resolve(__dirname, "./containers"),
       "@services": path.resolve(__dirname, "./services/index.tsx"),
       "@types": path.resolve(__dirname, "./src/types/index.ts"),
+      "@components": path.resolve(__dirname, "./src/components/index.ts"),
     },
   },
   css: {

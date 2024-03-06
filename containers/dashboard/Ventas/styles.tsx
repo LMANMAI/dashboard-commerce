@@ -4,7 +4,7 @@ export const GraphicContainer = styled.div`
   display: flex;
   padding: 10px;
   gap: 10px;
-
+  justify-content: center;
   .graphic {
     max-width: 35dvw;
     min-width: 300px;
