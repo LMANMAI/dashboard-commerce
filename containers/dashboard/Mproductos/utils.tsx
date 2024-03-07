@@ -28,3 +28,51 @@ export const formatDate = (dateString: string) => {
 
   return formattedDate;
 };
+
+// export const columns = [
+//   {
+//     title: "Ver",
+//     dataIndex: "",
+//     key: "name",
+//     render: (_: string, record: IProduct) => (
+//       <Button
+//         onClick={() => {
+//           showDrawer(record);
+//         }}
+//         icon={<SearchOutlined />}
+//       ></Button>
+//     ),
+//   },
+//   {
+//     title: "Nombre",
+//     dataIndex: "name",
+//     key: "name",
+//   },
+//   {
+//     title: "Precio",
+//     dataIndex: "price",
+//     key: "price",
+//     render: (salary: any) => <span>{`$ ${formatNumber(salary)}`}</span>,
+//   },
+//   {
+//     title: "Genero",
+//     dataIndex: "genre",
+//     key: "genre",
+//   },
+//   {
+//     title: "Cantidad total",
+//     dataIndex: "quantity",
+//     key: "quantity",
+//   },
+//   {
+//     title: "Fecha de lanzamiento",
+//     dataIndex: "releaseYear",
+//     key: "releaseYear",
+//     render: (date: any) => <span>{`${formatDate(date)}`}</span>,
+//   },
+//   {
+//     title: "Marca",
+//     dataIndex: "brand",
+//     key: "brand",
+//   },
+// ];

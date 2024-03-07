@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
+import { FunctionsContext } from "../../../../../context/functionsContext";
 import {
   Input,
   Select,
@@ -38,17 +39,17 @@ import {
 } from "../../statics";
 import dayjs from "dayjs";
 
-const DrawerComponent = ({
-  selectedItem,
-  selectedItemPoster,
-  editmode,
-  onChange,
-  setSelectedItemPoster,
-  handleChange,
-  getData,
-  onClose,
-  setSelectedItem,
-}: any) => {
+const DrawerComponent = ({ getData, onClose }: any) => {
+  const {
+    selectedItem,
+    editmode,
+    selectedItemPoster,
+    setSelectedItem,
+    setSelectedItemPoster,
+    onChange,
+    handleChange,
+  } = useContext(FunctionsContext);
+
   const [loading, setLoading] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>("");
   const [sizevalue, setSizevalue] = useState<string>("");
@@ -65,7 +66,6 @@ const DrawerComponent = ({
   };
   const handleDeleteProduct = async (item: any) => {
     const res = await deleteProduct(item);
-    console.log(res);
     if (res.status === 200) {
       getData(1, 10);
       onClose();
@@ -132,7 +132,7 @@ const DrawerComponent = ({
 
   const props1: UploadProps = {
     name: "images",
-    action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem._id}`,
+    action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem?._id}`,
     method: "PUT",
     headers: {
       authorization: "authorization-text",
@@ -144,7 +144,7 @@ const DrawerComponent = ({
       ) {
         setLoading(true);
         getData(1, 10);
-        const res = await getProduct(selectedItem._id);
+        const res = await getProduct(selectedItem?._id);
         if (res) {
           setSelectedItem(res.product);
           onChange(false);
@@ -159,7 +159,7 @@ const DrawerComponent = ({
   const propsPosterImg: UploadProps = {
     name: "image",
     action: `${import.meta.env.VITE_URL_EP}/updateposterimage/${
-      selectedItem._id
+      selectedItem?._id
     }`,
     method: "PUT",
     headers: {
@@ -172,7 +172,7 @@ const DrawerComponent = ({
       ) {
         setLoading(true);
         getData(1, 10);
-        const res = await getProduct(selectedItem._id);
+        const res = await getProduct(selectedItem?._id);
         if (res) {
           setSelectedItem(res.sneaker);
           onChange(false);
@@ -252,7 +252,7 @@ const DrawerComponent = ({
                       className="button__delete_badge"
                       onClick={() =>
                         handleRemoveImageFromProduct(
-                          selectedItem._id,
+                          selectedItem?._id,
                           selectedItem.posterPathImage,
                           "poster"
                         )
@@ -273,7 +273,7 @@ const DrawerComponent = ({
                             className="button__delete_badge"
                             onClick={() =>
                               handleRemoveImageFromProduct(
-                                selectedItem._id,
+                                selectedItem?._id,
                                 item,
                                 "image"
                               )
@@ -427,7 +427,9 @@ const DrawerComponent = ({
               className="datepicker__addform"
               disabled={!editmode}
               value={
-                selectedItem.releaseYear && dayjs(selectedItem.releaseYear)
+                selectedItem?.releaseYear
+                  ? dayjs(selectedItem.releaseYear)
+                  : undefined
               }
               onChange={(date: any) => {
                 if (date) {
@@ -450,7 +452,7 @@ const DrawerComponent = ({
               </StyledCustomButton>
               <StyledCustomButton
                 style={{ fontSize: "12px" }}
-                onClick={() => handleDeleteProduct(selectedItem._id)}
+                onClick={() => handleDeleteProduct(selectedItem?._id)}
                 disabled={!editmode}
                 title="Eliminar producto"
               >

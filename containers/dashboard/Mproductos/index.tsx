@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   getProducts,
   searchProduct,
@@ -17,49 +17,40 @@ import {
   CurrentPromotionsComponent,
   DrawerComponent,
 } from "./auxiliars";
-import { formatNumber, formatDate } from "./utils";
-interface SearchParams {
-  brand?: string;
-  genre?: string;
-}
+import { FunctionsContext } from "../../../context/functionsContext";
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<IProduct | any>(null);
   const [promotion, setParametersPromotions] = useState<IProduct | any>({
     brand: "",
     genre: "",
   });
-  const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
-  const [editmode, setEditMode] = useState<boolean>(false);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
   const [mockdatapromos, setMockDataPromo] = useState<any>([]);
-  const [searchparam, setSearchParam] = useState({
-    name: "",
-    genre: "",
-    brand: "",
-  });
+
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
     total: 10,
   });
-  const [open, setOpen] = useState(false);
   const [promovalue, setPromoValue] = useState<number | any>();
-  const [currentContent, setCurrentContent] = useState(1);
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
+  const {
+    initialColumns,
+    currentContent,
+    open,
+    isModalOpen,
+    searchparam,
+    showModal,
+    handleOk,
+    handleCancel,
+    handleChangePromotionsDTO,
+    handleChange,
+    setOpen,
+  } = useContext(FunctionsContext);
 
-  const showDrawer = (item: any) => {
-    setOpen(true);
-    setSelectedItem(item);
-    setSelectedItemPoster(
-      `https://res.cloudinary.com/${
-        import.meta.env.VITE_CLOUD_NAME
-      }/image/upload/v1697492964/${item.posterPathImage}`
-    );
-  };
   const onClose = () => {
     setOpen(false);
   };
@@ -140,90 +131,6 @@ const MisProductos: React.FC = () => {
       );
     }
   };
-  //eventos onchange
-  const handleChange = (value: any, fieldName: string) => {
-    setSearchParam((prevSearchParam) => ({
-      ...prevSearchParam,
-      [fieldName]: value,
-    }));
-  };
-  const handleChangePromotionsDTO = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const { value, name } = event.target;
-    setParametersPromotions((prevSearchParam: SearchParams) => ({
-      ...prevSearchParam,
-      [name]: value,
-    }));
-  };
-  const handleChangeEditMode = (value: any, fieldName: string) => {
-    setSelectedItem({
-      ...selectedItem,
-      [fieldName]: value,
-    });
-  };
-
-  const onChange = (checked: boolean) => {
-    setEditMode(checked);
-  };
-  const showModal = (type: number) => {
-    setIsModalOpen(true);
-    setCurrentContent(type);
-  };
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
-  const columns = [
-    {
-      title: "Ver",
-      dataIndex: "",
-      key: "name",
-      render: (_: string, record: IProduct) => (
-        <Button
-          onClick={() => {
-            showDrawer(record);
-          }}
-          icon={<SearchOutlined />}
-        ></Button>
-      ),
-    },
-    {
-      title: "Nombre",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Precio",
-      dataIndex: "price",
-      key: "price",
-      render: (salary: any) => <span>{`$ ${formatNumber(salary)}`}</span>,
-    },
-    {
-      title: "Genero",
-      dataIndex: "genre",
-      key: "genre",
-    },
-    {
-      title: "Cantidad total",
-      dataIndex: "quantity",
-      key: "quantity",
-    },
-    {
-      title: "Fecha de lanzamiento",
-      dataIndex: "releaseYear",
-      key: "releaseYear",
-      render: (date: any) => <span>{`${formatDate(date)}`}</span>,
-    },
-    {
-      title: "Marca",
-      dataIndex: "brand",
-      key: "brand",
-    },
-  ];
 
   useEffect(() => {
     getData(1, 10);
@@ -253,7 +160,7 @@ const MisProductos: React.FC = () => {
         return null;
     }
   };
-
+  console.log(open);
   return (
     <div>
       {contextHolder}
@@ -351,7 +258,7 @@ const MisProductos: React.FC = () => {
         <TaleContainer>
           <Table
             dataSource={products}
-            columns={columns}
+            columns={initialColumns}
             loading={load}
             pagination={pagination}
             onChange={(pagination) => {
@@ -365,18 +272,7 @@ const MisProductos: React.FC = () => {
           onClose={onClose}
           open={open}
         >
-          <DrawerComponent
-            selectedItem={selectedItem}
-            selectedItemPoster={selectedItemPoster}
-            editmode={editmode}
-            open={open}
-            onChange={onChange}
-            setSelectedItemPoster={setSelectedItemPoster}
-            handleChange={handleChangeEditMode}
-            getData={getData}
-            onClose={onClose}
-            setSelectedItem={setSelectedItem}
-          />
+          <DrawerComponent getData={getData} onClose={onClose} />
         </Drawer>
       </MisProductosContainer>
     </div>
