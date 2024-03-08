@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { SaveOutlined } from "@ant-design/icons";
 import {
   AddFormContainer,
@@ -18,28 +18,38 @@ import {
   Badge,
   Avatar,
 } from "antd";
-import AgregarProductoPasoDos from "./AgregarProductoPasoDos";
-import AgregarProductoPasoTres from "./AgregarProductoPasoTres";
+import AgregarProductoPasoDos from "./auxiliars/steps/AgregarProductoPasoDos";
+import AgregarProductoPasoTres from "./auxiliars/steps/AgregarProductoPasoTres";
 import { createProducts, addImagestoProduct } from "@services";
+import {
+  SelectMockDataSize,
+  SelectMockDataGenre,
+  SelectMockDataBrand,
+} from "../Mproductos/statics";
 import dayjs from "dayjs";
+import { FunctionsAgregarContext } from "context/functionsAgregrarProductosContext";
 
 const AgregarProductosContainer: React.FC = () => {
   const { Step } = Steps;
-  const [currentStep, setCurrentStep] = useState<number>(0);
-  const [inputValue, setInputValue] = useState<string>("");
-  const [sizevalue, setSizevalue] = useState<string>("");
-  const [load, setLoad] = useState<boolean>(false);
-  const [imgsToProduct, setImgsListToProduct] = useState<any>([]);
-  const [imgProduct, setImgProduct] = useState<any>();
-  const [product, setProduct] = useState<any>({
-    sizes: [],
-    name: "",
-    releaseYear: dayjs(),
-    price: 0,
-    brand: "",
-    genre: "",
-    quantity: 0,
-  });
+  const {
+    currentStep,
+    product,
+    inputValue,
+    imgProduct,
+    imgsToProduct,
+    load,
+    setCurrentStep,
+    setLoad,
+    resetForm,
+    handleChange,
+    setProduct,
+    handleDeleteStock,
+    setImgProduct,
+    setImgsListToProduct,
+    handleChangeSizeStock,
+    handleSizeInputChange,
+    handleSaveStock,
+  } = useContext(FunctionsAgregarContext);
 
   const openNotification = (message: string, description: string) => {
     notification.open({
@@ -51,7 +61,7 @@ const AgregarProductosContainer: React.FC = () => {
       notification.destroy();
     }, 3000);
   };
-
+  //Funciones
   const onFinish = async () => {
     try {
       setLoad(true);
@@ -87,64 +97,6 @@ const AgregarProductosContainer: React.FC = () => {
     }
   };
 
-  const resetForm = () => {
-    setImgProduct(null);
-    setImgsListToProduct([]);
-    setCurrentStep(0);
-    setLoad(false);
-    setProduct({
-      sizes: [],
-      name: "",
-      releaseYear: dayjs(),
-      price: 0,
-      brand: "",
-      genre: "",
-      quantity: 0,
-    });
-  };
-
-  const handleChangeSizeStock = (value: string) => {
-    setSizevalue(value);
-  };
-
-  const handleSizeInputChange = (value: string) => {
-    setInputValue(value);
-  };
-
-  const handleDeleteStock = (index: number) => {
-    const updatedSizes = product.sizes.filter(
-      (_: any, itemIndex: any) => itemIndex !== index
-    );
-    setProduct({ ...product, sizes: updatedSizes });
-  };
-
-  const handleChange = (fieldName: string, value: any) => {
-    setProduct({ ...product, [fieldName]: value });
-  };
-
-  const handleSaveStock = () => {
-    const newSize = {
-      size: sizevalue,
-      qty: inputValue,
-    };
-    const prevStock: { size: string; qty: string }[] = product.sizes;
-    const existingSizeIndex = prevStock.findIndex(
-      (item) => item.size === sizevalue
-    );
-    if (existingSizeIndex !== -1) {
-      prevStock[existingSizeIndex].qty = (
-        parseInt(prevStock[existingSizeIndex].qty) + parseInt(inputValue)
-      ).toString();
-    } else {
-      prevStock.push(newSize);
-    }
-    setProduct({
-      ...product,
-      sizes: prevStock,
-    });
-    setSizevalue("");
-    setInputValue("");
-  };
   return (
     <AddFormContainer>
       <div className="steps">
@@ -197,28 +149,13 @@ const AgregarProductosContainer: React.FC = () => {
                   onChange={(value) => handleChange("brand", value)}
                   style={{ width: 250 }}
                   value={product.brand}
-                  options={[
-                    { label: "Elige una marca", value: "" },
-                    { label: "Adidas", value: "ADIDAS" },
-                    { label: "Nike", value: "NIKE" },
-                    { label: "New Balance", value: "NEW BALANCE" },
-                    { label: "Air Jordan", value: "AIR JORDAN" },
-                    { label: "Yeezy", value: "YEEZY" },
-                    { label: "Converse", value: "CONVERSE" },
-                    { label: "Vans", value: "VANS" },
-                    { label: "Revengexstorm", value: "REVENGEXSTORM" },
-                  ]}
+                  options={SelectMockDataBrand}
                 />
                 <Select
                   onChange={(value) => handleChange("genre", value)}
                   style={{ width: 250 }}
                   value={product.genre}
-                  options={[
-                    { value: "", label: "Elige un genero" },
-                    { value: "MEN", label: "Hombre" },
-                    { value: "WOMAN", label: "Mujer" },
-                    { value: "UNISEX", label: "Unisex" },
-                  ]}
+                  options={SelectMockDataGenre}
                 />
               </div>
 
@@ -235,24 +172,7 @@ const AgregarProductosContainer: React.FC = () => {
                   defaultValue="Tamaño"
                   onChange={handleChangeSizeStock}
                   style={{ width: 250 }}
-                  options={[
-                    { value: "", label: "Elige un Tamaño" },
-                    { value: "5", label: "5" },
-                    { value: "5.5", label: "5.5" },
-                    { value: "6", label: "6" },
-                    { value: "6.5", label: "6.5" },
-                    { value: "7", label: "7" },
-                    { value: "7.5", label: "7.5" },
-                    { value: "8", label: "8" },
-                    { value: "8.5", label: "8.5" },
-                    { value: "9", label: "9" },
-                    { value: "9.5", label: "9.5" },
-                    { value: "10", label: "10" },
-                    { value: "10.5", label: "10.5" },
-                    { value: "11", label: "11" },
-                    { value: "11.5", label: "11.5" },
-                    { value: "12", label: "12" },
-                  ]}
+                  options={SelectMockDataSize}
                 />
                 <Button
                   onClick={() => handleSaveStock()}

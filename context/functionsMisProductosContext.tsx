@@ -288,6 +288,7 @@ export const FunctionsProvider = ({
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const value: FunctionsContextValue = {
     initialColumns: initialColumns,
     products: products,

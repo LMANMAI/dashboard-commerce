@@ -17,7 +17,7 @@ import {
   CurrentPromotionsComponent,
   DrawerComponent,
 } from "./auxiliars";
-import { FunctionsContext } from "../../../context/functionsContext";
+import { FunctionsContext } from "../../../context/functionsMisProductosContext";
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
