@@ -54,6 +54,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
   const [inputValue, setInputValue] = useState<string>("");
   const [sizevalue, setSizevalue] = useState<string>("");
 
+  //Servicios
   const handleUpdateProduct = async (item: any) => {
     setLoading(true);
     const res = await editProduct(item);
@@ -89,6 +90,8 @@ const DrawerComponent = ({ getData, onClose }: any) => {
       setSelectedItem(res.product);
     }
   };
+
+  //Funciones
   const handleChangeSizeStock = (value: string) => {
     setSizevalue(value);
   };
@@ -96,8 +99,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     const { value } = e.target;
     setInputValue(value);
   };
-
-  const handleSaveStock = async () => {
+  const handleSaveStock = () => {
     const newSize = {
       size: sizevalue,
       qty: inputValue,
@@ -130,6 +132,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     setSelectedItem({ ...selectedItem, sizes: updatedSizes });
   };
 
+  //Props para el upload de imagenes
   const props1: UploadProps = {
     name: "images",
     action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem?._id}`,
