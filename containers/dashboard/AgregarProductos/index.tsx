@@ -28,6 +28,7 @@ const AgregarProductosContainer: React.FC = () => {
       key: "updatable",
       message: message,
       description: description,
+      placement: "bottomRight",
     });
     setTimeout(() => {
       notification.destroy();
@@ -46,7 +47,7 @@ const AgregarProductosContainer: React.FC = () => {
       if (response && response.product) {
         openNotification(
           "Producto agregado correctamente",
-          "La ventana volvera automaticamente a la primer instancia."
+          "La ventana volvera automaticamente a la primer instancia para agregar más productos."
         );
 
         const imagesFormData = new FormData();

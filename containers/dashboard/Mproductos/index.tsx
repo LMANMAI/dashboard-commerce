@@ -61,6 +61,7 @@ const MisProductos: React.FC = () => {
       key,
       message: message,
       description: description,
+      placement: "bottomRight",
     });
 
     setTimeout(() => {
