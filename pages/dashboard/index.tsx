@@ -17,6 +17,7 @@ import {
 } from "./styles";
 const DashboardPage = () => {
   const [menustatus, setMenuStatus] = useState<boolean>(false);
+
   const menu = [
     { icon: FolderOpenOutlined, label: "Mis productos", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar productos", path: "add" },

@@ -243,7 +243,6 @@ export const FunctionsProvider = ({
   };
 
   const showDrawer = (item: any) => {
-    console.log("desde el drawer en el context", item);
     setOpen(true);
     setSelectedItem(item);
     setSelectedItemPoster(

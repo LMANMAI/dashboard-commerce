@@ -49,10 +49,12 @@ const MisProductos: React.FC = () => {
     handleChangePromotionsDTO,
     handleChange,
     setOpen,
+    setEditMode,
   } = useContext(FunctionsContext);
 
   const onClose = () => {
     setOpen(false);
+    setEditMode(false);
   };
   const openNotification = (message: string, description: string) => {
     api.open({
@@ -160,7 +162,7 @@ const MisProductos: React.FC = () => {
         return null;
     }
   };
-  console.log(open);
+
   return (
     <div>
       {contextHolder}

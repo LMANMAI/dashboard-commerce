@@ -203,7 +203,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         <div>
           <EditMode>
             <p>Editar producto</p>
-            <Switch size="small" onChange={onChange} />
+            <Switch size="small" onChange={onChange} checked={editmode} />
           </EditMode>
           <DetailImgContainer>
             <DetailImgPosterPath>
