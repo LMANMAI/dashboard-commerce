@@ -5,6 +5,7 @@ import { AuthProvider } from "../context/auth-context";
 import { FunctionsProvider } from "../context/functionsMisProductosContext.tsx";
 import { FunctionsAgregarProvider } from "../context/functionsAgregrarProductosContext.tsx";
 import "./index.css";
+
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
@@ -12,7 +13,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <FunctionsAgregarProvider>
           <App />
         </FunctionsAgregarProvider>
-        <App />
       </FunctionsProvider>
     </AuthProvider>
   </React.StrictMode>

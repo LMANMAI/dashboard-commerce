@@ -28,6 +28,11 @@ export const AddFormContainer = styled.div`
       overflow: hidden;
     }
   }
+
+  .button_actions_steps {
+    margin-top: 20px;
+    display: flex;
+  }
 `;
 export const AddForm = styled.div`
   display: flex;

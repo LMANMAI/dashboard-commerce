@@ -1,54 +1,26 @@
 import React, { useContext } from "react";
-import { SaveOutlined } from "@ant-design/icons";
-import {
-  AddFormContainer,
-  AddForm,
-  StepsContainer,
-  CustomSteps,
-  CustomInput,
-} from "./styles";
+import { AddFormContainer, StepsContainer, CustomSteps } from "./styles";
 import { StyledCustomButton } from "../styles";
+import { notification, Steps } from "antd";
 import {
-  DatePicker,
-  Select,
-  Button,
-  notification,
-  Steps,
-  Space,
-  Badge,
-  Avatar,
-} from "antd";
-import AgregarProductoPasoDos from "./auxiliars/steps/AgregarProductoPasoDos";
-import AgregarProductoPasoTres from "./auxiliars/steps/AgregarProductoPasoTres";
+  AgregarProductoPasoUno,
+  AgregarProductoPasoDos,
+  AgregarProductoPasoTres,
+} from "./auxiliars/steps";
 import { createProducts, addImagestoProduct } from "@services";
-import {
-  SelectMockDataSize,
-  SelectMockDataGenre,
-  SelectMockDataBrand,
-} from "../Mproductos/statics";
-import dayjs from "dayjs";
-import { FunctionsAgregarContext } from "context/functionsAgregrarProductosContext";
+import { FunctionsAgregarContext } from "../../../context/functionsAgregrarProductosContext";
 
 const AgregarProductosContainer: React.FC = () => {
   const { Step } = Steps;
   const {
     currentStep,
     product,
-    inputValue,
     imgProduct,
     imgsToProduct,
     load,
     setCurrentStep,
     setLoad,
     resetForm,
-    handleChange,
-    setProduct,
-    handleDeleteStock,
-    setImgProduct,
-    setImgsListToProduct,
-    handleChangeSizeStock,
-    handleSizeInputChange,
-    handleSaveStock,
   } = useContext(FunctionsAgregarContext);
 
   const openNotification = (message: string, description: string) => {
@@ -97,6 +69,11 @@ const AgregarProductosContainer: React.FC = () => {
     }
   };
 
+  const disabledButton =
+    (currentStep === 0 &&
+      (product.name === "" || product.genre === "" || product.brand === "")) ||
+    (currentStep === 1 && !imgProduct);
+
   return (
     <AddFormContainer>
       <div className="steps">
@@ -110,116 +87,13 @@ const AgregarProductosContainer: React.FC = () => {
           <Step title="Guardar" />
         </CustomSteps>
         <StepsContainer>
-          {currentStep === 0 && (
-            <AddForm>
-              <CustomInput
-                addonBefore="Nombre"
-                className="input__addform"
-                placeholder="Nombre"
-                type="text"
-                name="name"
-                value={product.name}
-                onChange={(e) => handleChange("name", e.target.value)}
-              />
-              <CustomInput
-                addonBefore="Precio"
-                className="input__addform precio"
-                placeholder="Precio"
-                type="number"
-                name="price"
-                value={product.price}
-                onChange={(e) => handleChange("price", e.target.value)}
-              />
-              <DatePicker
-                className="datepicker__addform"
-                onChange={(date) => {
-                  if (date) {
-                    setProduct({
-                      ...product,
-                      releaseYear: date,
-                    });
-                  }
-                }}
-                defaultValue={dayjs()}
-                value={product.relaseYear}
-                format={"DD/MM/YY"}
-              />
-              <div className="select__formcontain">
-                <Select
-                  onChange={(value) => handleChange("brand", value)}
-                  style={{ width: 250 }}
-                  value={product.brand}
-                  options={SelectMockDataBrand}
-                />
-                <Select
-                  onChange={(value) => handleChange("genre", value)}
-                  style={{ width: 250 }}
-                  value={product.genre}
-                  options={SelectMockDataGenre}
-                />
-              </div>
-
-              <div className="input__formadd_container_talle">
-                <CustomInput
-                  className="input__addform qty"
-                  placeholder="Cantidad"
-                  value={inputValue}
-                  type="number"
-                  addonBefore="Cantidad"
-                  onChange={(e) => handleSizeInputChange(e.target.value)}
-                />
-                <Select
-                  defaultValue="Tamaño"
-                  onChange={handleChangeSizeStock}
-                  style={{ width: 250 }}
-                  options={SelectMockDataSize}
-                />
-                <Button
-                  onClick={() => handleSaveStock()}
-                  type="default"
-                  icon={<SaveOutlined />}
-                >
-                  Guardar
-                </Button>
-              </div>
-              <div className="badge__container">
-                <Space size="middle">
-                  {product.sizes.map((item: any, index: any) => (
-                    <div className="button_badge" key={index}>
-                      <button
-                        className="button__delete_badge"
-                        onClick={() => handleDeleteStock(index)}
-                        title="Eliminar producto del stock"
-                      >
-                        x
-                      </button>
-                      <Badge size="small" count={item.qty} color={"#4E7A9C"}>
-                        <Avatar shape="square" size="small">
-                          {item.size}
-                        </Avatar>
-                      </Badge>
-                    </div>
-                  ))}
-                </Space>
-              </div>
-            </AddForm>
-          )}
-          {currentStep === 1 && (
-            <AgregarProductoPasoDos
-              handleChangeImages={setImgProduct}
-              setImgsListToProduct={setImgsListToProduct}
-            />
-          )}
-          {currentStep === 2 && (
-            <AgregarProductoPasoTres
-              product={product}
-              productImg={imgProduct}
-            />
-          )}
+          {currentStep === 0 && <AgregarProductoPasoUno />}
+          {currentStep === 1 && <AgregarProductoPasoDos />}
+          {currentStep === 2 && <AgregarProductoPasoTres />}
         </StepsContainer>
       </div>
 
-      <div style={{ marginTop: "20px", display: "flex" }}>
+      <div className="button_actions_steps">
         {currentStep > 0 && (
           <StyledCustomButton
             type="primary"
@@ -235,13 +109,7 @@ const AgregarProductosContainer: React.FC = () => {
             onClick={() => {
               setCurrentStep(currentStep + 1);
             }}
-            disabled={
-              (currentStep === 0 &&
-                (product.name === "" ||
-                  product.genre === "" ||
-                  product.brand === "")) ||
-              (currentStep === 1 && !imgProduct)
-            }
+            disabled={disabledButton}
           >
             Siguiente
           </StyledCustomButton>

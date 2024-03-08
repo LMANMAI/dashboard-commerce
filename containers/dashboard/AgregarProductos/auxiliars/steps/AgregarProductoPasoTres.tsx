@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Card } from "antd";
+import { FunctionsAgregarContext } from "../../../../../context/functionsAgregrarProductosContext";
 
-interface Props {
-  product: any;
-  productImg: any;
-}
+const AgregarProductoPasoTres: React.FC = () => {
+  const { product, imgProduct } = useContext(FunctionsAgregarContext);
 
-const AgregarProductoPasoTres: React.FC<Props> = ({ product, productImg }) => {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <Card
         className="card__product_add"
         style={{ width: 275 }}
-        cover={<img alt="example" src={productImg.thumbUrl} />}
+        cover={<img alt="example" src={imgProduct.thumbUrl} />}
         title={product.name}
       >
         <p>Precio: ${product.price}</p>
