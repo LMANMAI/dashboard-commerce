@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-import { FunctionsContext } from "../../../../../context/functionsContext";
+import { FunctionsContext } from "../../../../../context/functionsMisProductosContext";
 import {
   Input,
   Select,
@@ -206,7 +206,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         <div>
           <EditMode>
             <p>Editar producto</p>
-            <Switch size="small" onChange={onChange} />
+            <Switch size="small" onChange={onChange} checked={editmode} />
           </EditMode>
           <DetailImgContainer>
             <DetailImgPosterPath>

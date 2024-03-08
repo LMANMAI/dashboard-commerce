@@ -1,18 +1,15 @@
-import React from "react";
-import { Button, Upload, UploadProps, message } from "antd";
+import React, { useContext } from "react";
+import { Button, Upload, UploadProps } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
+import { FunctionsAgregarContext } from "../../../../../context/functionsAgregrarProductosContext";
 
-interface Props {
-  handleChangeImages: (image: any) => void;
-  setImgsListToProduct: (file: any) => void;
-}
+const AgregarProductoPasoDos: React.FC = () => {
+  const { setImgProduct, setImgsListToProduct } = useContext(
+    FunctionsAgregarContext
+  );
 
-const AgregarProductoPasoDos: React.FC<Props> = ({
-  handleChangeImages,
-  setImgsListToProduct,
-}) => {
   const handleRemove = () => {
-    handleChangeImages(null);
+    setImgProduct(null);
   };
 
   const propsPosterPath: UploadProps = {
@@ -21,7 +18,7 @@ const AgregarProductoPasoDos: React.FC<Props> = ({
     onRemove: handleRemove,
     onChange(info) {
       if (info.file.status === "uploading") {
-        handleChangeImages(info.file);
+        setImgProduct(info.file);
       } else if (info.file.status === "error") {
       }
     },

@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 interface IStock {
   qty: any;
   size: any;
@@ -12,6 +14,8 @@ export interface IProduct {
   sizes: IStock[];
   genre: string;
   brand: string;
+  releaseYear: Dayjs | string;
+  quantity: number;
 }
 
 export const SelectMockDataGenre = [

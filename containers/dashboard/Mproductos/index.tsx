@@ -17,7 +17,7 @@ import {
   CurrentPromotionsComponent,
   DrawerComponent,
 } from "./auxiliars";
-import { FunctionsContext } from "../../../context/functionsContext";
+import { FunctionsContext } from "../../../context/functionsMisProductosContext";
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
@@ -49,16 +49,19 @@ const MisProductos: React.FC = () => {
     handleChangePromotionsDTO,
     handleChange,
     setOpen,
+    setEditMode,
   } = useContext(FunctionsContext);
 
   const onClose = () => {
     setOpen(false);
+    setEditMode(false);
   };
   const openNotification = (message: string, description: string) => {
     api.open({
       key,
       message: message,
       description: description,
+      placement: "bottomRight",
     });
 
     setTimeout(() => {
@@ -160,7 +163,7 @@ const MisProductos: React.FC = () => {
         return null;
     }
   };
-  console.log(open);
+
   return (
     <div>
       {contextHolder}
