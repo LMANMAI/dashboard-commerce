@@ -11,7 +11,7 @@ import {
 import { FunctionsAgregarContext } from "../../../../../context/functionsAgregrarProductosContext";
 import dayjs from "dayjs";
 
-const AgregarProductoPasoUno = () => {
+const AgregarProductoPasoUno: React.FC = () => {
   const {
     product,
     inputValue,
