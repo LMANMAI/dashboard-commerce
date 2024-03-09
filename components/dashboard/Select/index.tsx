@@ -16,6 +16,7 @@ const SelectComponent: React.FC<ISelect> = ({
       onChange={(value) => handleChange(value, value_label)}
       className={class_select}
       options={options}
+      style={{ minWidth: "175px" }}
     />
   );
 };

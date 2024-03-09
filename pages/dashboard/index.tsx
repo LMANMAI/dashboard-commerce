@@ -63,13 +63,7 @@ const DashboardPage = () => {
 
             <div
               title="Cerrar sesión"
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                position: "absolute",
-                bottom: "20px",
-                cursor: "pointer",
-              }}
+              className="logout__button"
               onClick={() => SignOutUser()}
             >
               <LogoutOutlined

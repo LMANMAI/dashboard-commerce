@@ -5,11 +5,11 @@ import { Upload } from "antd";
 export const TaleContainer = styled.div`
   margin: 0px auto;
   th {
+    font-size: 13px;
     background-color: ${customTheme["@secondary-color"]}!important;
     color: white !important;
   }
 `;
-
 export const MisProductosContainer = styled.div`
   max-width: 90%;
   margin: 0px auto;
@@ -33,6 +33,10 @@ export const MisProductosContainer = styled.div`
       align-items: center;
       p {
         padding: 0px 10px;
+      }
+      transition: all 250ms ease-in-out;
+      &:hover {
+        background-color: ${customTheme["@secondary-color"]};
       }
     }
   }
@@ -70,7 +74,6 @@ export const MisProductosContainer = styled.div`
     }
   }
 `;
-
 export const StockContainer = styled.div`
   .badge__container {
     .button_badge {
@@ -191,7 +194,6 @@ export const DetailImgDetail = styled.div`
     cursor: pointer;
   }
 `;
-
 export const StyledUpload = styled(Upload)`
   div.ant-upload.ant-upload-select {
     width: 50px !important;
@@ -210,7 +212,6 @@ export const StyledUpload = styled(Upload)`
     height: 50px !important;
   }
 `;
-
 export const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
@@ -222,20 +223,48 @@ export const LoadingContainer = styled.div`
     color: #4e7a9c;
   }
 `;
-
 export const ModalAddPromotionsContainer = styled.div`
   margin: 10px 0px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   gap: 5px;
+
   .input__discount {
     margin: 5px 0px;
     width: 250px;
   }
 
+  .input__discount_container,
+  .select__discount_container {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    justify-content: space-evenly;
+    .input__discount {
+      margin: 0px !important;
+    }
+  }
+
+  @media (min-width: 568px) {
+    & {
+      flex-direction: row;
+    }
+
+    .select__discount_container {
+      width: 100%;
+    }
+    .input__discount_container {
+      width: 50%;
+    }
+  }
+
   @media (max-width: 768px) {
-    flex-direction: column;
+    .input__discount_container,
+    .select__discount_container {
+      flex-direction: column;
+    }
     .select__discount,
     .input__discount {
       width: 100% !important;
@@ -246,7 +275,6 @@ export const ModalAddPromotionsContainer = styled.div`
     }
   }
 `;
-
 export const ModalCurrentPromotion = styled.div`
   .current_promotion {
     display: flex;

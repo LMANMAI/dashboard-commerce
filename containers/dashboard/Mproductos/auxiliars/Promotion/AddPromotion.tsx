@@ -6,8 +6,14 @@ import { Input } from "antd";
 import { FunctionsContext } from "../../../../../context/functionsMisProductosContext";
 
 const AddPromotionComponent: React.FC = () => {
-  const { promotion, promovalue, handleChangePromotionsDTO, setPromoValue } =
-    useContext(FunctionsContext);
+  const {
+    promotion,
+    promovalue,
+    discountName,
+    handleChangePromotionsDTO,
+    setPromoValue,
+    setDiscountName,
+  } = useContext(FunctionsContext);
 
   return (
     <div>
@@ -20,54 +26,54 @@ const AddPromotionComponent: React.FC = () => {
         </p>
 
         <ModalAddPromotionsContainer>
-          <div className="input__discount">
-            <Input
-              className="input__addform name"
-              placeholder="ej: Descuento Nike"
-              type="text"
-              name="name"
-              value={promotion.name}
-              onChange={(value) =>
-                setPromoValue(parseFloat(value.target.value))
-              }
-            />
+          <div className="input__discount_container">
+            <div className="input__discount">
+              <Input
+                className="input__addform name"
+                placeholder="ej: Descuento Nike"
+                type="text"
+                name="discountName"
+                value={discountName}
+                onChange={(event) => {
+                  setDiscountName(event.target.value);
+                }}
+              />
+            </div>
+            <div className="input__discount">
+              <Input
+                addonAfter="%"
+                className="input__addform precio"
+                placeholder="ej: 2"
+                type="number"
+                name="discount_name"
+                value={promovalue}
+                onChange={(value) =>
+                  setPromoValue(parseFloat(value.target.value))
+                }
+              />
+            </div>
           </div>
 
-          <div className="select__discount">
-            <SelectComponent
-              value={promotion.brand}
-              options={SelectMockDataBrand}
-              class_select={"select__mproducts"}
-              value_label={"brand"}
-              handleChange={(e: any) => handleChangePromotionsDTO("brand", e)}
-            />
-            <div></div>
-          </div>
+          <div className="select__discount_container">
+            <div className="select__discount">
+              <SelectComponent
+                value={promotion.brand}
+                options={SelectMockDataBrand}
+                class_select={"select__mproducts"}
+                value_label={"brand"}
+                handleChange={(e: any) => handleChangePromotionsDTO("brand", e)}
+              />
+            </div>
 
-          <div className="select__discount">
-            <SelectComponent
-              value={promotion.genre}
-              options={SelectMockDataGenre}
-              class_select={"select__mproducts"}
-              value_label={"genre"}
-              handleChange={(e: any) => handleChangePromotionsDTO("genre", e)}
-            />
-            <div></div>
-          </div>
-
-          <div className="input__discount">
-            <Input
-              addonBefore="Valor del descuento"
-              addonAfter="%"
-              className="input__addform precio"
-              placeholder="ej: 2"
-              type="number"
-              name="discount_name"
-              value={promovalue}
-              onChange={(value) =>
-                setPromoValue(parseFloat(value.target.value))
-              }
-            />
+            <div className="select__discount">
+              <SelectComponent
+                value={promotion.genre}
+                options={SelectMockDataGenre}
+                class_select={"select__mproducts"}
+                value_label={"genre"}
+                handleChange={(e: any) => handleChangePromotionsDTO("genre", e)}
+              />
+            </div>
           </div>
         </ModalAddPromotionsContainer>
       </div>

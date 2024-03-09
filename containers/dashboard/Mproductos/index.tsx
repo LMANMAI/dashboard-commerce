@@ -39,6 +39,7 @@ const MisProductos: React.FC = () => {
     searchparam,
     promotion,
     promovalue,
+    discountName,
     showModal,
     handleOk,
     handleCancel,
@@ -47,6 +48,7 @@ const MisProductos: React.FC = () => {
     setEditMode,
     setParametersPromotions,
     setPromoValue,
+    setDiscountName,
   } = useContext(FunctionsContext);
 
   const onClose = () => {
@@ -98,6 +100,7 @@ const MisProductos: React.FC = () => {
       );
       getActivePromotions();
       setLoadPromotions(false);
+      setDiscountName("");
     } else {
       setMockDataPromo([]);
       setLoadPromotions(false);
@@ -237,7 +240,10 @@ const MisProductos: React.FC = () => {
                     savePromotion({
                       afectedProduct: promotion,
                       discountAmount: promovalue,
-                      discountNameId: `Promoción #${mockdatapromos.length + 1}`,
+                      discountNameId:
+                        discountName === ""
+                          ? `Promoción #${mockdatapromos.length + 1}`
+                          : discountName,
                       replaceExistedPromotion: true,
                     });
                   }}

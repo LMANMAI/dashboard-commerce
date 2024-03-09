@@ -19,6 +19,20 @@ export interface Promotion {
     genre: string;
   };
 }
+export interface IProduct {
+  key?: string;
+  name: string;
+  price: number;
+  imgs: [];
+  _id: string;
+  posterPathImage: string;
+  sizes: IStock[];
+  genre: string;
+  brand: string;
+  releaseYear: Dayjs | string;
+  quantity: number;
+}
+
 export interface CurrentPromotionsComponentProps {
   mockDataPromos: Promotion[];
   loadPromotions: boolean;
@@ -57,7 +71,7 @@ export interface FunctionsContextValue {
   open: boolean;
   promovalue: number | any;
   currentContent: number;
-
+  discountName: string;
   setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
   setLoad: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedItem: React.Dispatch<React.SetStateAction<IProduct | null>>;
@@ -87,6 +101,7 @@ export interface FunctionsContextValue {
   handleOk: () => void;
   handleCancel: () => void;
   setParametersPromotions: (item: any) => void;
+  setDiscountName: (name: string) => void;
 }
 
 export interface FunctionsAgregarContextValue {
@@ -129,18 +144,4 @@ export interface ISelect {
 export interface IStock {
   qty: any;
   size: any;
-}
-
-export interface IProduct {
-  key: string;
-  name: string;
-  price: number;
-  imgs: [];
-  _id: string;
-  posterPathImage: string;
-  sizes: IStock[];
-  genre: string;
-  brand: string;
-  releaseYear: Dayjs | string;
-  quantity: number;
 }

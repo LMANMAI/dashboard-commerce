@@ -17,6 +17,7 @@ export const FunctionsContext = createContext<FunctionsContextValue>({
     genre: "",
     brand: "",
     releaseYear: "",
+    quantity: 0,
   },
   promotion: {},
   selectedItemPoster: "",
@@ -36,6 +37,7 @@ export const FunctionsContext = createContext<FunctionsContextValue>({
   open: false,
   promovalue: undefined,
   currentContent: 0,
+  discountName: "",
   setProducts: () => {},
   setLoad: () => {},
   setSelectedItem: () => {},
@@ -59,6 +61,7 @@ export const FunctionsContext = createContext<FunctionsContextValue>({
   handleOk: () => {},
   handleCancel: () => {},
   setParametersPromotions: () => {},
+  setDiscountName: () => {},
 });
 
 export const FunctionsProvider = ({
@@ -90,13 +93,13 @@ export const FunctionsProvider = ({
       dataIndex: "price",
       key: "price",
       render: (salary: any) => <span>{`$ ${formatNumber(salary)}`}</span>,
-      responsive: ["md"],
+      responsive: ["lg"],
     },
     {
       title: "Genero",
       dataIndex: "genre",
       key: "genre",
-      responsive: ["md"],
+      responsive: ["lg"],
     },
     {
       title: "Cantidad total",
@@ -141,6 +144,7 @@ export const FunctionsProvider = ({
   });
   const [open, setOpen] = useState(false);
   const [promovalue, setPromoValue] = useState<number>(0);
+  const [discountName, setDiscountName] = useState<string>("");
   const [currentContent, setCurrentContent] = useState(1);
   const formatNumber = (number: number) => {
     const hasDecimals = number % 1 !== 0;
@@ -231,6 +235,7 @@ export const FunctionsProvider = ({
     open: open,
     promovalue: promovalue,
     currentContent: currentContent,
+    discountName,
     setProducts: setProducts,
     setLoad: setLoad,
     setSelectedItem: setSelectedItem,
@@ -254,6 +259,7 @@ export const FunctionsProvider = ({
     handleOk: handleOk,
     handleCancel: handleCancel,
     setParametersPromotions: setParametersPromotions,
+    setDiscountName,
   };
 
   return (
