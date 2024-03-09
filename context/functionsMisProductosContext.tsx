@@ -20,6 +20,7 @@ interface Column {
   dataIndex: string;
   key: string;
   render?: (arg0: string, arg1: any) => JSX.Element;
+  responsive?: string[];
 }
 
 interface SearchParams {
@@ -144,7 +145,7 @@ export const FunctionsProvider = ({
     {
       title: "Ver",
       dataIndex: "",
-      key: "name",
+      key: "ver",
       render: (_: string, record: IProduct) => (
         <Button
           onClick={() => {
@@ -164,27 +165,32 @@ export const FunctionsProvider = ({
       dataIndex: "price",
       key: "price",
       render: (salary: any) => <span>{`$ ${formatNumber(salary)}`}</span>,
+      responsive: ["md"],
     },
     {
       title: "Genero",
       dataIndex: "genre",
       key: "genre",
+      responsive: ["md"],
     },
     {
       title: "Cantidad total",
       dataIndex: "quantity",
       key: "quantity",
+      responsive: ["md"],
     },
     {
       title: "Fecha de lanzamiento",
       dataIndex: "releaseYear",
       key: "releaseYear",
       render: (date: any) => <span>{`${formatDate(date)}`}</span>,
+      responsive: ["md"],
     },
     {
       title: "Marca",
       dataIndex: "brand",
       key: "brand",
+      responsive: ["md"],
     },
   ];
   const [products, setProducts] = useState<any>([]);

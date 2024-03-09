@@ -23,7 +23,6 @@ const SelectComponent: React.FC<ISelect> = ({
       onChange={(value) => handleChange(value, value_label)}
       className={class_select}
       options={options}
-      style={{ width: 250 }}
     />
   );
 };

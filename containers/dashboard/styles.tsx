@@ -21,4 +21,8 @@ export const StyledCustomButton = styled(Button)`
     background-color: #3e617d !important;
     color: white !important ;
   }
+  width: 100%;
+  @media (min-width: 768px) {
+    max-width: fit-content;
+  }
 `;

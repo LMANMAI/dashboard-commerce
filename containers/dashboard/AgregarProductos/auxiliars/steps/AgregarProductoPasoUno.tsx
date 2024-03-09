@@ -97,7 +97,7 @@ const AgregarProductoPasoUno: React.FC = () => {
       </div>
       <div className="badge__container">
         <Space size="middle">
-          {product.sizes.map((item: any, index: any) => (
+          {product.sizes.map((item: any, index: number) => (
             <div className="button_badge" key={index}>
               <button
                 className="button__delete_badge"

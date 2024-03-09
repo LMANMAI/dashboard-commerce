@@ -14,6 +14,7 @@ export const AuthContext = createContext({
 
 export const AuthProvider = ({ children }: Props) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+
   useEffect(() => {
     const unsubscribe = userStateListener((user) => {
       if (user) {
