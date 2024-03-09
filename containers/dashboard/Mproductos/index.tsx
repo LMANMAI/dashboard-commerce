@@ -11,7 +11,7 @@ import { SelectComponent } from "../../../components";
 import { TaleContainer, MisProductosContainer } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
-import { IProduct, SelectMockDataGenre, SelectMockDataBrand } from "./statics";
+import { SelectMockDataGenre, SelectMockDataBrand } from "./statics";
 import {
   AddPromotionComponent,
   CurrentPromotionsComponent,
@@ -22,19 +22,13 @@ import { FunctionsContext } from "../../../context/functionsMisProductosContext"
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
-  const [promotion, setParametersPromotions] = useState<IProduct | any>({
-    brand: "",
-    genre: "",
-  });
-
   const [mockdatapromos, setMockDataPromo] = useState<any>([]);
-
+  const [loadPromotions, setLoadPromotions] = useState<boolean>(false);
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
     total: 10,
   });
-  const [promovalue, setPromoValue] = useState<number | any>();
   const key = "updatable";
   const [api, contextHolder] = notification.useNotification();
   const {
@@ -43,13 +37,16 @@ const MisProductos: React.FC = () => {
     open,
     isModalOpen,
     searchparam,
+    promotion,
+    promovalue,
     showModal,
     handleOk,
     handleCancel,
-    handleChangePromotionsDTO,
     handleChange,
     setOpen,
     setEditMode,
+    setParametersPromotions,
+    setPromoValue,
   } = useContext(FunctionsContext);
 
   const onClose = () => {
@@ -87,9 +84,10 @@ const MisProductos: React.FC = () => {
     }
   };
   const savePromotion = async (promotion: any) => {
+    setLoadPromotions(true);
     const req = await createPromotion({ promotion });
     if (req.status === 200) {
-      setPromoValue(null);
+      setPromoValue(0);
       setParametersPromotions({
         brand: "",
         genre: "",
@@ -99,21 +97,49 @@ const MisProductos: React.FC = () => {
         "Se restablecera el formulario para agregar otra promoción"
       );
       getActivePromotions();
+      setLoadPromotions(false);
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al guardar las promociones",
+        "vuelva a intentar en unos momentos."
+      );
     }
   };
   const getActivePromotions = async () => {
+    setLoadPromotions(true);
     const res = await getCurrentPromotions();
     if (res.status === 200) {
       setMockDataPromo(res.currentPromotions);
+
+      setTimeout(() => {
+        setLoadPromotions(false);
+      }, 2000);
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al traer las promociones",
+        "vuelva a intentar en unos momentos."
+      );
     }
   };
   const deleteCurrentPromotion = async (promotionId: string) => {
+    setLoadPromotions(true);
     const res = await deletePromotion(promotionId);
-
     if (res.status === 200) {
+      setLoadPromotions(false);
       openNotification(
         "Promocion eliminada correctamente",
         "Se elimino la promoción y los productos volvieron a su precio original."
+      );
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al eliminar la promoción",
+        "vuelva a intentar en unos momentos."
       );
     }
   };
@@ -142,18 +168,12 @@ const MisProductos: React.FC = () => {
   const getContent = () => {
     switch (currentContent) {
       case 1:
-        return (
-          <AddPromotionComponent
-            promotion={promotion}
-            promovalue={promovalue}
-            setPromoValue={setPromoValue}
-            handleChangePromotionsDTO={handleChangePromotionsDTO}
-          />
-        );
+        return <AddPromotionComponent />;
       case 2:
         return (
           <CurrentPromotionsComponent
             mockDataPromos={mockdatapromos}
+            loadPromotions={loadPromotions}
             setMockDataPromo={setMockDataPromo}
             deleteCurrentPromotion={deleteCurrentPromotion}
           />
@@ -177,7 +197,7 @@ const MisProductos: React.FC = () => {
             title="Agregar una promocion para los productos en stock"
             className="misproductos__box__button"
           >
-            Agregar promocion
+            <p>Agregar promocion</p>
           </div>
           <div
             onClick={() => {
@@ -187,13 +207,13 @@ const MisProductos: React.FC = () => {
             className="misproductos__box__button"
             title="Ver promociones vigentes"
           >
-            Promociones vigentes
+            <p>Promociones vigentes</p>
           </div>
           <Modal
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
-            width={currentContent !== 1 ? "70dvw" : "50dvw"}
+            width={"800px"}
             footer={[
               <Button
                 key="cancel"
@@ -209,7 +229,7 @@ const MisProductos: React.FC = () => {
                   onClick={() => {
                     savePromotion({
                       afectedProduct: promotion,
-                      discountAmount: parseFloat(promovalue),
+                      discountAmount: promovalue,
                       discountNameId: `Promoción #${mockdatapromos.length + 1}`,
                       replaceExistedPromotion: true,
                     });

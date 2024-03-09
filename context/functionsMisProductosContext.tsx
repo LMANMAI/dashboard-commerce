@@ -20,7 +20,7 @@ interface Column {
   dataIndex: string;
   key: string;
   render?: (arg0: string, arg1: any) => JSX.Element;
-  responsive?: string[];
+  responsive?: any;
 }
 
 interface SearchParams {
@@ -69,14 +69,13 @@ interface FunctionsContextValue {
   formatDate: (dateString: string) => string;
   showDrawer: (item: IProduct) => void;
   handleChange: (value: any, fieldName: string) => void;
-  handleChangePromotionsDTO: (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => void;
+  handleChangePromotionsDTO: (fieldName: string, event: string) => void;
   handleChangeEditMode: (value: any, fieldName: string) => void;
   onChange: (checked: boolean) => void;
   showModal: (type: number) => void;
   handleOk: () => void;
   handleCancel: () => void;
+  setParametersPromotions: (item: any) => void;
 }
 
 export const FunctionsContext = createContext<FunctionsContextValue>({
@@ -134,6 +133,7 @@ export const FunctionsContext = createContext<FunctionsContextValue>({
   showModal: () => {},
   handleOk: () => {},
   handleCancel: () => {},
+  setParametersPromotions: () => {},
 });
 
 export const FunctionsProvider = ({
@@ -215,7 +215,7 @@ export const FunctionsProvider = ({
     total: 10,
   });
   const [open, setOpen] = useState(false);
-  const [promovalue, setPromoValue] = useState<number | any>();
+  const [promovalue, setPromoValue] = useState<number>(0);
   const [currentContent, setCurrentContent] = useState(1);
   const formatNumber = (number: number) => {
     const hasDecimals = number % 1 !== 0;
@@ -264,13 +264,10 @@ export const FunctionsProvider = ({
       [fieldName]: value,
     }));
   };
-  const handleChangePromotionsDTO = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const { value, name } = event.target;
+  const handleChangePromotionsDTO = (fieldName: string, event: string) => {
     setParametersPromotions((prevSearchParam: SearchParams) => ({
       ...prevSearchParam,
-      [name]: value,
+      [fieldName]: event,
     }));
   };
   const handleChangeEditMode = (value: any, fieldName: string) => {
@@ -331,6 +328,7 @@ export const FunctionsProvider = ({
     showModal: showModal,
     handleOk: handleOk,
     handleCancel: handleCancel,
+    setParametersPromotions: setParametersPromotions,
   };
 
   return (

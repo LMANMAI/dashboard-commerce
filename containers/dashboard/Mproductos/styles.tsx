@@ -14,19 +14,26 @@ export const MisProductosContainer = styled.div`
   max-width: 90%;
   margin: 0px auto;
   .misproductos__box {
-    display: none;
-
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin: 10px 0px;
     .misproductos__box__button {
-      width: 33%;
+      width: 100%;
       border-radius: 5px;
-      padding: 10px;
+      padding: 10px 0px;
       cursor: pointer;
       background-color: rgb(78, 122, 156);
       color: white;
-      height: 45px;
+      height: 30px;
       font-size: 13px;
       display: flex;
       align-items: center;
+      p {
+        padding: 0px 10px;
+      }
     }
   }
   .misproductos__formulario {
@@ -41,17 +48,18 @@ export const MisProductosContainer = styled.div`
   }
   @media (min-width: 768px) {
     .misproductos__box {
-      display: flex;
+      flex-direction: row;
       gap: 10px;
       align-items: center;
-      padding: 0px 10px;
+      justify-content: start;
       height: 100px;
-      border: 1px solid #eee;
       border-radius: 5px;
       margin: 15px 0px;
       margin-bottom: 0px;
     }
-
+    .misproductos__box__button {
+      max-width: 450px;
+    }
     .misproductos__formulario {
       flex-direction: row;
     }
@@ -207,8 +215,8 @@ export const LoadingContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 75vh;
   flex-direction: column;
+  min-height: 250px;
   p {
     margin: 5px 0px;
     color: #4e7a9c;
@@ -218,12 +226,25 @@ export const LoadingContainer = styled.div`
 export const ModalAddPromotionsContainer = styled.div`
   margin: 10px 0px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  align-items: center;
   gap: 5px;
-
+  justify-content: center;
   .input__discount {
     margin: 5px 0px;
     width: 250px;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    .select__discount,
+    .input__discount {
+      width: 100% !important;
+    }
+
+    .select__discount .select__mproducts {
+      width: 100% !important;
+    }
   }
 `;
 

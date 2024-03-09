@@ -1,29 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ModalAddPromotionsContainer } from "../../styles";
 import { SelectComponent } from "../../../../../components";
 import { SelectMockDataGenre, SelectMockDataBrand } from "../../statics";
 import { Input } from "antd";
+import { FunctionsContext } from "../../../../../context/functionsMisProductosContext";
 
-interface Promotion {
-  brand: string;
-  genre: string;
-}
+const AddPromotionComponent: React.FC = () => {
+  const { promotion, promovalue, handleChangePromotionsDTO, setPromoValue } =
+    useContext(FunctionsContext);
 
-interface AddPromotionComponentProps {
-  promotion: Promotion;
-  promovalue: number;
-  setPromoValue: (newValue: number) => void;
-  handleChangePromotionsDTO: (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => void;
-}
-
-const AddPromotionComponent: React.FC<AddPromotionComponentProps> = ({
-  promotion,
-  promovalue,
-  setPromoValue,
-  handleChangePromotionsDTO,
-}) => {
   return (
     <div>
       <h2>Agregar una promoción</h2>
@@ -41,7 +26,7 @@ const AddPromotionComponent: React.FC<AddPromotionComponentProps> = ({
               options={SelectMockDataBrand}
               class_select={"select__mproducts"}
               value_label={"brand"}
-              handleChange={handleChangePromotionsDTO}
+              handleChange={(e: any) => handleChangePromotionsDTO("brand", e)}
             />
             <div></div>
           </div>
@@ -52,7 +37,7 @@ const AddPromotionComponent: React.FC<AddPromotionComponentProps> = ({
               options={SelectMockDataGenre}
               class_select={"select__mproducts"}
               value_label={"genre"}
-              handleChange={handleChangePromotionsDTO}
+              handleChange={(e: any) => handleChangePromotionsDTO("genre", e)}
             />
             <div></div>
           </div>

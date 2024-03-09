@@ -20,6 +20,7 @@ export const Card = styled.div`
   box-shadow: 2px 10px 24px -12px rgba(0, 0, 0, 0.75);
   h3 {
     margin: 10px 0px;
+    text-align: center;
   }
   .form__input {
     margin: 7px 0px;
@@ -30,6 +31,7 @@ export const Card = styled.div`
       border: 1px solid #ccc;
       background: transparent;
       outline: none;
+      padding-left: 10px;
     }
   }
 
@@ -43,6 +45,10 @@ export const Card = styled.div`
       color: white;
       border-radius: 5px;
       background-color: ${customTheme["@action-color"]};
+      &:hover {
+        background-color: #265273 !important;
+        color: #fff !important;
+      }
     }
   }
 `;

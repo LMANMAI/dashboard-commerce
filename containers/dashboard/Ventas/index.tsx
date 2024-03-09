@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { getProducts } from "@services";
 import { Line } from "react-chartjs-2";
-import { GraphicContainer } from "./styles";
+import { GraphicContainer, HeaderTittle } from "./styles";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -99,15 +99,21 @@ const MisVentas = () => {
 
   return (
     <div>
-      <h3>Mis ventas</h3>
+      <HeaderTittle>Mis ventas</HeaderTittle>
       <GraphicContainer>
-        <div className="graphic graphic_line">
+        <div
+          className="graphic graphic_line"
+          title="Grafico de productos ingresados por mes"
+        >
           <Line options={options} data={data} />
         </div>
-        <div className="graphic graphic_line">
+        <div
+          className="graphic graphic_line"
+          title="Grafico de productos vendidos por mes"
+        >
           <Line options={options} data={data} />
         </div>
-        <div className="graphic graphic_line">
+        <div className="graphic graphic_line" title="Grafico de ventas">
           <Line options={options} data={data} />
         </div>
       </GraphicContainer>

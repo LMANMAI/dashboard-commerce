@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import customTheme from "../../../customTheme";
 export const GraphicContainer = styled.div`
   display: flex;
   padding: 10px;
@@ -13,8 +13,19 @@ export const GraphicContainer = styled.div`
     flex-direction: column;
 
     .graphic {
-      max-width: 75dvw;
-      min-width: 700px;
+      max-width: 450px;
+      min-width: 45dvw;
     }
   }
+`;
+
+export const HeaderTittle = styled.h3`
+  padding: 10px;
+  text-align: center;
+  background-color: ${customTheme["@action-color"]};
+  color: white;
+  margin: 15px auto;
+  width: 50%;
+  max-width: 700px;
+  min-width: 45dvw;
 `;

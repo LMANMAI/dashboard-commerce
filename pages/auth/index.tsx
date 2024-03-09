@@ -50,7 +50,7 @@ const Home = () => {
     <Container>
       <Card>
         {contextHolder}
-        <h3>Iniciar sesión</h3>
+        <h3 style={{ textAlign: "center" }}>Iniciar sesión</h3>
         <form onSubmit={handleSubmit}>
           <div className="form__input">
             <Input
