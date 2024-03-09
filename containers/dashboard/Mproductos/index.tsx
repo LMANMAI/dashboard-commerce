@@ -226,6 +226,13 @@ const MisProductos: React.FC = () => {
                 <Button
                   key="ok"
                   type="primary"
+                  disabled={
+                    promotion.genre.length !== 0 &&
+                    promotion.brand.length !== 0 &&
+                    promovalue !== 0
+                      ? false
+                      : true
+                  }
                   onClick={() => {
                     savePromotion({
                       afectedProduct: promotion,

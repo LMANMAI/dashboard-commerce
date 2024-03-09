@@ -20,6 +20,19 @@ const AddPromotionComponent: React.FC = () => {
         </p>
 
         <ModalAddPromotionsContainer>
+          <div className="input__discount">
+            <Input
+              className="input__addform name"
+              placeholder="ej: Descuento Nike"
+              type="text"
+              name="name"
+              value={promotion.name}
+              onChange={(value) =>
+                setPromoValue(parseFloat(value.target.value))
+              }
+            />
+          </div>
+
           <div className="select__discount">
             <SelectComponent
               value={promotion.brand}
@@ -49,7 +62,7 @@ const AddPromotionComponent: React.FC = () => {
               className="input__addform precio"
               placeholder="ej: 2"
               type="number"
-              name="name"
+              name="discount_name"
               value={promovalue}
               onChange={(value) =>
                 setPromoValue(parseFloat(value.target.value))

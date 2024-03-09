@@ -1,12 +1,12 @@
 import instance from "../config";
-interface IPageProps {
-  productId: string;
-  imagesFormData: any;
-}
+
 const addImagestoProduct = async ({
   productId,
   imagesFormData,
-}: IPageProps) => {
+}: {
+  productId: string;
+  imagesFormData: any;
+}) => {
   try {
     const { data } = await instance.put(
       `product/productimages/${productId}`,

@@ -1,9 +1,12 @@
 import instance from "../config";
-interface IPageProps {
+
+const getProducts = async ({
+  page,
+  pageSize,
+}: {
   page: number;
   pageSize: number;
-}
-const getProducts = async ({ page, pageSize }: IPageProps) => {
+}) => {
   try {
     const { data } = await instance.get(
       `product/?page=${page}&pageSize=${pageSize}`

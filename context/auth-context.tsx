@@ -2,17 +2,13 @@ import { User } from "firebase/auth";
 import { SignOutUser, userStateListener } from "../config/firebase-config";
 import { createContext, useState, useEffect, ReactNode } from "react";
 
-interface Props {
-  children?: ReactNode;
-}
-
 export const AuthContext = createContext({
   currentUser: {} as User | null,
   setCurrentUser: (_user: User) => {},
   signOut: () => {},
 });
 
-export const AuthProvider = ({ children }: Props) => {
+export const AuthProvider = ({ children }: { children?: ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {

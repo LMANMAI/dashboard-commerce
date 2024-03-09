@@ -1,27 +1,6 @@
 import React, { createContext, useState } from "react";
 import dayjs from "dayjs";
-import { IProduct } from "@containers/dashboard/Mproductos/statics";
-
-interface FunctionsAgregarContextValue {
-  currentStep: number;
-  inputValue: string;
-  sizevalue: string;
-  load: boolean;
-  imgsToProduct: any[];
-  imgProduct: any;
-  product: IProduct | any;
-  resetForm: () => void;
-  handleChangeSizeStock: (value: string) => void;
-  handleSizeInputChange: (value: string) => void;
-  handleDeleteStock: (index: number) => void;
-  handleChange: (fieldName: string, value: any) => void;
-  handleSaveStock: () => void;
-  setCurrentStep: (value: any) => void;
-  setLoad: (value: boolean) => void;
-  setProduct: (value: any) => void;
-  setImgProduct: (value: any) => void;
-  setImgsListToProduct: (value: any) => void;
-}
+import { FunctionsAgregarContextValue } from "@types";
 
 export const FunctionsAgregarContext =
   createContext<FunctionsAgregarContextValue>({

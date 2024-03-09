@@ -1,8 +1,6 @@
 import instance from "../config";
-interface IPageProps {
-  promotion: any;
-}
-const createPromotion = async ({ promotion }: IPageProps) => {
+
+const createPromotion = async ({ promotion }: { promotion: any }) => {
   try {
     const { data } = await instance.post(
       `/promotion/createPromotion`,

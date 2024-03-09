@@ -1,13 +1,6 @@
 import React from "react";
 import { Select } from "antd";
-
-interface ISelect {
-  value: string;
-  options: any;
-  class_select: string;
-  value_label: string;
-  handleChange: Function;
-}
+import { ISelect } from "@types";
 
 const SelectComponent: React.FC<ISelect> = ({
   value,

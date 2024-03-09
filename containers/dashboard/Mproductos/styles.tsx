@@ -25,7 +25,7 @@ export const MisProductosContainer = styled.div`
       border-radius: 5px;
       padding: 10px 0px;
       cursor: pointer;
-      background-color: rgb(78, 122, 156);
+      background-color: ${customTheme["@secondary-color-dark"]};
       color: white;
       height: 30px;
       font-size: 13px;
@@ -229,7 +229,6 @@ export const ModalAddPromotionsContainer = styled.div`
   flex-direction: row;
   align-items: center;
   gap: 5px;
-  justify-content: center;
   .input__discount {
     margin: 5px 0px;
     width: 250px;
@@ -257,5 +256,8 @@ export const ModalCurrentPromotion = styled.div`
     flex-wrap: wrap;
     max-height: 50dvh;
     overflow-y: auto;
+    p {
+      font-size: 13px;
+    }
   }
 `;

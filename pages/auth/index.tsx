@@ -4,16 +4,16 @@ import { Container, Card } from "./styles";
 import { Input, notification } from "antd";
 import type { NotificationPlacement } from "antd/es/notification/interface";
 import { CustomButton } from "@containers/dashboard/AgregarProductos/styles";
-const defaultFormFields = {
-  email: "",
-  password: "",
-};
 
 const Home = () => {
-  const [formFields, setFormFields] = useState(defaultFormFields);
+  const [formFields, setFormFields] = useState({
+    email: "",
+    password: "",
+  });
   const { email, password } = formFields;
   const [api, contextHolder] = notification.useNotification();
   const [load, setLoad] = useState<boolean>(false);
+
   const openNotification = (placement: NotificationPlacement, msg: any) => {
     api.info({
       message: msg,
@@ -22,11 +22,12 @@ const Home = () => {
       placement,
     });
   };
-
   const resetFormFields = () => {
-    return setFormFields(defaultFormFields);
+    return setFormFields({
+      email: "",
+      password: "",
+    });
   };
-
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     setLoad(true);
@@ -41,7 +42,6 @@ const Home = () => {
       openNotification("bottomRight", error.message);
     }
   };
-
   const handleChange = (value: any, fieldName: string) => {
     setFormFields({ ...formFields, [fieldName]: value });
   };

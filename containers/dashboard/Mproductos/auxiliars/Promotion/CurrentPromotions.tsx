@@ -3,14 +3,7 @@ import { Card, Spin } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { ModalCurrentPromotion } from "../../styles";
 import { LoadingContainer } from "../../styles";
-import { Promotion } from "@types";
-
-interface CurrentPromotionsComponentProps {
-  mockDataPromos: Promotion[];
-  loadPromotions: boolean;
-  setMockDataPromo: React.Dispatch<React.SetStateAction<Promotion[]>>;
-  deleteCurrentPromotion: (id: string) => void;
-}
+import { CurrentPromotionsComponentProps, Promotion } from "@types";
 
 const CurrentPromotionsComponent: React.FC<CurrentPromotionsComponentProps> = ({
   mockDataPromos,
@@ -26,7 +19,7 @@ const CurrentPromotionsComponent: React.FC<CurrentPromotionsComponentProps> = ({
           {mockDataPromos.map((item: Promotion) => (
             <Card
               key={item._id}
-              style={{ width: 175 }}
+              style={{ width: 200 }}
               actions={[
                 <DeleteOutlined
                   key="setting"

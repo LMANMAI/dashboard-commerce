@@ -1,14 +1,8 @@
 import React from "react";
 import { Input } from "antd";
+import { IPropsInputComponent } from "@types";
 
-interface IProps {
-  name: string;
-  classType: string;
-  type: string;
-  placeholder: string;
-  handleChangeFunction: any;
-}
-const InputComponent: React.FC<IProps> = ({
+const InputComponent: React.FC<IPropsInputComponent> = ({
   name,
   classType,
   type,
