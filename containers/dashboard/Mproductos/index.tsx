@@ -1,51 +1,66 @@
-import React, { useState, useEffect } from "react";
-import { getProducts, searchProduct } from "@services";
-import { Table, Input, Select, Button, notification, Drawer } from "antd";
+import React, { useState, useEffect, useContext } from "react";
+import {
+  getProducts,
+  searchProduct,
+  createPromotion,
+  getCurrentPromotions,
+  deletePromotion,
+} from "@services";
+import { Table, Input, Button, notification, Drawer, Modal } from "antd";
+import { SelectComponent } from "../../../components";
 import { TaleContainer, MisProductosContainer } from "./styles";
 import { StyledCustomButton } from "../styles";
 import { SearchOutlined } from "@ant-design/icons";
-import { IProduct } from "./statics";
-import { DrawerComponent } from "./auxiliars";
+import { SelectMockDataGenre, SelectMockDataBrand } from "./statics";
+import {
+  AddPromotionComponent,
+  CurrentPromotionsComponent,
+  DrawerComponent,
+} from "./auxiliars";
+import { FunctionsContext } from "../../../context/functionsMisProductosContext";
 
 const MisProductos: React.FC = () => {
   const [products, setProducts] = useState<any>([]);
   const [load, setLoad] = useState<boolean>(false);
-  const [selectedItem, setSelectedItem] = useState<IProduct | any>(null);
-  const [selectedItemPoster, setSelectedItemPoster] = useState<string>("");
-  const [editmode, setEditMode] = useState<boolean>(false);
-  const [searchparam, setSearchParam] = useState({
-    name: "",
-    genre: "",
-    brand: "",
-  });
+  const [mockdatapromos, setMockDataPromo] = useState<any>([]);
+  const [loadPromotions, setLoadPromotions] = useState<boolean>(false);
   const [pagination, setPagination] = useState<any>({
     current: 1,
     pageSize: 10,
-    total: 123,
+    total: 10,
   });
-  const [open, setOpen] = useState(false);
-
-  const showDrawer = (item: any) => {
-    setOpen(true);
-    setSelectedItem(item);
-    setSelectedItemPoster(
-      `https://res.cloudinary.com/${
-        import.meta.env.VITE_CLOUD_NAME
-      }/image/upload/v1697492964/${item.posterPathImage}`
-    );
-  };
+  const key = "updatable";
+  const [api, contextHolder] = notification.useNotification();
+  const {
+    initialColumns,
+    currentContent,
+    open,
+    isModalOpen,
+    searchparam,
+    promotion,
+    promovalue,
+    discountName,
+    showModal,
+    handleOk,
+    handleCancel,
+    handleChange,
+    setOpen,
+    setEditMode,
+    setParametersPromotions,
+    setPromoValue,
+    setDiscountName,
+  } = useContext(FunctionsContext);
 
   const onClose = () => {
     setOpen(false);
+    setEditMode(false);
   };
-
-  const key = "updatable";
-  const [api, contextHolder] = notification.useNotification();
   const openNotification = (message: string, description: string) => {
     api.open({
       key,
       message: message,
       description: description,
+      placement: "bottomRight",
     });
 
     setTimeout(() => {
@@ -53,6 +68,7 @@ const MisProductos: React.FC = () => {
     }, 3000);
   };
 
+  //llamadas a los servicios
   const getData = async (page: any, pageSize: any) => {
     setLoad(true);
     const req = await getProducts({
@@ -63,24 +79,72 @@ const MisProductos: React.FC = () => {
       setPagination({
         current: req.currenPage,
         pageSize: 10,
-        total: req.totalSneakers,
+        total: req.totalproducts,
       });
       setProducts(req.data);
       setLoad(false);
     }
   };
-  const handleChange = (value: any, fieldName: string) => {
-    setSearchParam((prevSearchParam) => ({
-      ...prevSearchParam,
-      [fieldName]: value,
-    }));
+  const savePromotion = async (promotion: any) => {
+    setLoadPromotions(true);
+    const req = await createPromotion({ promotion });
+    if (req.status === 200) {
+      setPromoValue(0);
+      setParametersPromotions({
+        brand: "",
+        genre: "",
+      });
+      openNotification(
+        "Promocion agregada correctamente",
+        "Se restablecera el formulario para agregar otra promoción"
+      );
+      getActivePromotions();
+      setLoadPromotions(false);
+      setDiscountName("");
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al guardar las promociones",
+        "vuelva a intentar en unos momentos."
+      );
+    }
   };
-  const handleChangeEditMode = (value: any, fieldName: string) => {
-    console.log(value, fieldName);
-    setSelectedItem({
-      ...selectedItem,
-      [fieldName]: value,
-    });
+  const getActivePromotions = async () => {
+    setLoadPromotions(true);
+    const res = await getCurrentPromotions();
+    if (res.status === 200) {
+      setMockDataPromo(res.currentPromotions);
+
+      setTimeout(() => {
+        setLoadPromotions(false);
+      }, 2000);
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al traer las promociones",
+        "vuelva a intentar en unos momentos."
+      );
+    }
+  };
+  const deleteCurrentPromotion = async (promotionId: string) => {
+    setLoadPromotions(true);
+    const res = await deletePromotion(promotionId);
+    if (res.status === 200) {
+      setLoadPromotions(false);
+      openNotification(
+        "Promocion eliminada correctamente",
+        "Se elimino la promoción y los productos volvieron a su precio original."
+      );
+    } else {
+      setMockDataPromo([]);
+      setLoadPromotions(false);
+      openNotification(
+        "Ocurrio un error al eliminar la promoción",
+        "vuelva a intentar en unos momentos."
+      );
+    }
   };
   const handleSearch = async () => {
     const req = await searchProduct(searchparam);
@@ -100,97 +164,123 @@ const MisProductos: React.FC = () => {
     }
   };
 
-  const onChange = (checked: boolean) => {
-    setEditMode(checked);
-  };
-
-  const columns = [
-    {
-      title: "Ver",
-      dataIndex: "",
-      key: "name",
-      render: (_: string, record: IProduct) => (
-        <Button
-          onClick={() => showDrawer(record)}
-          icon={<SearchOutlined />}
-        ></Button>
-      ),
-    },
-    {
-      title: "Nombre",
-      dataIndex: "name",
-      key: "name",
-    },
-    {
-      title: "Precio",
-      dataIndex: "price",
-      key: "age",
-    },
-    {
-      title: "Genero",
-      dataIndex: "genre",
-      key: "address",
-    },
-    {
-      title: "Cantidad total",
-      dataIndex: "",
-      key: "address",
-    },
-    {
-      title: "Fecha de lanzamiento",
-      dataIndex: "relaseYear",
-      key: "address",
-    },
-    {
-      title: "Marca",
-      dataIndex: "brand",
-      key: "address",
-    },
-  ];
   useEffect(() => {
-    setLoad(true);
     getData(1, 10);
   }, []);
+
+  const getContent = () => {
+    switch (currentContent) {
+      case 1:
+        return <AddPromotionComponent />;
+      case 2:
+        return (
+          <CurrentPromotionsComponent
+            mockDataPromos={mockdatapromos}
+            loadPromotions={loadPromotions}
+            setMockDataPromo={setMockDataPromo}
+            deleteCurrentPromotion={deleteCurrentPromotion}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <div>
       {contextHolder}
       <MisProductosContainer>
-        <div className="misproductos__box"></div>
+        <div className="misproductos__box">
+          <div
+            onClick={() => {
+              getActivePromotions();
+              showModal(1);
+            }}
+            title="Agregar una promocion para los productos en stock"
+            className="misproductos__box__button"
+          >
+            <p>Agregar promocion</p>
+          </div>
+          <div
+            onClick={() => {
+              getActivePromotions();
+              showModal(2);
+            }}
+            className="misproductos__box__button"
+            title="Ver promociones vigentes"
+          >
+            <p>Promociones vigentes</p>
+          </div>
+          <Modal
+            open={isModalOpen}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            width={"800px"}
+            footer={[
+              <Button
+                key="cancel"
+                onClick={handleCancel}
+                style={{ marginRight: 8 }}
+              >
+                Cancelar
+              </Button>,
+              currentContent === 1 && (
+                <Button
+                  key="ok"
+                  type="primary"
+                  disabled={
+                    promotion.genre.length !== 0 &&
+                    promotion.brand.length !== 0 &&
+                    promovalue !== 0
+                      ? false
+                      : true
+                  }
+                  onClick={() => {
+                    savePromotion({
+                      afectedProduct: promotion,
+                      discountAmount: promovalue,
+                      discountNameId:
+                        discountName === ""
+                          ? `Promoción #${mockdatapromos.length + 1}`
+                          : discountName,
+                      replaceExistedPromotion: true,
+                    });
+                  }}
+                >
+                  Guardar
+                </Button>
+              ),
+            ]}
+          >
+            {getContent()}
+          </Modal>
+        </div>
         <div className="misproductos__formulario">
           <Input
             addonBefore="Nombre"
             className="input__addform precio"
             placeholder="Buscar por nombre"
             type="text"
+            name="name"
+            value={searchparam.name}
+            onChange={(value) => handleChange(value.target.value, "name")}
           />
-          <Select
-            defaultValue="Buscar por marca"
-            onChange={(value) => handleChange(value, "brand")}
-            className="select__mproducts"
-            options={[
-              { label: "Elige una marca", value: "" },
-              { label: "Adidas", value: "ADIDAS" },
-              { label: "Nike", value: "NIKE" },
-              { label: "New Balance", value: "NEW BALANCE" },
-              { label: "Air Jordan", value: "AIR JORDAN" },
-              { label: "Yeezy", value: "YEEZY" },
-              { label: "Converse", value: "CONVERSE" },
-              { label: "Vans", value: "VANS" },
-              { label: "Revengexstorm", value: "REVENGEXSTORM" },
-            ]}
+          <SelectComponent
+            value={searchparam.brand}
+            options={SelectMockDataBrand}
+            class_select={"select__mproducts"}
+            value_label={"brand"}
+            handleChange={handleChange}
           />
-          <Select
-            defaultValue="Buscar por genero"
-            onChange={(value) => handleChange(value, "genre")}
-            className="select__mproducts"
-            options={[
-              { value: "", label: "Elige un genero" },
-              { value: "MEN", label: "Hombre" },
-              { value: "WOMAN", label: "Mujer" },
-              { value: "UNISEX", label: "Unisex" },
-            ]}
+          <SelectComponent
+            value={searchparam.genre}
+            options={SelectMockDataGenre}
+            class_select={"select__mproducts"}
+            value_label={"genre"}
+            handleChange={handleChange}
           />
+
           <StyledCustomButton
             title="Buscar producto"
             type="primary"
@@ -200,10 +290,11 @@ const MisProductos: React.FC = () => {
             Buscar producto
           </StyledCustomButton>
         </div>
+
         <TaleContainer>
           <Table
             dataSource={products}
-            columns={columns}
+            columns={initialColumns}
             loading={load}
             pagination={pagination}
             onChange={(pagination) => {
@@ -217,14 +308,7 @@ const MisProductos: React.FC = () => {
           onClose={onClose}
           open={open}
         >
-          <DrawerComponent
-            selectedItem={selectedItem}
-            selectedItemPoster={selectedItemPoster}
-            editmode={editmode}
-            onChange={onChange}
-            setSelectedItemPoster={setSelectedItemPoster}
-            handleChange={handleChangeEditMode}
-          />
+          <DrawerComponent getData={getData} onClose={onClose} />
         </Drawer>
       </MisProductosContainer>
     </div>

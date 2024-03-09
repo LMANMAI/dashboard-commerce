@@ -22,6 +22,7 @@ export const SideMenu = styled.div<IMenu>`
   flex-direction: column;
   justify-content: center;
   padding: 0px 7px;
+  position: relative;
 `;
 export const MenuOpenedButton = styled.button<IMenu>`
   width: 30px;
@@ -41,9 +42,6 @@ export const MenuContainer = styled.ul<IMenu>`
   display: flex;
   flex-direction: column;
   width: 100%;
-  &:hover {
-    color: ${customTheme["@secondary-color-dark"]};
-  }
   .nav_link.active {
     border-radius: 5px;
     background: ${customTheme["@primary-color"]};
@@ -57,20 +55,39 @@ export const MenuContainer = styled.ul<IMenu>`
     color: ${customTheme["@primary-color"]};
     display: flex;
     align-items: center;
-    transition: all 300ms ease-in-out;
+    transition: all 150ms ease-in-out;
     flex-wrap: nowrap;
     justify-content: ${(props) => (props.menustatus ? "start" : "center")};
-
-    .icon_link {
-      font-size: 20px !important;
-      padding: 10px;
-      border-radius: 5px;
+    &:hover {
+      background: ${customTheme["@secondary-color-dark"]};
+      p,
+      span {
+        color: white;
+      }
     }
     &.label {
       font-size: 14px;
       transition-delay: 450ms;
       transition: display 350ms ease-in-out;
       display: ${(props) => (props.menustatus ? "inherit" : "none")};
+    }
+  }
+  .icon_link {
+    font-size: 20px !important;
+    padding: 10px;
+    border-radius: 5px;
+  }
+
+  .logout__button {
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    bottom: 20px;
+    cursor: pointer;
+    &:hover {
+      p {
+        background-color: ${customTheme["@secondary-color"]};
+      }
     }
   }
 `;

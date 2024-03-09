@@ -28,6 +28,11 @@ export const AddFormContainer = styled.div`
       overflow: hidden;
     }
   }
+
+  .button_actions_steps {
+    margin-top: 20px;
+    display: flex;
+  }
 `;
 export const AddForm = styled.div`
   display: flex;
@@ -48,6 +53,7 @@ export const AddForm = styled.div`
       &:hover {
         .button__delete_badge {
           visibility: visible;
+          z-index: 99;
         }
       }
     }
@@ -136,12 +142,13 @@ export const StepsContainer = styled.section`
     }
     .input__formadd_container_talle {
       flex-direction: row;
-      //width: 50%;
     }
   }
 `;
 
 export const CustomSteps = styled(Steps)`
+  width: 50%;
+  margin: 0px auto;
   && {
     .ant-steps-item.ant-steps-item-process.ant-steps-item-active {
       .ant-steps-item-icon {
@@ -178,6 +185,11 @@ export const CustomInput = styled(Input)`
 
 export const CustomButton = styled(Button)`
   && {
+    &:disabled {
+      cursor: not-allowed !important;
+      background-color: #cccccc !important;
+      color: #666666 !important;
+    }
     input {
       &:focus {
         border: 1px solid ${customTheme["@action-color"]}!important;

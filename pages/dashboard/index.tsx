@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-
+import { SignOutUser } from "../../config/firebase-config";
 import {
-  HomeOutlined,
   PlusCircleOutlined,
   FolderOpenOutlined,
   RiseOutlined,
   MenuOutlined,
+  LogoutOutlined,
 } from "@ant-design/icons";
 import {
   SideMenu,
@@ -17,10 +17,10 @@ import {
 } from "./styles";
 const DashboardPage = () => {
   const [menustatus, setMenuStatus] = useState<boolean>(false);
+
   const menu = [
-    { icon: HomeOutlined, label: "Inicio", path: "" },
+    { icon: FolderOpenOutlined, label: "Mis productos", path: "" },
     { icon: PlusCircleOutlined, label: "Agregar productos", path: "add" },
-    { icon: FolderOpenOutlined, label: "Mis productos", path: "products" },
     { icon: RiseOutlined, label: "Mis estadisticas", path: "sales" },
   ];
 
@@ -28,6 +28,7 @@ const DashboardPage = () => {
     <div style={{ display: "flex", height: "100vh", width: "100vw" }}>
       <Container>
         <MenuOpenedButton
+          title={!menustatus ? `Abrir menu` : "Cerrar menu"}
           menustatus={menustatus}
           onClick={() => {
             setMenuStatus(!menustatus);
@@ -59,6 +60,18 @@ const DashboardPage = () => {
                 </NavLink>
               );
             })}
+
+            <div
+              title="Cerrar sesión"
+              className="logout__button"
+              onClick={() => SignOutUser()}
+            >
+              <LogoutOutlined
+                style={{ fontSize: "16px", color: "white" }}
+                className="icon_link"
+              />
+              <p className="nav_link label">Cerrar sesión</p>
+            </div>
           </MenuContainer>
         </SideMenu>
       </Container>

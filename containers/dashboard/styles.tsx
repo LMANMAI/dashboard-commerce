@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { Button } from "antd";
 import customTheme from "../../customTheme";
+
 export const Title = styled.h3`
   color: white;
   padding: 10px;
@@ -19,5 +20,9 @@ export const StyledCustomButton = styled(Button)`
   &:hover {
     background-color: #3e617d !important;
     color: white !important ;
+  }
+  width: 100%;
+  @media (min-width: 768px) {
+    max-width: fit-content;
   }
 `;
