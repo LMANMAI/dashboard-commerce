@@ -53,7 +53,8 @@ export const FunctionsContext = createContext<FunctionsContextValue>({
   formatNumber: () => "",
   formatDate: () => "",
   showDrawer: () => {},
-  handleChange: () => {},
+  handleChangeSearchParams: () => {},
+  handleChangeselectedItem: () => {},
   handleChangePromotionsDTO: () => {},
   handleChangeEditMode: () => {},
   onChange: () => {},
@@ -187,9 +188,17 @@ export const FunctionsProvider = ({
     );
   };
 
-  const handleChange = (value: any, fieldName: string) => {
+  const handleChangeSearchParams = (value: any, fieldName: string) => {
+    console.log(fieldName, "fieldName");
+    console.log(value, "value");
     setSearchParam((prevSearchParam) => ({
       ...prevSearchParam,
+      [fieldName]: value,
+    }));
+  };
+  const handleChangeselectedItem = (value: any, fieldName: string) => {
+    setSelectedItem((selectedItem: any) => ({
+      ...selectedItem,
       [fieldName]: value,
     }));
   };
@@ -251,7 +260,8 @@ export const FunctionsProvider = ({
     formatNumber: formatNumber,
     formatDate: formatDate,
     showDrawer: showDrawer,
-    handleChange: handleChange,
+    handleChangeSearchParams: handleChangeSearchParams,
+    handleChangeselectedItem,
     handleChangePromotionsDTO: handleChangePromotionsDTO,
     handleChangeEditMode: handleChangeEditMode,
     onChange: onChange,

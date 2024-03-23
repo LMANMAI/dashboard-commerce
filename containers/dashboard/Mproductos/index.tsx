@@ -43,7 +43,7 @@ const MisProductos: React.FC = () => {
     showModal,
     handleOk,
     handleCancel,
-    handleChange,
+    handleChangeSearchParams,
     setOpen,
     setEditMode,
     setParametersPromotions,
@@ -264,21 +264,23 @@ const MisProductos: React.FC = () => {
             type="text"
             name="name"
             value={searchparam.name}
-            onChange={(value) => handleChange(value.target.value, "name")}
+            onChange={(value) =>
+              handleChangeSearchParams(value.target.value, "name")
+            }
           />
           <SelectComponent
             value={searchparam.brand}
             options={SelectMockDataBrand}
             class_select={"select__mproducts"}
             value_label={"brand"}
-            handleChange={handleChange}
+            handleChange={handleChangeSearchParams}
           />
           <SelectComponent
             value={searchparam.genre}
             options={SelectMockDataGenre}
             class_select={"select__mproducts"}
             value_label={"genre"}
-            handleChange={handleChange}
+            handleChange={handleChangeSearchParams}
           />
 
           <StyledCustomButton

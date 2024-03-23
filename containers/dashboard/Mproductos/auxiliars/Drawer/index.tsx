@@ -47,7 +47,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     setSelectedItem,
     setSelectedItemPoster,
     onChange,
-    handleChange,
+    handleChangeselectedItem,
   } = useContext(FunctionsContext);
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -400,7 +400,9 @@ const DrawerComponent = ({ getData, onClose }: any) => {
               placeholder="Buscar por nombre"
               type="text"
               disabled={!editmode}
-              onChange={(value) => handleChange(value.target.value, "name")}
+              onChange={(value) =>
+                handleChangeselectedItem(value.target.value, "name")
+              }
             />
             <Input
               value={selectedItem.price}
@@ -409,18 +411,20 @@ const DrawerComponent = ({ getData, onClose }: any) => {
               placeholder="Buscar por nombre"
               type="number"
               disabled={!editmode}
-              onChange={(value) => handleChange(value.target.value, "price")}
+              onChange={(value) =>
+                handleChangeselectedItem(value.target.value, "price")
+              }
             />
             <Select
               value={selectedItem.brand}
-              onChange={(value) => handleChange(value, "brand")}
+              onChange={(value) => handleChangeselectedItem(value, "brand")}
               className="select__mproducts"
               options={SelectMockDataBrand}
               disabled={!editmode}
             />
             <Select
               value={selectedItem.genre}
-              onChange={(value) => handleChange(value, "genre")}
+              onChange={(value) => handleChangeselectedItem(value, "genre")}
               className="select__mproducts"
               options={SelectMockDataGenre}
               disabled={!editmode}
