@@ -93,7 +93,8 @@ export interface FunctionsContextValue {
   formatNumber: (number: number) => string;
   formatDate: (dateString: string) => string;
   showDrawer: (item: IProduct) => void;
-  handleChange: (value: any, fieldName: string) => void;
+  handleChangeselectedItem: (value: any, fieldName: string) => void;
+  handleChangeSearchParams: (value: any, fieldName: string) => void;
   handleChangePromotionsDTO: (fieldName: string, event: string) => void;
   handleChangeEditMode: (value: any, fieldName: string) => void;
   onChange: (checked: boolean) => void;
