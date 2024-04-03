@@ -11,6 +11,7 @@ import {
   Spin,
   Button,
   DatePicker,
+  message,
 } from "antd";
 import {
   DetailImgContainer,
@@ -31,7 +32,7 @@ import {
 } from "@services";
 import { CustomInput } from "../../../AgregarProductos/styles";
 import { SaveOutlined } from "@ant-design/icons";
-import type { UploadProps } from "antd";
+import type { UploadFile, UploadProps } from "antd";
 import {
   SelectMockDataGenre,
   SelectMockDataSize,
@@ -161,38 +162,45 @@ const DrawerComponent = ({ getData, onClose }: any) => {
   };
   const propsPosterImg: UploadProps = {
     name: "image",
-    action: `${import.meta.env.VITE_URL_EP}/updateposterimage/${
-      selectedItem?._id
-    }`,
-    method: "PUT",
-    headers: {
-      authorization: "authorization-text",
-    },
-    async onChange(info) {
-      if (
-        info.file.status === "done" &&
-        info.fileList.every((file) => file.status === "done")
-      ) {
-        setLoading(true);
-        getData(1, 10);
-        const res = await getProduct(selectedItem?._id);
-        if (res) {
-          setSelectedItem(res.sneaker);
-          onChange(false);
-          setSelectedItemPoster(
-            `https://res.cloudinary.com/${
-              import.meta.env.VITE_CLOUD_NAME
-            }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
-          );
-        }
-        setTimeout(() => {
-          setLoading(false);
-        }, 1000);
-      } else if (info.file.status === "error") {
-      }
-    },
-  };
+    // action: `${import.meta.env.VITE_URL_EP}updateposterimage/${
+    //   selectedItem?._id
+    // }`,
+    // method: "PUT",
+    // headers: {
+    //   authorization: "authorization-text",
+    // },
 
+    // async onChange(info) {
+    //   console.log(info);
+    //   if (
+    //     info.file.status === "done" &&
+    //     info.fileList.every((file) => file.status === "done")
+    //   ) {
+    //     setLoading(true);
+    //     getData(1, 10);
+    //     const res = await getProduct(selectedItem?._id);
+    //     if (res) {
+    //       setSelectedItem(res.sneaker);
+    //       onChange(false);
+    //       (
+    //         `https://res.cloudinary.com/${
+    //           import.meta.env.VITE_CLOUD_NAME
+    //         }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+    //       );
+    //     }
+    //     setTimeout(() => {
+    //       setLoading(false);
+    //     }, 1000);
+    //   } else if (info.file.status === "error") {
+    //   }
+    // },
+  };
+  const handleImageChange = (e: any) => {
+    const file = e.target.files[0];
+
+    console.log(file);
+    //setSelectedImage(file);
+  };
   return (
     <div>
       {loading ? (
@@ -238,16 +246,23 @@ const DrawerComponent = ({ getData, onClose }: any) => {
                     />
                   ) : (
                     <div title="Agregar imagen de portada.">
-                      <StyledUpload
+                      {/* <StyledUpload
+                        disabled={!editmode}
                         style={{ width: "50px" }}
                         listType="picture-card"
                         className="upload-list-inline"
+                        onChange={handleChange}
                         {...propsPosterImg}
                       >
                         <div>
                           <PlusOutlined />
                         </div>
-                      </StyledUpload>
+                      </StyledUpload> */}
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageChange}
+                      />
                     </div>
                   )}
                   {editmode && selectedItem.posterPathImage !== "" && (
@@ -310,7 +325,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
                     listType="picture-card"
                     multiple
                     className="upload-list-inline"
-                    {...props1}
+                    // {...props1}
                   >
                     <div>
                       <PlusOutlined />

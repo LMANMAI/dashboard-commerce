@@ -164,6 +164,9 @@ export const DetailImgDetail = styled.div`
     width: 50px;
     position: relative;
   }
+  .img_container {
+    height: 100%;
+  }
   img {
     width: 100%;
     height: 100%;
@@ -278,7 +281,6 @@ export const ModalAddPromotionsContainer = styled.div`
 export const ModalCurrentPromotion = styled.div`
   .current_promotion {
     display: flex;
-    justify-content: center;
     gap: 10px;
     padding: 10px;
     flex-wrap: wrap;

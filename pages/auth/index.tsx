@@ -68,6 +68,11 @@ const Home = () => {
               placeholder="Contraseña"
               type="password"
               onChange={(value) => handleChange(value.target.value, "password")}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleSubmit(e);
+                }
+              }}
             />
           </div>
           <div className="form__input_button">
