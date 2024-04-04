@@ -297,6 +297,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
                             x
                           </button>
                         )}
+
                         <img
                           onClick={() =>
                             setSelectedItemPoster(

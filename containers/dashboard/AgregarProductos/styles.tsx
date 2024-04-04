@@ -138,7 +138,6 @@ export const StepsContainer = styled.section`
 
   @media (min-width: 1024px) {
     .button__formadd {
-      flex-direction: row;
     }
     .input__formadd_container_talle {
       flex-direction: row;

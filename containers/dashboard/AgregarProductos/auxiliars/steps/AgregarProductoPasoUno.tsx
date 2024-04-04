@@ -91,6 +91,7 @@ const AgregarProductoPasoUno: React.FC = () => {
           onClick={() => handleSaveStock()}
           type="default"
           icon={<SaveOutlined />}
+          disabled={inputValue === ""}
         >
           Guardar
         </Button>

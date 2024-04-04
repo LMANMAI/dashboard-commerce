@@ -15,6 +15,9 @@ const AgregarProductoPasoDos: React.FC = () => {
   const propsPosterPath: UploadProps = {
     name: "file",
     action: "https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188",
+    headers: {
+      authorization: "authorization-text",
+    },
     onRemove: handleRemove,
     onChange(info) {
       if (info.file.status === "uploading") {
@@ -26,6 +29,7 @@ const AgregarProductoPasoDos: React.FC = () => {
   const props1: UploadProps = {
     name: "images",
     action: `https://run.mocky.io/v3/435e224c-44fb-4773-9faf-380c5e6a2188`,
+    multiple: true,
     headers: {
       authorization: "authorization-text",
     },

@@ -189,8 +189,6 @@ export const FunctionsProvider = ({
   };
 
   const handleChangeSearchParams = (value: any, fieldName: string) => {
-    console.log(fieldName, "fieldName");
-    console.log(value, "value");
     setSearchParam((prevSearchParam) => ({
       ...prevSearchParam,
       [fieldName]: value,
