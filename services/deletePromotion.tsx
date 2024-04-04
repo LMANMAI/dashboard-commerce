@@ -1,10 +1,10 @@
 import instance from "../config";
 
-const deletePromotions = async (promotionId: string, afectedProduct: any) => {
+const deletePromotions = async (promotionId: string, affectedProduct: any) => {
   try {
     const { data } = await instance.delete(
       `/promotion/deletePromotion/${promotionId}`,
-      afectedProduct
+      { data: { affectedProduct } }
     );
     return data;
   } catch (error) {
