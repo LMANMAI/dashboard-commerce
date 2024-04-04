@@ -154,6 +154,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         if (res) {
           setSelectedItem(res.product);
           onChange(false);
+          setLoading(false);
         }
         setTimeout(() => {
           setLoading(false);
@@ -185,9 +186,12 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         if (res) {
           setSelectedItem(res.sneaker);
           onChange(false);
-          `https://res.cloudinary.com/${
-            import.meta.env.VITE_CLOUD_NAME
-          }/image/upload/v1697492964/${res.sneaker.posterPathImage}`;
+          setLoading(false);
+          setSelectedItemPoster(
+            `https://res.cloudinary.com/${
+              import.meta.env.VITE_CLOUD_NAME
+            }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+          );
         }
         setTimeout(() => {
           setLoading(false);
