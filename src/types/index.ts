@@ -37,7 +37,7 @@ export interface CurrentPromotionsComponentProps {
   mockDataPromos: Promotion[];
   loadPromotions: boolean;
   setMockDataPromo: React.Dispatch<React.SetStateAction<Promotion[]>>;
-  deleteCurrentPromotion: (id: string) => void;
+  deleteCurrentPromotion: (id: string, afectedProduct: any) => void;
 }
 
 export interface Column {

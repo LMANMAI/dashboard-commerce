@@ -128,9 +128,13 @@ const MisProductos: React.FC = () => {
       );
     }
   };
-  const deleteCurrentPromotion = async (promotionId: string) => {
+
+  const deleteCurrentPromotion = async (
+    promotionId: string,
+    afectedProduct: any
+  ) => {
     setLoadPromotions(true);
-    const res = await deletePromotion(promotionId);
+    const res = await deletePromotion(promotionId, afectedProduct);
     if (res.status === 200) {
       setLoadPromotions(false);
       openNotification(

@@ -28,7 +28,7 @@ const CurrentPromotionsComponent: React.FC<CurrentPromotionsComponentProps> = ({
                       (itemfilter: Promotion) => itemfilter._id !== item._id
                     );
                     setMockDataPromo(updatedPromos);
-                    deleteCurrentPromotion(item._id);
+                    deleteCurrentPromotion(item._id, item.afectedProduct);
                   }}
                 />,
               ]}

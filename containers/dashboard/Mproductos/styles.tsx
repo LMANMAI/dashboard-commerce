@@ -278,7 +278,6 @@ export const ModalAddPromotionsContainer = styled.div`
 export const ModalCurrentPromotion = styled.div`
   .current_promotion {
     display: flex;
-    justify-content: center;
     gap: 10px;
     padding: 10px;
     flex-wrap: wrap;
