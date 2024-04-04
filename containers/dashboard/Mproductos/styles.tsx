@@ -165,8 +165,8 @@ export const DetailImgDetail = styled.div`
     position: relative;
   }
   img {
-    width: 100%;
-    height: 100%;
+    height: 50px;
+    width: 50px;
     object-fit: cover;
     cursor: pointer;
     border-radius: 5px;
@@ -185,13 +185,16 @@ export const DetailImgDetail = styled.div`
   .button__delete_badge {
     position: absolute;
     bottom: 0px;
-    left: 0px;
+    left: -5px;
+    bottom: -5px;
     border: none;
     border-radius: 100%;
     height: 15px;
     width: 15px;
     font-size: 10px;
     cursor: pointer;
+    background: #e1e1e1;
+    line-height: 10px;
   }
 `;
 export const StyledUpload = styled(Upload)`
