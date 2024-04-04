@@ -81,6 +81,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     const res = await removeProductImage(id, imgId.split("/")[1], type);
     setLoading(true);
     if (res) {
+      onChange(false);
       setLoading(false);
       getData(1, 10);
       setSelectedItemPoster(
@@ -177,7 +178,6 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     },
 
     async onChange(info) {
-      console.log(info);
       if (
         info.file.status === "done" &&
         info.fileList.every((file) => file.status === "done")
@@ -186,14 +186,13 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         getData(1, 10);
         const res = await getProduct(selectedItem?._id);
         if (res) {
-          setSelectedItem(res.sneaker);
+          setSelectedItem(res.product);
           onChange(false);
           setLoading(false);
-          onChange(false);
           setSelectedItemPoster(
             `https://res.cloudinary.com/${
               import.meta.env.VITE_CLOUD_NAME
-            }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
+            }/image/upload/v1697492964/${res.product.posterPathImage}`
           );
         }
         setTimeout(() => {
@@ -253,6 +252,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
                         style={{ width: "50px" }}
                         listType="picture-card"
                         className="upload-list-inline"
+                        disabled={!editmode}
                         {...propsPosterImg}
                       >
                         <div>
@@ -320,6 +320,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
                     style={{ width: "50px" }}
                     listType="picture-card"
                     multiple
+                    disabled={!editmode}
                     className="upload-list-inline"
                     {...props1}
                   >
