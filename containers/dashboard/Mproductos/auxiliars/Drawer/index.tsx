@@ -70,6 +70,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
     if (res.status === 200) {
       getData(1, 10);
       onClose();
+      onChange(false);
     }
   };
   const handleRemoveImageFromProduct = async (
@@ -155,6 +156,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
           setSelectedItem(res.product);
           onChange(false);
           setLoading(false);
+          onChange(false);
         }
         setTimeout(() => {
           setLoading(false);
@@ -187,6 +189,7 @@ const DrawerComponent = ({ getData, onClose }: any) => {
           setSelectedItem(res.sneaker);
           onChange(false);
           setLoading(false);
+          onChange(false);
           setSelectedItemPoster(
             `https://res.cloudinary.com/${
               import.meta.env.VITE_CLOUD_NAME
