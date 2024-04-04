@@ -135,10 +135,13 @@ const DrawerComponent = ({ getData, onClose }: any) => {
   //Props para el upload de imagenes
   const props1: UploadProps = {
     name: "images",
-    action: `${import.meta.env.VITE_URL_EP}/productimages/${selectedItem?._id}`,
+    action: `${import.meta.env.VITE_URL_EP}product/productimages/${
+      selectedItem?._id
+    }`,
     method: "PUT",
     headers: {
       authorization: "authorization-text",
+      "api-key": import.meta.env.VITE_API_KEY_BE as string,
     },
     async onChange(info) {
       if (
@@ -161,14 +164,17 @@ const DrawerComponent = ({ getData, onClose }: any) => {
   };
   const propsPosterImg: UploadProps = {
     name: "image",
-    action: `${import.meta.env.VITE_URL_EP}/updateposterimage/${
+    action: `${import.meta.env.VITE_URL_EP}product/updateposterimage/${
       selectedItem?._id
     }`,
     method: "PUT",
     headers: {
       authorization: "authorization-text",
+      "api-key": import.meta.env.VITE_API_KEY_BE as string,
     },
+
     async onChange(info) {
+      console.log(info);
       if (
         info.file.status === "done" &&
         info.fileList.every((file) => file.status === "done")
@@ -179,11 +185,9 @@ const DrawerComponent = ({ getData, onClose }: any) => {
         if (res) {
           setSelectedItem(res.sneaker);
           onChange(false);
-          setSelectedItemPoster(
-            `https://res.cloudinary.com/${
-              import.meta.env.VITE_CLOUD_NAME
-            }/image/upload/v1697492964/${res.sneaker.posterPathImage}`
-          );
+          `https://res.cloudinary.com/${
+            import.meta.env.VITE_CLOUD_NAME
+          }/image/upload/v1697492964/${res.sneaker.posterPathImage}`;
         }
         setTimeout(() => {
           setLoading(false);
