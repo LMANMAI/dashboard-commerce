@@ -7,21 +7,17 @@ export const AddFormContainer = styled.div`
   align-items: center;
   margin: 35px;
   justify-content: space-evenly;
-
+  flex-direction: column;
   .steps {
     width: 100%;
     margin: 0px auto;
     max-width: 1200px;
   }
-  @media (min-width: 768px) {
-  }
 
   @media (min-width: 1024px) {
-    flex-direction: row;
     flex-wrap: wrap;
   }
-  @media (min-width: 1440px) {
-  }
+
   .card__product_add {
     .ant-card-cover.ant-card-cover {
       height: 170px;
