@@ -12,3 +12,6 @@ export { default as updateProduct } from "./updateProduct";
 export { default as getCurrentPromotions } from "./getCurrentPromotions";
 export { default as createPromotion } from "./createPromotion";
 export { default as deletePromotion } from "./deletePromotion";
+
+//ordenes
+export { default as getPurchaseOrders } from "./getPurchaseOrders";
